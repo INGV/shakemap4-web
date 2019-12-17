@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+    <!-- <input type="file" id="file" />
+    <output id="list"></output> -->
+
+
+  <script>
+  // document.getElementById("./event.txt").onchange = function() {
+class EarthQuake {
+  constructor(number, day, month, year, city) {
+    this.number = number;
+    this.day = day;
+    this.month = month;
+    this.year = year;
+    this.city = city;
+  }
+}
+
+var file = "./eventlist.txt";
+var outputArray = [];
+var reader = new FileReader();
+reader.onload = function(progressEvent) {
+  // Entire file
+  console.log(this.result);
+
+  // By lines
+  var lines = this.result.split("\n");
+  for (var i = 0; i < lines.length; i++) {
+    var parts = lines[i].split(" ");
+    var number = parseInt(parts[0]);
+    var year = parseInt(parts[1]);
+    var month = parseInt(parts[2]);
+    var day = parseInt(parts[3]);
+    var city = parts[4];
+
+    var quake = new EarthQuake(number, day, month, year, city);
+    outputArray.push(quake);
+  }
+
+  console.log(outputArray);
+};
+reader.readAsText(file);
+</script>
+
+</body>
+</html>

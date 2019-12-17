@@ -1,0 +1,143 @@
+.footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #f5f5f5;
+}
+
+.tab_menu {
+  top: 0;
+  text-align: center;
+}
+
+/*  ################
+### Archive page
+####################*/
+.archive_table {
+  padding-right: 5%;
+  padding-left: 5%;
+  margin-right: 5%;
+}
+
+table tbody {
+  cursor: pointer;
+}
+
+.criteria_container {
+  text-align: center;
+  padding: 5px;
+  margin-left: 5%;
+}
+
+.form-group {
+  width: 10%;
+}
+
+h3 {
+  margin: 5px;
+}
+
+.mag_input {
+  width: 6%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid gray;
+  text-align: center;
+  padding: 0px;
+}
+
+.mag_input:focus {
+  border-bottom: 3px solid #009587;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+/*  Table sorting*/
+.table_arrow_link {
+  font-size: 19px;
+  color: inherit;
+}
+
+.table_arrow_link:hover {
+  color: white;
+}
+
+.btn_hide {
+  display: none !important;
+}
+
+.btn_active {
+  background-color: #009587 !important;
+  color: white !important;
+}
+
+.go_right {
+  align: right;
+  right: 10px;
+  margin: 10px;
+}
+
+/*  ################
+ ### Leaflet page
+ ####################*/
+#mapid {
+  height: 700px;
+  margin: 30px;
+}
+
+.double_map {
+  height: 700px;
+  margin: 10px;
+}
+
+.leaflet-tooltip.my-labels {
+  background-color: transparent;
+  color: black;
+  padding: 0;
+  border: transparent;
+  box-shadow: none;
+}
+
+.epi_icon {
+  color: red;
+}
+
+.legend {
+  font-style: italic;
+  color: gray;
+}
+
+.legend_table {
+  color: black;
+  font-size: 13px;
+  line-height: 17px;
+  padding: 0 !important;
+}
+
+/*  Placeholder styling */
+::-webkit-input-placeholder {
+  font-size: 12px;
+}
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  font-size: 12px;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  font-size: 12px;
+}
+
+:-ms-input-placeholder {
+  font-size: 12px;
+}
+
+/* ########### */
+.input_text {
+  color: silver;
+}

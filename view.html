@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>ShakeMap - Home</title>
+
+    <link rel="stylesheet" href="./style.css">
+
+
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+  </head>
+
+  <!--
+  ###############################################
+  # Header
+  ###############################################
+   -->
+
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     <a class="navbar-brand" href="./index.html"><h3>ShakeMap <small class="text-muted">v4</small></h3></a>
+     <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavDropdown">
+       <ul class="navbar-nav">
+         <li class="nav-item">
+            <a class="nav-link" href="./index.html">Home</a>
+         </li>
+         <li class="nav-item">
+           <a class="nav-link" href="./archive.html">Archive</a>
+         </li>
+         <li class="nav-item dropdown">
+           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Information
+           </a>
+           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+             <a class="dropdown-item" href="./disclaimer.html">Disclaimer</a>
+             <a class="dropdown-item" href="./links.html">Related Links</a>
+           </div>
+         </li>
+       </ul>
+     </div>
+   </nav>
+
+
+     <!--
+     ###############################################
+     # Main content
+     ###############################################
+      -->
+
+      <div style="text-align:center;">
+        <div class="d-flex justify-content-center">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="intensity-tab" data-toggle="tab" href="#intensity" role="tab" aria-controls="intensity" aria-expanded="true">Intensity</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pga-tab" data-toggle="tab" href="#pga" role="tab" aria-controls="pga">PGA</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pgv-tab" data-toggle="tab" href="#pgv" role="tab" aria-controls="pgv">PGV</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                SA
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" id="dropdown1-tab" href="#dropdown1" role="tab" data-toggle="tab" aria-controls="dropdown1">SA 0.3s</a>
+                <a class="dropdown-item" id="dropdown2-tab" href="#dropdown2" role="tab" data-toggle="tab" aria-controls="dropdown2">SA 1s</a>
+                <a class="dropdown-item" id="dropdown3-tab" href="#dropdown3" role="tab" data-toggle="tab" aria-controls="dropdown3">SA 3s</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="intensity" role="tabpanel" aria-labelledby="intensity-tab">
+          <img height="60%" id="imgint" src="data4/8863681/current/products/img/intensity.png" alt="Intensity">
+         </div>
+        <div class="tab-pane fade" id="pga" role="tabpanel" aria-labelledby="pga-tab">
+          <img height="60%" id="pgaint" src="./data/1723191/images/urat_pga.jpg" alt="PGA">
+        </div>
+        <div class="tab-pane fade" id="pgv" role="tabpanel" aria-labelledby="pgv-tab">
+          <img height="60%" id="pgvint" src="./data/1723191/images/urat_pga.jpg" alt="PGV">
+        </div>
+        <div class="tab-pane fade" id="dropdown1" role="tabpanel" aria-labelledby="dropdown1-tab">
+          <img height="60%" id="imgsa03" src="./data/1723191/mapping/urat_pga.jpg" alt="sa03">
+        </div>
+        <div class="tab-pane fade" id="dropdown2" role="tabpanel" aria-labelledby="dropdown2-tab">
+          <img height="60%" id="imgsa1" src="./data/1723191/mapping/urat_pga.jpg" alt="sa1">
+        </div>
+          <div class="tab-pane fade" id="dropdown3" role="tabpanel" aria-labelledby="dropdown3-tab">
+            <img height="60%" id="imgsa3" src="./data/1723191/mapping/urat_pga.jpg" alt="sa3">
+          </div>
+        </div>
+    </div>
+
+      <!--
+      ###############################################
+      # Footer
+      ###############################################
+       -->
+<!--
+     <footer class="footer">
+           <div class="container">
+             <span class="text-muted">Place sticky footer content here.</span>
+           </div>
+         </footer> -->
+
+
+
+
+
+     <!-- Bootstrap core JavaScript
+       ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+
+    <!--  My scripts -->
+    <!-- <script src="./scripts/require.js"></script> -->
+    <script src="./scripts/scriptView.js"></script>
+  </body>
+</html>

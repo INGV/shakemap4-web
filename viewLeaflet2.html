@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>ShakeMap - Home</title>
+
+    <link rel="stylesheet" href="./style.css">
+
+    <!--  Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+      integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+      crossorigin=""/>
+
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+
+    <!-- Font awesome icons-->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+    <!-- Sidebar css -->
+    <link rel="stylesheet" href="scripts/LeafletPlugins/leaflet-sidebar.css" />
+
+    <!-- Markers css -->
+    <link rel="stylesheet" href="scripts/LeafletPlugins/leaflet-beautify-marker-icon.css" />
+
+      <link rel="stylesheet" href="scripts/LeafletPlugins/L.Icon.Pulse.css" />
+
+  </head>
+
+  <!--
+  ###############################################
+  # Header
+  ###############################################
+   -->
+
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     <a class="navbar-brand" href="./index.html"><h3>ShakeMap <small class="text-muted">v4</small></h3></a>
+     <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavDropdown">
+       <ul class="navbar-nav">
+         <li class="nav-item">
+            <a class="nav-link" href="./index.html">Home</a>
+         </li>
+         <li class="nav-item">
+           <a class="nav-link" href="./archive.html">Archive</a>
+         </li>
+         <li class="nav-item dropdown">
+           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Information
+           </a>
+           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+             <a class="dropdown-item" href="./disclaimer.html">Disclaimer</a>
+             <a class="dropdown-item" href="./links.html">Related Links</a>
+           </div>
+         </li>
+       </ul>
+     </div>
+   </nav>
+
+
+     <!--
+     ###############################################
+     # Main content
+     ###############################################
+      -->
+        <button type="button" class="btn btn-outline-primary go_right" id="leafletButton"  onclick="open_single()">Single view</button>
+
+<div class="container-fluid row justify-content-md-center">
+
+
+      <div id="map1" class="col sidebar-map double_map">
+
+
+           <div id="sidebar" class="sidebar collapsed">
+                  <!-- Nav tabs -->
+                  <div class="sidebar-tabs">
+                      <ul role="tablist">
+                          <li><a href="#home" role="tab"><i class="fa fa-map"></i></a></li>
+                          <li><a href="#input_info" role="tab"><i class="fa fa-info"></i></a></li>
+                          <li><a href="#messages" role="tab"><i class="fa fa-question-circle"></i></a></li>
+                          <li><a href="#process" role="tab"><i class="fa fa-question-circle"></i></a></li>
+                      </ul>
+                  </div>
+
+                  <!-- Tab panes -->
+                          <div class="sidebar-content">
+                             <div class="sidebar-pane" id="home">
+                                  <h1 class="sidebar-header">
+                                      Legend
+                                      <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                                      <div>
+                                        <p class="legend">Epicenter &nbsp;&nbsp;&nbsp;<i class="material-icons epi_icon">star</i></p>
+                                        <br/>
+                                        <p class="legend">Intensity table</p>
+                                        <table class="table table-bordered table-sm legend_table">
+                                          <thead class="thead-dark">
+                                            <tr>
+                                              <th scope="col">Intensity</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr style="background-color: #FFFFFF;">
+                                              <td>I</td>
+                                            </tr>
+                                            <tr style="background-color: #DDF3FE;">
+                                              <td>II</td>
+                                            </tr>
+                                            <tr style="background-color: #A4F4F5;">
+                                               <td>III</td>
+                                            </tr>
+                                            <tr style="background-color: #A5FDCD;">
+                                               <td>IV</td>
+                                            </tr>
+                                            <tr style="background-color: #FFFF31;">
+                                               <td>V</td>
+                                            </tr>
+                                            <tr style="background-color: #FCEE1B;">
+                                               <td>VI</td>
+                                            </tr>
+                                            <tr style="background-color: #FFBE20;">
+                                               <td>VII</td>
+                                            </tr>
+                                            <tr style="background-color: #FF341D;">
+                                               <td>VIII</td>
+                                            </tr>
+                                            <tr style="background-color: #F71E19;">
+                                               <td>IX</td>
+                                            </tr>
+                                            <tr style="background-color: #E51E31;">
+                                               <td>X</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+
+
+                                      </div>
+                                  </h1>
+                              </div>
+
+                              <div class="sidebar-pane" id="input_info">
+                                  <h1 class="sidebar-header">Input information<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                                  <div id="input_content">
+                                  </div>
+                              </div>
+
+                              <div class="sidebar-pane" id="messages">
+                                  <h1 class="sidebar-header">Uncertainty<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                                  <div id="motions_content">
+                                  </div>
+                              </div>
+                              <div class="sidebar-pane" id="process">
+                                  <h1 class="sidebar-header">Processing information<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                                  <div id="processing_content">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+      </div>
+
+      <div id="map2" class="col double_map">
+
+      </div>
+
+
+</div>
+
+
+
+
+
+      <!--
+      ###############################################
+      # Footer
+      ###############################################
+       -->
+<!--
+     <footer class="footer">
+           <div class="container">
+             <span class="text-muted">Place sticky footer content here.</span>
+           </div>
+         </footer> -->
+
+
+
+
+
+     <!-- Bootstrap core JavaScript
+       ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+
+    <!--  Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+      integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+      crossorigin=""></script>
+
+    <!-- Some special markers (triangle...)  -->
+    <script src="./scripts/LeafletPlugins/leaflet-svg-shape-markers.js"></script>
+
+    <!--  Font awesome icons for markers-->
+    <script src="./scripts/LeafletPlugins/leaflet-beautify-marker-icon.js"></script>
+
+    <!-- Sidebar  -->
+    <script src="scripts/LeafletPlugins/leaflet-sidebar.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma.min.js"></script>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="//npmcdn.com/geotiff@0.3.6/dist/geotiff.js"></script> <!-- optional -->
+    <script src="https://ihcantabria.github.io/Leaflet.CanvasLayer.Field/dist/leaflet.canvaslayer.field.js"></script>
+
+    <script src="scripts/LeafletPlugins/L.Icon.Pulse.js"></script>
+
+    <script src="scripts/LeafletPlugins/L.Map.Sync.js"></script>
+    <!--  My scripts -->
+    <script src="scripts/colors.js"></script>
+    <script src="scripts/scriptLeaflet2.js"></script>
+  </body>
+</html>
