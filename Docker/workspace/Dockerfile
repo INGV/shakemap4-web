@@ -925,9 +925,11 @@ RUN if [ ${INSTALL_SYMFONY} = true ]; then \
 ARG INSTALL_PYTHON=false
 
 RUN if [ ${INSTALL_PYTHON} = true ]; then \
+  apt-get update -yqq  \
   apt-get -y install python3 python3-pip python3-dev build-essential  \
-  && python -m pip install --upgrade pip  \
-  && python -m pip install --upgrade virtualenv \
+  && python3 -m pip install --upgrade pip  \
+  && python3 -m pip install --upgrade virtualenv \
+  apt -y autoremove \
 ;fi
 
 ###########################################################################
