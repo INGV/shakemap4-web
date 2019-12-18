@@ -54,6 +54,7 @@ def get_parameters (event_id):
     """
     info_file_path = './data/' + event_id + '/current/products/info.json'
     try:
+        print("File exist")
         with open(info_file_path) as f:
             info_file = json.load(f)
 
@@ -73,6 +74,7 @@ def get_parameters (event_id):
                 'magnitude': info_file['input']['event_information']['magnitude'],
                 'depth': info_file['input']['event_information']['depth']
                 }
+        print(parameter_dict)
         return parameter_dict
     except FileNotFoundError:
         print("File doesn't exist: " + info_file_path)
@@ -94,15 +96,16 @@ def write_list_to_file(event_list):
 final_list = []
 
 for event in get_event_ids():
+    print(' Processing event: ' + event)
     parameters = get_parameters(event)
     if parameters is None:
-        print(' It is None')
+        print(' it is None')
 
     else:
         final_list.append(parameters)
         try:
             overlay_to_json(event)
         except Exception as e:
-            print(' No intensity overlay file for event:' + event)
+            print(' no intensity overlay file for event:' + event)
 
 write_list_to_file(final_list)
