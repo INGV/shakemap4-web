@@ -39,6 +39,28 @@ default is:
 
 If all works, you should see ShakeMap4-Web web page.
 
+## Tips and tricks
+### To change nginx port live:
+1) Update `NGINX_HOST_HTTP_PORT` in `.env`
+2) run:
+```
+$ docker-compose build nginx
+```
+3) Restart docker:
+```
+$ docker-compose up --no-deps -d nginx
+```
+
+### Rebuild an image from existing `Dockerfile` (es: workspace)
+```
+$ docker-compose build --no-cache workspace
+```
+
+### Rebuild an image from a remote image (es: nginx)
+```
+$ docker-compose pull nginx
+```
+
 ## Thanks to
 This project uses the [Laradock](https://github.com/laradock/laradock) idea to start docker containers
 
