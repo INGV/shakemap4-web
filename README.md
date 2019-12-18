@@ -10,8 +10,11 @@ Copy docker environment file:
 ```
 $ cp ./Docker/env-example ./Docker/.env
 ```
+### Set NGINX port
+Set `NGINX_HOST_HTTP_PORT` in `./Docker/.env` file (default port is `8091`).
 
-Set `NGINX_HOST_HTTP_PORT` in `./Docker/.env` file.
+### Set 'data' path
+Set `SHAKEMAP_DATA_PATH` with the absolte `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
 
 ### !!! On Linux machine and no 'root' user !!!
 To run container as *linux-user* (intead of `root`), set `WORKSPACE_PUID` and `WORKSPACE_PGID` in `./Docker/.env` file with:
@@ -23,7 +26,7 @@ First, build docker images:
 
 ```
 $ cd Docker
-$ docker-compose up -d nginx workspace
+$ docker-compose up -d
 $ cd ..
 ```
 
