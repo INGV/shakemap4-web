@@ -40,8 +40,6 @@ def overlay_to_json(event_id):
             'upper_left_y': overlay_file[5]
         }
 
-    # with open('./data/' + event_id + '/current/products/overlay.js', 'w') as f:
-    #         print('var overlayCoords =', file=f)
     with open('./data/' + event_id + '/current/products/overlay.json', 'w') as outfile:
             json.dump(js_file, outfile)
 
@@ -54,7 +52,6 @@ def get_parameters (event_id):
     """
     info_file_path = './data/' + event_id + '/current/products/info.json'
     try:
-        print("File exist")
         with open(info_file_path) as f:
             info_file = json.load(f)
 
@@ -77,9 +74,9 @@ def get_parameters (event_id):
         print(parameter_dict)
         return parameter_dict
     except FileNotFoundError:
-        print("File doesn't exist: " + info_file_path)
+        print(" file doesn't exist: " + info_file_path)
     except IOError:
-        print("File not accessible: " + info_file_path)
+        print(" file not accessible: " + info_file_path)
 
 
 def write_list_to_file(event_list):
@@ -96,16 +93,16 @@ def write_list_to_file(event_list):
 final_list = []
 
 for event in get_event_ids():
-    print(' Processing event: ' + event)
+    print('Processing event: ' + event)
     parameters = get_parameters(event)
     if parameters is None:
-        print(' it is None')
+        print(' parameters are None')
 
     else:
         final_list.append(parameters)
         try:
             overlay_to_json(event)
         except Exception as e:
-            print(' no intensity overlay file for event:' + event)
+            print('  no intensity overlay file for event:' + event)
 
 write_list_to_file(final_list)
