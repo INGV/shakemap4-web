@@ -69,6 +69,10 @@ CHANGE_SOURCE=false
 # If you are using Docker Sync. For `osx` use 'native_osx', for `windows` use 'unison', for `linux` docker-sync is not required
 DOCKER_SYNC_STRATEGY=native_osx
 
+
+### ShakeMap4 ########################################### 
+SHAKEMAP_DATA_PATH=/home/lauciani/gitwork/_shakemap/shakemap4/data/shakemap_profiles/world/data
+
 ###########################################################
 ################ Containers Customization #################
 ###########################################################
