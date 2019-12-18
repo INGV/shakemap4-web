@@ -40,7 +40,7 @@ function makeTable() {
         events[i].day +
         '</td>' +
         '<td>' +
-        events[i].name +
+        events[i].description +
         '</td>' +
         '<td>' +
         events[i].magnitude +
@@ -66,7 +66,7 @@ function makeTable() {
         events[i].day +
         '</td>' +
         '<td>' +
-        events[i].name +
+        events[i].description +
         '</td>' +
         '<td>' +
         events[i].magnitude +
