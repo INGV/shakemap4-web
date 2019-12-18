@@ -71,7 +71,7 @@ def get_parameters (event_id):
                 'magnitude': info_file['input']['event_information']['magnitude'],
                 'depth': info_file['input']['event_information']['depth']
                 }
-        print(parameter_dict)
+        #print(parameter_dict)
         return parameter_dict
     except FileNotFoundError:
         print(" file doesn't exist: " + info_file_path)
