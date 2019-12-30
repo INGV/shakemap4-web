@@ -5,6 +5,7 @@
   width: 100%;
   overflow: hidden;
   z-index: 2000;
+  height: 80%;
 }
 .sidebar.collapsed {
   width: 40px;

@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "metadata": {"reference": ""}, "features": [{"type": "Feature", "properties": {"rupture type": "rupture extent"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[13.10333, 42.95164, 2.642], [13.21126, 42.75677, 2.642], [13.00847, 42.92315, 13.358], [13.11666, 42.72836, 13.358], [13.10333, 42.95164, 2.642]]]]}}]}

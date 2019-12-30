@@ -40,6 +40,8 @@ def overlay_to_json(event_id):
             'upper_left_y': overlay_file[5]
         }
 
+    # with open('./data/' + event_id + '/current/products/overlay.js', 'w') as f:
+    #         print('var overlayCoords =', file=f)
     with open('./data/' + event_id + '/current/products/overlay.json', 'w') as outfile:
             json.dump(js_file, outfile)
 
@@ -51,33 +53,28 @@ def get_parameters (event_id):
         Get the event parameters from the info.json file of an event
     """
     info_file_path = './data/' + event_id + '/current/products/info.json'
-    try:
-        with open(info_file_path) as f:
-            info_file = json.load(f)
+    with open(info_file_path) as f:
+        info_file = json.load(f)
 
-        year, month, day, hour, minute, second = separate_time_date(info_file['input']['event_information']['origin_time'])
+    year, month, day, hour, minute, second = separate_time_date(info_file['input']['event_information']['origin_time'])
 
-        parameter_dict = {
-                'id': event_id,
-                'description': info_file['input']['event_information']['event_description'],
-                'day': day,
-                'month': month,
-                'year': year,
-                'hour': hour,
-                'minute': minute,
-                'second': second,
-                'latitude': info_file['input']['event_information']['latitude'],
-                'longitude': info_file['input']['event_information']['longitude'],
-                'magnitude': info_file['input']['event_information']['magnitude'],
-                'depth': info_file['input']['event_information']['depth']
-                }
-        #print(parameter_dict)
-        return parameter_dict
-    except FileNotFoundError:
-        print(" file doesn't exist: " + info_file_path)
-    except IOError:
-        print(" file not accessible: " + info_file_path)
+    parameter_dict = {
+            'id': event_id,
+            'description': info_file['input']['event_information']['event_description'],
+            'day': day,
+            'month': month,
+            'year': year,
+            'hour': hour,
+            'minute': minute,
+            'second': second,
+            'latitude': info_file['input']['event_information']['latitude'],
+            'longitude': info_file['input']['event_information']['longitude'],
+            'magnitude': info_file['input']['event_information']['magnitude'],
+            'depth': info_file['input']['event_information']['depth']
+            }
 
+
+    return parameter_dict
 
 def write_list_to_file(event_list):
     """
@@ -93,16 +90,10 @@ def write_list_to_file(event_list):
 final_list = []
 
 for event in get_event_ids():
-    print('Processing event: ' + event)
-    parameters = get_parameters(event)
-    if parameters is None:
-        print(' parameters are None')
-
-    else:
-        final_list.append(parameters)
-        try:
-            overlay_to_json(event)
-        except Exception as e:
-            print('  no intensity overlay file for event:' + event)
+    final_list.append(get_parameters(event))
+    try:
+        overlay_to_json(event)
+    except Exception as e:
+        print('No intensity overlay file for event:' + event)
 
 write_list_to_file(final_list)

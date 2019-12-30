@@ -413,8 +413,8 @@ function intensityOverlay() {
   var height = 0;
   var width = 0;
 
-  var imagePath = './data/' + eventid + '/current/products/intensity_overlay.png'
-  var fileIntensity = './data/' + eventid + '/current/products/intensity_overlay.pngw'
+  var imagePath = './data/' + eventid + '/current/products/intensity_overlay.png';
+  // var fileIntensity = './data/' + eventid + '/current/products/intensity_overlay.pngw'
 
   $.getJSON('./data/' + eventid + '/current/products/overlay.json',
     function(json) {
@@ -438,6 +438,33 @@ function intensityOverlay() {
       imgIntHelper.src = imagePath;
     }
   );
+}
+
+// #######################################################
+// Loading raster intensity file
+
+function legend_box() {
+  L.Control.Watermark = L.Control.extend({
+    onAdd: function(map) {
+      var img = L.DomUtil.create('img');
+
+      img.src = './data/' + eventid + '/current/products/mmi_legend.png';
+      // img.style.width = '70%';
+      var widthSize = 0.25 * $(window).width();
+      img.style.width =  widthSize.toString() + 'px';
+      return img;
+  },
+
+    onRemove: function(map) {
+      // Nothing to do here
+    }
+  });
+
+  L.control.watermark = function(opts) {
+    return new L.Control.Watermark(opts);
+  }
+
+  L.control.watermark({ position: 'bottomleft' }).addTo(mymap);
 }
 
 // #######################################################
@@ -480,5 +507,11 @@ show_psa3p0();
 stationList();
 faultSurface();
 intensityOverlay();
+legend_box();
+
+// L.control.watermark.removeFrom(mymap)
+// var imageUrl = './data/' + eventid + '/current/products/mmi_legend.png';
+// var imageBounds = [[43.712216, 18], [45.773941, 19.12544]];
+// L.imageOverlay(imageUrl, imageBounds).addTo(mymap);
 
 var sidebar = L.control.sidebar('sidebar').addTo(mymap);

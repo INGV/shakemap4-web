@@ -1,75 +1,45 @@
-# shakemap4-web
+**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
 
-```
-$ git clone https://github.com/INGV/shakemap4-web
-$ cd shakemap4-web
-```
+When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
 
-## Configure
-Copy docker environment file:
-```
-$ cp ./Docker/env-example ./Docker/.env
-```
-### Set NGINX port
-Set `NGINX_HOST_HTTP_PORT` in `./Docker/.env` file (default port is `8091`).
+*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
 
-### Set 'data' path
-Set `SHAKEMAP_DATA_PATH` with the absolte `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
+---
 
-### !!! On Linux machine and no 'root' user !!!
-To run container as *linux-user* (intead of `root`), set `WORKSPACE_PUID` and `WORKSPACE_PGID` in `./Docker/.env` file with:
-- `WORKSPACE_PUID` should be equal to the output of `id -u` command
-- `WORKSPACE_PGID` should be equal to the output of `id -g` command
+## Edit a file
 
-## Start shakemap4-web
-First, build docker images:
+You’ll start by editing this README file to learn how to edit a file in Bitbucket.
 
-```
-$ cd Docker
-$ docker-compose up -d
-$ cd ..
-```
+1. Click **Source** on the left side.
+2. Click the README.md link from the list of files.
+3. Click the **Edit** button.
+4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
+5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
+6. Go back to the **Source** page.
 
-## How to use it
-When all containers are started, connect to: 
-- http://<your_host>:<your_port>/
+---
 
-default is:
-- http://localhost:8091
+## Create a file
 
-If all works, you should see ShakeMap4-Web web page.
+Next, you’ll add a new file to this repository.
 
-## Tips and tricks
-### To change nginx port live:
-1) Update `NGINX_HOST_HTTP_PORT` in `.env`
-2) run:
-```
-$ docker-compose build nginx
-```
-3) Restart docker:
-```
-$ docker-compose up --no-deps -d nginx
-```
+1. Click the **New file** button at the top of the **Source** page.
+2. Give the file a filename of **contributors.txt**.
+3. Enter your name in the empty file space.
+4. Click **Commit** and then **Commit** again in the dialog.
+5. Go back to the **Source** page.
 
-### Rebuild an image from existing `Dockerfile` (es: workspace)
-```
-$ docker-compose build --no-cache workspace
-```
+Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
 
-### Rebuild an image from a remote image (es: nginx)
-```
-$ docker-compose pull nginx
-```
+---
 
-## Thanks to
-This project uses the [Laradock](https://github.com/laradock/laradock) idea to start docker containers
+## Clone a repository
 
-## Contribute
-Please, feel free to contribute.
+Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
 
-## Author
-(c) 2019 Dario Jozinovic dario.jozinovic[at]ingv.it \
-(c) 2019 Valentino Lauciani valentino.lauciani[at]ingv.it
+1. You’ll see the clone button under the **Source** heading. Click that button.
+2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
+3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
+4. Open the directory you just created to see your repository’s files.
 
-
-Istituto Nazionale di Geofisica e Vulcanologia, Italia
+Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
