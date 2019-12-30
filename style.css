@@ -78,6 +78,14 @@ h3 {
 .go_right {
   align: right;
   right: 10px;
+  float: right;
+  margin: 10px;
+}
+
+.go_left {
+  align: right;
+  right: 10px;
+  left: 10px;
   margin: 10px;
 }
 

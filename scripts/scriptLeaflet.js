@@ -20,6 +20,13 @@ function open_double() {
 }
 
 // #####################################################
+// Open the static map view
+//
+function open_static() {
+  window.location = './view.html?eventid=' + eventid;
+}
+
+// #####################################################
 // Write json attributes to a div
 
 function attr_div(attr_collection, div_id) {
