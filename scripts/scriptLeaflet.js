@@ -84,9 +84,24 @@ function stationList() {
   function show_stations (stations) {
     var stations_layer = L.geoJSON (stations, {
       pointToLayer: function (feature, latlng) {
+        if (feature.properties.intensity < 5) {
+          var result = feature.properties.mmi_from_pgm.filter(obj => {
+            return obj.name === 'pga';
+          });
+          var stationColor = Math.round(result[0].value);
+        } else if (feature.properties.intensity >= 5) {
+          var result = feature.properties.mmi_from_pgm.filter(obj => {
+            return obj.name === 'pgv';
+          });
+          var stationColor = Math.round(result[0].value);
+        } else {
+          // pass
+        }
         return new L.shapeMarker (latlng, {
           fillColor: 'black',
-          color: stationColors[feature.properties.network] || 'blue',
+          // if feature.properties.intensity > 5:
+          //   color: feature.properties.mmi_from_pgm.
+          color: intColors_USGS[stationColor] || 'blue',
           shape: 'triangle',
           radius: 5
         });
@@ -99,14 +114,15 @@ function stationList() {
           feature.properties.network +
           '<br/>Distance: ' +
           feature.properties.distance +
-          '<br/>Intensity: ' +
+          ' km <br/>Intensity: ' +
           feature.properties.intensity +
           '<br/>PGA: ' +
           feature.properties.pga +
           '<br/>PGV: ' +
           feature.properties.pgv +
           '<br/>Vs30: ' +
-          feature.properties.vs30
+          feature.properties.vs30 +
+          ' m/s'
         );
       }
     });
