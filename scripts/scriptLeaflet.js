@@ -94,16 +94,17 @@ function stationList() {
             return obj.name === 'pgv';
           });
           var stationColor = Math.round(result[0].value);
+
         } else {
-          // pass
+          var stationWidth = 1;
+          var stationRadius = 3;
         }
         return new L.shapeMarker (latlng, {
           fillColor: 'black',
-          // if feature.properties.intensity > 5:
-          //   color: feature.properties.mmi_from_pgm.
-          color: intColors_USGS[stationColor] || 'blue',
+          color: intColors_USGS[stationColor] || 'black',
           shape: 'triangle',
-          radius: 5
+          radius: stationRadius || 5,
+          weight: stationWidth || 3
         });
       },
       onEachFeature: function (feature, layer) {
