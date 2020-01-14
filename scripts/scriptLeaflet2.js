@@ -76,11 +76,27 @@ function stationList() {
   function show_stations(stations) {
     var stations_layer = L.geoJSON(stations, {
       pointToLayer: function(feature, latlng) {
-        return new L.shapeMarker(latlng, {
+        if (feature.properties.intensity < 5) {
+          var result = feature.properties.mmi_from_pgm.filter(obj => {
+            return obj.name === 'pga';
+          });
+          var stationColor = Math.round(result[0].value);
+        } else if (feature.properties.intensity >= 5) {
+          var result = feature.properties.mmi_from_pgm.filter(obj => {
+            return obj.name === 'pgv';
+          });
+          var stationColor = Math.round(result[0].value);
+
+        } else {
+          var stationWidth = 1;
+          var stationRadius = 3;
+        }
+        return new L.shapeMarker (latlng, {
           fillColor: 'black',
-          color: stationColors[feature.properties.network] || 'blue',
+          color: intColors_USGS[stationColor] || 'black',
           shape: 'triangle',
-          radius: 5
+          radius: stationRadius || 5,
+          weight: stationWidth || 3
         });
       },
       onEachFeature: function(feature, layer) {
@@ -169,8 +185,20 @@ function show_pga() {
   );
 
   function plot_pga(pga) {
-    var layers_combined = L.layerGroup([L.geoJSON(pga)]);
-    var pga_layer = L.geoJSON(pga, {
+    var pga_layer = L.layerGroup([L.geoJSON(pga, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PGA: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function(feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(pga, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -184,19 +212,19 @@ function show_pga() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              pga_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control.addBaseLayer(layers_combined, 'PGA');
+    control.addBaseLayer(pga_layer, 'PGA');
   }
 }
 
@@ -213,9 +241,21 @@ function show_pgv() {
   );
 
   function plot_pgv(pgv) {
-    var layers_combined = L.layerGroup([L.geoJSON(pgv)]);
-    var pgv_layer = L.geoJSON(pgv, {
-      onEachFeature: function(feature, layer) {
+    var pgv_layer = L.layerGroup([L.geoJSON(pgv, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PGV: ' + feature.properties.value.toString() + ' cm/s';
+        layer.bindPopup(popupContent);
+      },
+      style: function(feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(pgv, {
+      onEachFeature: function (feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
             if (j % 50 == 0) {
@@ -228,19 +268,19 @@ function show_pgv() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' cm/s', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              pgv_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control.addBaseLayer(layers_combined, 'PGV');
+    control.addBaseLayer(pgv_layer, 'PGV');
   }
 }
 
@@ -257,8 +297,20 @@ function show_psa0p3() {
   );
 
   function plot_psa0p3(psa0p3) {
-    var layers_combined = L.layerGroup([L.geoJSON(psa0p3)]);
-    var psa0p3_layer = L.geoJSON(psa0p3, {
+    var psa0p3_layer = L.layerGroup([L.geoJSON(psa0p3, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function (feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(psa0p3, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -272,19 +324,19 @@ function show_psa0p3() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              psa0p3_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control.addBaseLayer(layers_combined, 'PSA 0.3');
+    control.addBaseLayer(psa0p3_layer, 'PSA 0.3');
   }
 }
 
@@ -301,8 +353,20 @@ function show_psa1p0() {
   );
 
   function plot_psa1p0(psa1p0) {
-    var layers_combined = L.layerGroup([L.geoJSON(psa1p0)]);
-    var psa1p0_layer = L.geoJSON(psa1p0, {
+    var psa1p0_layer = L.layerGroup([L.geoJSON(psa1p0, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function (feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(psa1p0, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -316,19 +380,19 @@ function show_psa1p0() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              psa1p0_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control.addBaseLayer(layers_combined, 'PSA 1.0 s');
+    control.addBaseLayer(psa1p0_layer, 'PSA 1.0 s');
   }
 }
 
@@ -345,8 +409,20 @@ function show_psa3p0() {
   );
 
   function plot_psa3p0(psa3p0) {
-    var layers_combined = L.layerGroup([L.geoJSON(psa3p0)]);
-    var psa3p0_layer = L.geoJSON(psa3p0, {
+    var psa3p0_layer = L.layerGroup([L.geoJSON(psa3p0, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function (feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(psa3p0, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -360,19 +436,19 @@ function show_psa3p0() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              psa3p0_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control.addBaseLayer(layers_combined, 'PSA 3.0 s');
+    control.addBaseLayer(psa3p0_layer, 'PSA 3.0 s');
   }
 }
 
@@ -396,8 +472,8 @@ function show_intensity() {
       },
       style: function(feature) {
         return {
-          color: intColors[feature.properties.value] || '#FFFFFF',
-          weight: intWeights[feature.properties.value % 1],
+          color: feature.properties.color,
+          weight: 8 / feature.properties.weight, // weights are lower for integer values of intensity in the shakemap output, so here it's reversed to have the weights in integer values higher
           dashArray: lineStyle[feature.properties.value % 1]
         }
       }
@@ -457,8 +533,20 @@ function show_pga2() {
   );
 
   function plot_pga(pga) {
-    var layers_combined = L.layerGroup([L.geoJSON(pga)]);
-    var pga_layer = L.geoJSON(pga, {
+    var pga_layer = L.layerGroup([L.geoJSON(pga, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PGA: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function(feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(pga, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -472,20 +560,20 @@ function show_pga2() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              pga_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    layers_combined.addTo(map2);
-    control2.addBaseLayer(layers_combined, 'PGA');
+    pga_layer.addTo(map2);
+    control2.addBaseLayer(pga_layer, 'PGA');
   }
 }
 
@@ -502,9 +590,21 @@ function show_pgv2() {
   );
 
   function plot_pgv(pgv) {
-    var layers_combined = L.layerGroup([L.geoJSON(pgv)]);
-    var pgv_layer = L.geoJSON(pgv, {
-      onEachFeature: function(feature, layer) {
+    var pgv_layer = L.layerGroup([L.geoJSON(pgv, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PGV: ' + feature.properties.value.toString() + ' cm/s';
+        layer.bindPopup(popupContent);
+      },
+      style: function(feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(pgv, {
+      onEachFeature: function (feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
             if (j % 50 == 0) {
@@ -517,19 +617,19 @@ function show_pgv2() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' cm/s', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              pgv_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control2.addBaseLayer(layers_combined, 'PGV');
+    control2.addBaseLayer(pgv_layer, 'PGV');
   }
 }
 
@@ -546,8 +646,20 @@ function show_psa0p32() {
   );
 
   function plot_psa0p3(psa0p3) {
-    var layers_combined = L.layerGroup([L.geoJSON(psa0p3)]);
-    var psa0p3_layer = L.geoJSON(psa0p3, {
+    var psa0p3_layer = L.layerGroup([L.geoJSON(psa0p3, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function (feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(psa0p3, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -561,19 +673,19 @@ function show_psa0p32() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              psa0p3_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control2.addBaseLayer(layers_combined, 'PSA 0.3');
+    control2.addBaseLayer(psa0p3_layer, 'PSA 0.3');
   }
 }
 
@@ -590,8 +702,20 @@ function show_psa1p02() {
   );
 
   function plot_psa1p0(psa1p0) {
-    var layers_combined = L.layerGroup([L.geoJSON(psa1p0)]);
-    var psa1p0_layer = L.geoJSON(psa1p0, {
+    var psa1p0_layer = L.layerGroup([L.geoJSON(psa1p0, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function (feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(psa1p0, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -605,19 +729,19 @@ function show_psa1p02() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              psa1p0_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control2.addBaseLayer(layers_combined, 'PSA 1.0 s');
+    control2.addBaseLayer(psa1p0_layer, 'PSA 1.0 s');
   }
 }
 
@@ -634,8 +758,20 @@ function show_psa3p02() {
   );
 
   function plot_psa3p0(psa3p0) {
-    var layers_combined = L.layerGroup([L.geoJSON(psa3p0)]);
-    var psa3p0_layer = L.geoJSON(psa3p0, {
+    var psa3p0_layer = L.layerGroup([L.geoJSON(psa3p0, {
+      onEachFeature: function (feature, layer) {
+        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
+        layer.bindPopup(popupContent);
+      },
+      style: function (feature) {
+        return {
+          color: feature.properties.color,
+          weight: feature.properties.weight
+        };
+      }
+    })]);
+
+    var marker_layer = L.geoJSON(psa3p0, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -649,19 +785,19 @@ function show_psa3p02() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString(), {
+              ).bindTooltip(feature.properties.value.toString() + ' %g', {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              layers_combined.addLayer(marker);
+              psa3p0_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control.addBaseLayer(layers_combined, 'PSA 3.0 s');
+    control2.addBaseLayer(psa3p0_layer, 'PSA 3.0 s');
   }
 }
 
@@ -685,8 +821,8 @@ function show_intensity2() {
       },
       style: function(feature) {
         return {
-          color: intColors[feature.properties.value] || '#FFFFFF',
-          weight: intWeights[feature.properties.value % 1],
+          color: feature.properties.color,
+          weight: 8 / feature.properties.weight, // weights are lower for integer values of intensity in the shakemap output, so here it's reversed to have the weights in integer values higher
           dashArray: lineStyle[feature.properties.value % 1]
         }
       }
