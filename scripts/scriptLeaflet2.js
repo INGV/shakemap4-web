@@ -868,6 +868,33 @@ function intensityOverlay2() {
 }
 
 // #######################################################
+// Add legend to lower left corner of the map
+
+function legend_box() {
+  L.Control.Watermark = L.Control.extend({
+    onAdd: function(map) {
+      var img = L.DomUtil.create('img');
+
+      img.src = './data/' + eventid + '/current/products/mmi_legend.png';
+      // img.style.width = '70%';
+      var widthSize = 0.25 * $(window).width();
+      img.style.width =  widthSize.toString() + 'px';
+      return img;
+  },
+
+    onRemove: function(map) {
+      // Nothing to do here
+    }
+  });
+
+  L.control.watermark = function(opts) {
+    return new L.Control.Watermark(opts);
+  }
+
+  L.control.watermark({ position: 'bottomleft' }).addTo(map1);
+}
+
+// #######################################################
 // Drawing the map
 // #####################################################
 
@@ -916,7 +943,7 @@ show_psa1p0();
 show_psa3p0();
 stationList();
 faultSurface();
-
+legend_box();
 
 show_intensity2();
 show_pga2();

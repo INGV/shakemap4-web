@@ -525,7 +525,7 @@ function intensityOverlay() {
 }
 
 // #######################################################
-// Loading raster intensity file
+// Add legend to lower left corner of the map
 
 function legend_box() {
   L.Control.Watermark = L.Control.extend({
