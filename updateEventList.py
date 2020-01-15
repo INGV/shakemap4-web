@@ -90,10 +90,11 @@ def write_list_to_file(event_list):
 final_list = []
 
 for event in get_event_ids():
+    print('Processing event:' + event)
     final_list.append(get_parameters(event))
     try:
         overlay_to_json(event)
     except Exception as e:
-        print('No intensity overlay file for event:' + event)
+        print(' No intensity overlay file for event:' + event)
 
 write_list_to_file(final_list)
