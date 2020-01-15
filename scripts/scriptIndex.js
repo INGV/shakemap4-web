@@ -43,7 +43,7 @@ function makeTable() {
         events[i].description +
         '</td>' +
         '<td>' +
-        events[i].magnitude +
+        Math.round(events[i].magnitude * 10) / 10 +
         '</td>' +
         '</tr>';
     }
@@ -69,7 +69,7 @@ function makeTable() {
         events[i].description +
         '</td>' +
         '<td>' +
-        events[i].magnitude +
+        Math.round(events[i].magnitude * 10) / 10 +
         '</td>' +
         '</tr>';
     }
