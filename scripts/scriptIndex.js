@@ -15,14 +15,15 @@ function makeTable() {
     '<th scope="col";>Year</th>' +
     '<th scope="col";>Month</th>' +
     '<th scope="col";>Day</th>' +
+    '<th scope="col";>Time</th>' +
     '<th scope="col";>Location</th>' +
     '<th scope="col";>Magnitude</th>' +
     '</thead>' +
     '</tr>' +
     '<tbody>';
 
-  if (objLength > 5) {
-    for (var i = objLength - 5; i < objLength; i++) {
+  if (objLength > 20) {
+    for (var i = objLength - 20; i < objLength; i++) {
       myvar +=
         '<tr data-href="./viewLeaflet.html?eventid=' +
         events[i].id +
@@ -38,6 +39,9 @@ function makeTable() {
         '</td>' +
         '<td>' +
         events[i].day +
+        '</td>' +
+        '<td>' +
+        events[i].hour + ':' + events[i].minute +
         '</td>' +
         '<td>' +
         events[i].description +
@@ -66,6 +70,9 @@ function makeTable() {
         events[i].day +
         '</td>' +
         '<td>' +
+        events[i].hour + ':' + events[i].minute +
+        '</td>' +
+        '<td>' +
         events[i].description +
         '</td>' +
         '<td>' +
@@ -81,4 +88,14 @@ function makeTable() {
 }
 
 console.log(events);
+
+var events = events.map(function (o) {
+  o.date = new Date(o.year, o.month, o.day, o.hour, o.minute, o.second, 0);
+  return o;
+});
+
+events.sort(function (a, b) {
+  return b.date - a.date;
+});
+
 makeTable();

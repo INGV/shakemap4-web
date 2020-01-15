@@ -20,13 +20,17 @@ function initTableClick() {
 //# Creating an object from events list
 //##################################################################
 
-var Event = function(id, year, month, day, description, magnitude, list) {
+var Event = function (id, year, month, day, hour, minute, second, description, magnitude, date, list) {
   this.id = id;
   this.year = year;
   this.month = month;
   this.day = day;
+  this.hour = hour;
+  this.minute = minute;
+  this.second = second;
   this.description = description;
   this.magnitude = magnitude;
+  this.date = date;
   list.push(this);
 };
 
@@ -101,14 +105,14 @@ function determine_viewer(num) {
 //
 // #######################################
 
-function listEvents() {
+function listEvents () {
   var selYear = document.getElementById('selectYear');
   var selectedYear = selYear.options[selYear.selectedIndex].value;
   var showEvents = [];
   var helpObject = [];
 
   //#################################################################
-  //#  Sorting by year
+  //#  Showing by year
   //##################################################################
   // I assigned the value 5000 to the option All, so here we check do we
   // show all or just from one year
@@ -120,8 +124,12 @@ function listEvents() {
           events[i].year,
           events[i].month,
           events[i].day,
+          events[i].hour,
+          events[i].minute,
+          events[i].second,
           events[i].description,
           events[i].magnitude,
+          events[i].date,
           showEvents
         );
       }
@@ -131,6 +139,15 @@ function listEvents() {
   }
 
   var showLength = showEvents.length;
+
+  //#################################################################
+  //#  Sorting by date-time
+  //##################################################################
+
+  showEvents.sort(function (a, b) {
+    return b.date - a.date;
+  });
+
 
   //#################################################################
   //#  Sorting by magnitude
@@ -144,8 +161,12 @@ function listEvents() {
           showEvents[i].year,
           showEvents[i].month,
           showEvents[i].day,
+          events[i].hour,
+          events[i].minute,
+          events[i].second,
           showEvents[i].description,
           showEvents[i].magnitude,
+          events[i].date,
           helpObject
         );
       }
@@ -168,8 +189,12 @@ function listEvents() {
           showEvents[i].year,
           showEvents[i].month,
           showEvents[i].day,
+          events[i].hour,
+          events[i].minute,
+          events[i].second,
           showEvents[i].description,
           showEvents[i].magnitude,
+          events[i].date,
           helpObject
         );
       }
@@ -180,19 +205,19 @@ function listEvents() {
 
   showEvents = helpObject;
 
-  if (sort == 1) {
-    showEvents.sort(function(a, b) {
+  if (sort === 1) {
+    showEvents.sort(function (a, b) {
       return parseFloat(a.magnitude) - parseFloat(b.magnitude);
     });
-  } else if (sort == 2) {
-    showEvents.sort(function(a, b) {
+  } else if (sort === 2) {
+    showEvents.sort(function (a, b) {
       return parseFloat(b.magnitude) - parseFloat(a.magnitude);
     });
   }
 
-  //#################################################################
-  //#  Writing the table
-  //##################################################################
+  //  #################################################################
+  //  #  Writing the table
+  //  ##################################################################
   showLength = showEvents.length;
 
   var myvar =
@@ -203,6 +228,7 @@ function listEvents() {
     '<th scope="col";>Year</th>' +
     '<th scope="col";>Month</th>' +
     '<th scope="col";>Day</th>' +
+    '<th scope="col";>Time</th>' +
     '<th scope="col";>Location</th>' +
     '<th scope="col";" width="10%">' +
     '<a href="#" onclick="magn_sort(2);" class="table_arrow_link">↓</a>' +
@@ -232,6 +258,9 @@ function listEvents() {
       showEvents[i].day +
       '</td>' +
       '<td>' +
+      showEvents[i].hour + ':' + showEvents[i].minute +
+      '</td>' +
+      '<td>' +
       showEvents[i].description +
       '</td>' +
       '<td>' +
@@ -246,10 +275,17 @@ function listEvents() {
 
   initTableClick();
 }
-//###################################################
+//  ###################################################
 
 // getEventsList();
 // var events2 = getEventsList();
 // console.log(events2);
-console.log(events)
+
+var events = events.map(function (o) {
+  o.date = new Date(o.year, o.month, o.day, o.hour, o.minute, o.second, 0);
+  return o;
+});
+
+console.log(events);
+
 listEvents();
