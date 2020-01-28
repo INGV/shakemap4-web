@@ -15,12 +15,13 @@ function makeTable() {
     '<th scope="col";>Year</th>' +
     '<th scope="col";>Month</th>' +
     '<th scope="col";>Day</th>' +
-    '<th scope="col";>Time</th>' +
+    '<th scope="col";>Time (HH:MM)</th>' +
     '<th scope="col";>Location</th>' +
     '<th scope="col";>Magnitude</th>' +
     '</thead>' +
     '</tr>' +
     '<tbody>';
+
 
   if (objLength > 20) {
     for (var i = 0; i < 20; i++) {
@@ -41,7 +42,7 @@ function makeTable() {
         events[i].day +
         '</td>' +
         '<td>' +
-        events[i].hour + ':' + events[i].minute +
+        ('0' + events[i].hour.toString()).slice(-2) + ':' + ('0' + events[i].minute.toString()).slice(-2) +
         '</td>' +
         '<td>' +
         events[i].description +
@@ -70,7 +71,7 @@ function makeTable() {
         events[i].day +
         '</td>' +
         '<td>' +
-        events[i].hour + ':' + events[i].minute +
+        ('0' + events[i].hour.toString()).slice(-2) + ':' + ('0' + events[i].minute.toString()).slice(-2) +
         '</td>' +
         '<td>' +
         events[i].description +

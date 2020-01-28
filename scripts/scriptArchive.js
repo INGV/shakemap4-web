@@ -228,7 +228,7 @@ function listEvents () {
     '<th scope="col";>Year</th>' +
     '<th scope="col";>Month</th>' +
     '<th scope="col";>Day</th>' +
-    '<th scope="col";>Time</th>' +
+    '<th scope="col";>Time (HH:MM)</th>' +
     '<th scope="col";>Location</th>' +
     '<th scope="col";" width="10%">' +
     '<a href="#" onclick="magn_sort(2);" class="table_arrow_link">↓</a>' +
@@ -258,7 +258,7 @@ function listEvents () {
       showEvents[i].day +
       '</td>' +
       '<td>' +
-      showEvents[i].hour + ':' + showEvents[i].minute +
+      ('0' + showEvents[i].hour.toString()).slice(-2) + ':' + ('0' + showEvents[i].minute.toString()).slice(-2) +
       '</td>' +
       '<td>' +
       showEvents[i].description +
