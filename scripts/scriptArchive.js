@@ -264,7 +264,7 @@ function listEvents () {
       showEvents[i].description +
       '</td>' +
       '<td>' +
-      Math.round(showEvents[i].magnitude * 10) / 10 +
+      (Math.round(showEvents[i].magnitude * 10) / 10 + '.0').slice(0, 3) +
       '</td>' +
       '</tr>';
   }
