@@ -23,7 +23,7 @@ function makeTable() {
     '<tbody>';
 
   if (objLength > 20) {
-    for (var i = objLength - 20; i < objLength; i++) {
+    for (var i = 0; i < 20; i++) {
       myvar +=
         '<tr data-href="./viewLeaflet.html?eventid=' +
         events[i].id +
