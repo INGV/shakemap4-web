@@ -85,16 +85,28 @@ def write_list_to_file(event_list):
     with open('events.js', 'w') as f:
         print('var events =', file=f)
     with open('events.js', 'a') as outfile:
-        json.dump(final_list, outfile)
+        json.dump(event_list, outfile)
 
-final_list = []
+def main():
+    event_list = []
 
-for event in get_event_ids():
-    print('Processing event:' + event)
-    final_list.append(get_parameters(event))
-    try:
-        overlay_to_json(event)
-    except Exception as e:
-        print(' No intensity overlay file for event:' + event)
+    for event in get_event_ids():
+        print('Processing event:' + event)
+        
+        ## Try to read the info.json file to put the earthquake parameters in a list for the website to read
+        try:
+            event_list.append(get_parameters(event))
+        except Exception as e:
+            print('Following error occurred for event ' + event + ':')
+            print(e)
 
-write_list_to_file(final_list)
+        ## Try to extract overlay parameters and put them into a json file, so the website can read it
+        try:
+            overlay_to_json(event)
+        except Exception as e:
+            print('No intensity overlay file for event:' + event)
+
+    write_list_to_file(event_list)
+
+if __name__ == "__main__":
+    main()
