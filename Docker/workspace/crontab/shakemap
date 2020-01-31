@@ -1,2 +1,2 @@
-* * * * * laradock cd /var/www && /usr/bin/python3 /var/www/updateEventList.py >> /tmp/updateEventList.py 2>&1
-01 00 * * * laradock mv /tmp/updateEventList.py /tmp/updateEventList_yesterday.py
+* * * * * laradock cd /var/www && /usr/bin/python3 /var/www/updateEventList.py >> /tmp/updateEventList.py.log 2>&1
+01 00 * * * laradock mv /tmp/updateEventList.py.log /tmp/updateEventList_yesterday.py.log
