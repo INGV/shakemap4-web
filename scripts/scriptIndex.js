@@ -91,7 +91,7 @@ function makeTable() {
 console.log(events);
 
 var events = events.map(function (o) {
-  o.date = new Date(o.year, o.month, o.day, o.hour, o.minute, o.second, 0);
+  o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);
   return o;
 });
 
