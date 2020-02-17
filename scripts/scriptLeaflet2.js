@@ -120,6 +120,7 @@ function stationList() {
     });
 
     control.addOverlay(stations_layer, 'Show stations');
+    stations_layer.addTo(map1);
   }
 }
 
