@@ -27,6 +27,13 @@ function open_static() {
 }
 
 // #####################################################
+// Open the download page for event
+//
+function open_download() {
+  window.location = './downloadPage.html?eventid=' + eventid;
+}
+
+// #####################################################
 // Write json attributes to a div
 
 function attr_div(attr_collection, div_id) {

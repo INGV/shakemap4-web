@@ -28,3 +28,10 @@ document.getElementById('imgsa1').src =
   './data/' + eventid + '/current/products/psa1p0.jpg';
 document.getElementById('imgsa3').src =
   './data/' + eventid + '/current/products/psa3p0.jpg';
+
+// #####################################################
+// Open the download page for event
+//
+function open_download () {
+  window.location = './downloadPage.html?eventid=' + eventid;
+}
