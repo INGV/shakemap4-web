@@ -72,8 +72,8 @@ function listProducts (eventid, productList) {
     '<tbody>';
 
   for (var j = 0; j < categoriesNumber; j++) {
-    myvar += '<font size="7"><tr><td colspan = "100%" bgcolor="lightblue"><b>' + categories[j] +
-     '</b></td></tr></font>';
+    myvar += '<tr><td colspan = "100%" bgcolor="#00958C"><font size="3" color="#ffffff"><b>' + categories[j] +
+     '</b></font></td></tr>';
     for (var i = 0; i < productsNumber; i++) {
       if (productsList[i].cat === categories[j]) {
         myvar += '<tr data-href="' + baseLink + productsList[i].file + '">' +
