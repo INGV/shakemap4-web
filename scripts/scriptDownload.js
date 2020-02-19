@@ -33,14 +33,34 @@ function initTableClick () {
     });
   });
 }
+
+//  #################################################################
+//  #  Find categories of available products for event
+//  ##################################################################
+function find_unique_cats (productsList) {
+  var categoryList = [];
+
+  var productsNumber = productsList.length;
+
+  for (var i = 0; i < productsNumber; i++) {
+    if (categoryList.indexOf(productsList[i].cat) === -1) {
+      //  indexOf returns -1 if value never occurs in an array
+      categoryList.push(productsList[i].cat);
+    }
+  }
+
+  return categoryList;
+}
 //  #################################################################
 //  #  Writing the table
 //  ##################################################################
 function listProducts (eventid, productList) {
   var productsNumber = productsList.length;
 
+  var categories = find_unique_cats(productList);
+  var categoriesNumber = categories.length;
+  console.log(categoriesNumber);
   var baseLink = 'data/' + eventid + '/current/products/';
-
   var myvar =
     '<table class="table table-hover table-sm archive_table">' +
     '<thead>' +
@@ -51,16 +71,21 @@ function listProducts (eventid, productList) {
     '</tr>' +
     '<tbody>';
 
-  for (var i = 0; i < productsNumber; i++) {
-    myvar += '<tr data-href="' + baseLink + productsList[i].file + '" download="name_of_downloaded_file">' +
-        '<td>' +
-        productsList[i].file +
-        '</td>' +
-        '<td>' +
-        productsList[i].desc +
-        '</td>';
+  for (var j = 0; j < categoriesNumber; j++) {
+    myvar += '<font size="7"><tr><td colspan = "100%" bgcolor="lightblue"><b>' + categories[j] +
+     '</b></td></tr></font>';
+    for (var i = 0; i < productsNumber; i++) {
+      if (productsList[i].cat === categories[j]) {
+        myvar += '<tr data-href="' + baseLink + productsList[i].file + '">' +
+            '<td>' +
+            productsList[i].file +
+            '</td>' +
+            '<td>' +
+            productsList[i].desc +
+            '</td>';
+      }
+    }
   }
-
   myvar += '</tbody>' + '</table>';
 
   document.getElementById('products_table').innerHTML = myvar;
