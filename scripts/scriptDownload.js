@@ -53,7 +53,7 @@ function listProducts (eventid, productList) {
     '<tbody>';
 
   for (var i = 0; i < productsNumber; i++) {
-    myvar += '<tr data-href="' + baseLink + productsList[i].name + '" download="name_of_downloaded_file">' +
+    myvar += '<tr data-href="' + baseLink + productsList[i].file + '" download="name_of_downloaded_file">' +
         '<td>' +
         productsList[i].file +
         '</td>' +
