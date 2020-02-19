@@ -47,6 +47,35 @@ def overlay_to_json(event_id):
 
     return None
 
+def get_products_list(event_id):
+    """
+        Get the list of products generated for an event and write them to file
+    """
+    with open('productsDownloadList.json') as json_file:
+        productMeta = json.load(json_file)
+    
+    products_path = './data/' + event_id + '/current/products/'
+
+    fileList = [ item for item in os.listdir(products_path) if os.path.isfile(os.path.join(products_path, item)) ]
+
+    productsList = []
+    for fileName in fileList:
+        fileMeta = next((x for x in productMeta if x['name']==fileName),
+                     {'name': fileName, 'desc': '-', 'cat': '-'}
+                     )
+        product_dict = {
+                'file': fileName,
+                'desc': fileMeta['desc'],
+                'cat': fileMeta['cat']
+                }
+        productsList.append(product_dict)
+        
+#    with open(products_path + 'productList.js', 'w') as f:
+#        print('var productsList =', file=f)
+    with open(products_path + 'productList.js', 'a') as outfile:
+        json.dump(productsList, outfile)
+
+    return None
 
 def get_parameters (event_id):
     """
@@ -89,11 +118,11 @@ def write_list_to_file(event_list):
 
 def main():
     event_list = []
-
+    products_list = []
     for event in get_event_ids():
         print('Processing event:' + event)
-        
-        ## Try to read the info.json file to put the earthquake parameters in a list for the website to read
+
+        ## Try to read the info.json file to put the events in a list for the website to read
         try:
             event_list.append(get_parameters(event))
         except Exception as e:
@@ -105,6 +134,14 @@ def main():
             overlay_to_json(event)
         except Exception as e:
             print('No intensity overlay file for event:' + event)
+            print(e)
+        
+        ## Try to get products list and put them into a json file, so the website can read it
+        try:
+            get_products_list(event)
+        except Exception as e:
+            print('Product file list error for event ' + event + ':')
+            print(e)
 
     write_list_to_file(event_list)
 

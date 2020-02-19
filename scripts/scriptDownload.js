@@ -1,9 +1,3 @@
-// var fas = require("fs");
-// var text = fas.readFileSync("./eventlist.txt", "utf-8");
-// var list = text.split("\n")
-//
-// console.log(list)
-
 function getURLParameter (name) {
   return (
     decodeURIComponent(
@@ -42,7 +36,8 @@ function initTableClick () {
 //  #################################################################
 //  #  Writing the table
 //  ##################################################################
-function listProducts (eventid) {
+function listProducts (eventid, productList) {
+
   var productsNumber = productsList.length;
 
   var baseLink = 'data/' + eventid + '/current/products/';
@@ -60,41 +55,12 @@ function listProducts (eventid) {
   for (var i = 0; i < productsNumber; i++) {
     myvar += '<tr data-href="' + baseLink + productsList[i].name + '" download="name_of_downloaded_file">' +
         '<td>' +
-        productsList[i].name +
+        productsList[i].file +
         '</td>' +
         '<td>' +
         productsList[i].desc +
         '</td>';
   }
-  // for (var i = 0; i < showLength; i++) {
-  //   myvar +=
-  //     '<tr data-href="' +
-  //     viewerLink +
-  //     showEvents[i].id +
-  //     '">' +
-  //     '<td>' +
-  //     showEvents[i].id +
-  //     '</td>' +
-  //     '<td>' +
-  //     showEvents[i].year +
-  //     '</td>' +
-  //     '<td>' +
-  //     showEvents[i].month +
-  //     '</td>' +
-  //     '<td>' +
-  //     showEvents[i].day +
-  //     '</td>' +
-  //     '<td>' +
-  //     ('0' + showEvents[i].hour.toString()).slice(-2) + ':' + ('0' + showEvents[i].minute.toString()).slice(-2) +
-  //     '</td>' +
-  //     '<td>' +
-  //     showEvents[i].description +
-  //     '</td>' +
-  //     '<td>' +
-  //     (Math.round(showEvents[i].magnitude * 10) / 10 + '.0').slice(0, 3) +
-  //     '</td>' +
-  //     '</tr>';
-  // }
 
   myvar += '</tbody>' + '</table>';
 
@@ -103,18 +69,14 @@ function listProducts (eventid) {
   initTableClick();
 }
 
+//  #################################################################
+//  #  Main
+//  ##################################################################
+
 var eventid = getURLParameter('eventid');
 
-listProducts(eventid);
-// document.getElementById('imgint').src =
-//   './data/' + eventid + '/current/products/intensity.jpg';
-// document.getElementById('pgaint').src =
-//   './data/' + eventid + '/current/products/pga.jpg';
-// document.getElementById('pgvint').src =
-//   './data/' + eventid + '/current/products/pgv.jpg';
-// document.getElementById('imgsa03').src =
-//   './data/' + eventid + '/current/products/psa0p3.jpg';
-// document.getElementById('imgsa1').src =
-//   './data/' + eventid + '/current/products/psa1p0.jpg';
-// document.getElementById('imgsa3').src =
-//   './data/' + eventid + '/current/products/psa3p0.jpg';
+var productsList;
+$.getJSON('data/' + eventid + '/current/products/productList.json', function (data) {
+  productsList = data;
+  listProducts(eventid, productsList);
+});
