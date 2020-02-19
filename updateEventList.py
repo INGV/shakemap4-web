@@ -72,7 +72,7 @@ def get_products_list(event_id):
         
 #    with open(products_path + 'productList.js', 'w') as f:
 #        print('var productsList =', file=f)
-    with open(products_path + 'productList.js', 'a') as outfile:
+    with open(products_path + 'productList.json', 'w') as outfile:
         json.dump(productsList, outfile)
 
     return None
