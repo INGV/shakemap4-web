@@ -37,7 +37,6 @@ function initTableClick () {
 //  #  Writing the table
 //  ##################################################################
 function listProducts (eventid, productList) {
-
   var productsNumber = productsList.length;
 
   var baseLink = 'data/' + eventid + '/current/products/';

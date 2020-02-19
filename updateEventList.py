@@ -56,19 +56,22 @@ def get_products_list(event_id):
     
     products_path = './data/' + event_id + '/current/products/'
 
+    filesNotForList = ['productList.json', 'productList.js', 'overlay.json', 'intensity_overlay.pngw', 'pin-thumbnail.png']
+
     fileList = [ item for item in os.listdir(products_path) if os.path.isfile(os.path.join(products_path, item)) ]
 
     productsList = []
     for fileName in fileList:
-        fileMeta = next((x for x in productMeta if x['name']==fileName),
-                     {'name': fileName, 'desc': '-', 'cat': '-'}
-                     )
-        product_dict = {
-                'file': fileName,
-                'desc': fileMeta['desc'],
-                'cat': fileMeta['cat']
-                }
-        productsList.append(product_dict)
+        if fileName not in filesNotForList:
+            fileMeta = next((x for x in productMeta if x['name']==fileName),
+                         {'name': fileName, 'desc': '-', 'cat': '-'}
+                         )
+            product_dict = {
+                    'file': fileName,
+                    'desc': fileMeta['desc'],
+                    'cat': fileMeta['cat']
+                    }
+            productsList.append(product_dict)
         
 #    with open(products_path + 'productList.js', 'w') as f:
 #        print('var productsList =', file=f)
