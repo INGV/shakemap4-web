@@ -39,7 +39,7 @@
 {"name": "shake_result.hdf", "desc": "HDF5 results file", "cat": "Other files"},
 {"name": "attenuation_curves.json", "desc": "??", "cat": "Other files"},
 
-{"name": "mmi_legend.png", "desc": "PNG image of the legend for MMI and PGMs", "cat": "??"}
-{"name": "cont_mmi.json", "desc": "MMI contours GeoJSON file", "cat": "??"},
+{"name": "mmi_legend.png", "desc": "PNG image of the legend for MMI and PGMs", "cat": "??"},
+{"name": "cont_mmi.json", "desc": "MMI contours GeoJSON file", "cat": "??"}
 
 ]
