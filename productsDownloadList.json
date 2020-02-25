@@ -20,10 +20,10 @@
 {"name": "cont_psa3p0.json", "desc": "PSA 3.0s contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "shape.zip", "desc": "!!Shape files", "cat": "Contours and shape files"},
 
-{"name": "intensity_overlay.png", "desc": "PNG map overlay of intensity", "cat": "Peak Ground Motion Maps"},
-{"name": "raster.zip", "desc": "!!Raster files", "cat": "Contours and shape files"},
-{"name": "grid.xml", "desc": "!!grid XML file", "cat": "Contours and shape files"},
-{"name": "raster.zip", "desc": "Shape files", "cat": "Contours and shape files"},
+{"name": "intensity_overlay.png", "desc": "PNG map overlay of intensity", "cat": "Rasters and grid"},
+{"name": "raster.zip", "desc": "!!Raster files", "cat": "Rasters and grid"},
+{"name": "grid.xml", "desc": "!!grid XML file", "cat": "Rasters and grid"},
+{"name": "raster.zip", "desc": "Shape files", "cat": "Rasters and grid"},
 
 {"name": "mmi_regr.png", "desc": "??", "cat": "Regressions"},
 {"name": "pga_regr.png", "desc": "??", "cat": "Regressions"},
