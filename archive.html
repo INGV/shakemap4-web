@@ -26,6 +26,9 @@
     # Header
     ###############################################
      -->
+     <div style="width: 100%; margin: 0 auto;">
+          <img src="ingv_logo_colore.png"/>
+     </div>
      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
        <a class="navbar-brand" href="./index.html"><h3>ShakeMap <small class="text-muted">v4</small></h3></a>
        <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavDropdown">
@@ -54,37 +57,41 @@
      # Main content
      ###############################################
       -->
-<div class="tab_menu">
+
+      <div style="width: 100%;">
+           <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
+      </div>
+      <div class="tab_menu">
 
 
-<h3> Events list </h3>
+      <h3> Events list </h3>
 
-<button type="button" class="btn btn-outline-primary btn_active" id="leafletButton"  onclick="determine_viewer(2)">Leaflet View</button>
-<button type="button" class="btn btn-outline-primary" id="staticButton" onclick="determine_viewer(1)">Static View</button>
+      <button type="button" class="btn btn-outline-primary btn_active" id="leafletButton"  onclick="determine_viewer(2)">Leaflet View</button>
+      <button type="button" class="btn btn-outline-primary" id="staticButton" onclick="determine_viewer(1)">Static View</button>
 
-<div class="criteria_container">
+      <div class="criteria_container">
 
-    <small class="input_text">Select year &nbsp;</small>
-    <select class="custom-select" id="selectYear" onchange="listEvents()">
-    </select>
-    <small class="input_text"> &nbsp;  &nbsp; Magnitude range  &nbsp;</small>
-    <input type="text" class="mag_input" id="min_mag" placeholder="Minimum"></input>
-    &nbsp; <small class="input_text">-</small>&nbsp;
-    <input type="text" class="mag_input" id="max_mag" placeholder="Maximum"></input>
+          <small class="input_text">Select year &nbsp;</small>
+          <select class="custom-select" id="selectYear" onchange="listEvents()">
+          </select>
+          <small class="input_text"> &nbsp;  &nbsp; Magnitude range  &nbsp;</small>
+          <input type="text" class="mag_input" id="min_mag" placeholder="Minimum"></input>
+          &nbsp; <small class="input_text">-</small>&nbsp;
+          <input type="text" class="mag_input" id="max_mag" placeholder="Maximum"></input>
 
-  &nbsp;&nbsp;<button type="button" class="btn btn-dark btn-raised" onclick="listEvents()">Sort</button>
-</div>
-<br/>
-
-
-<br/>
-
-<div id="event_table" class="table-responsive-md archive_table">
-
-</div>
+        &nbsp;&nbsp;<button type="button" class="btn btn-dark btn-raised" onclick="listEvents()">Sort</button>
+      </div>
+      <br/>
 
 
-</div>
+      <br/>
+
+      <div id="event_table" class="table-responsive-md archive_table">
+
+      </div>
+
+
+      </div>
 
       <!--
       ###############################################
