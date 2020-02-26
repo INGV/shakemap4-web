@@ -53,10 +53,10 @@ def get_products_list(event_id):
     """
     with open('productsDownloadList.json') as json_file:
         productMeta = json.load(json_file)
-    
+
     products_path = './data/' + event_id + '/current/products/'
 
-    filesNotForList = ['productList.json', 'productList.js', 'overlay.json', 'intensity_overlay.pngw', 'pin-thumbnail.png']
+    filesNotForList = ['productList.json', 'productList.js', 'overlay.json', 'pin-thumbnail.png']
 
     fileList = [ item for item in os.listdir(products_path) if os.path.isfile(os.path.join(products_path, item)) ]
 
@@ -72,7 +72,7 @@ def get_products_list(event_id):
                     'cat': fileMeta['cat']
                     }
             productsList.append(product_dict)
-        
+
 #    with open(products_path + 'productList.js', 'w') as f:
 #        print('var productsList =', file=f)
     with open(products_path + 'productList.json', 'w') as outfile:
@@ -138,7 +138,7 @@ def main():
         except Exception as e:
             print('No intensity overlay file for event:' + event)
             print(e)
-        
+
         ## Try to get products list and put them into a json file, so the website can read it
         try:
             get_products_list(event)

@@ -18,12 +18,13 @@
 {"name": "cont_psa0p3.json", "desc": "PSA 0.3s contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_psa1p0.json", "desc": "PSA 1.0s contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_psa3p0.json", "desc": "PSA 3.0s contours GeoJSON file", "cat": "Contours and shape files"},
-{"name": "shape.zip", "desc": "!!Shape files", "cat": "Contours and shape files"},
+{"name": "shape.zip", "desc": "GIS Shapefiles in a zip archive", "cat": "Contours and shape files"},
 
 {"name": "intensity_overlay.png", "desc": "PNG map overlay of intensity", "cat": "Rasters and grid"},
-{"name": "raster.zip", "desc": "!!Raster files", "cat": "Rasters and grid"},
-{"name": "grid.xml", "desc": "!!grid XML file", "cat": "Rasters and grid"},
-{"name": "uncertainty.xml", "desc": "!!Uncertainty", "cat": "Rasters and grid"},
+{"name": "intensity_overlay.pngw", "desc": "PNG overlay accompanying “world file”", "cat": "Rasters and grid"},
+{"name": "raster.zip", "desc": "ESRI Raster Grid Files in a zip archive", "cat": "Rasters and grid"},
+{"name": "grid.xml", "desc": "XML grid of ground motions", "cat": "Rasters and grid"},
+{"name": "uncertainty.xml", "desc": "XML grid of ground-motion uncertainty", "cat": "Rasters and grid"},
 
 {"name": "mmi_regr.png", "desc": "??", "cat": "Regressions"},
 {"name": "pga_regr.png", "desc": "??", "cat": "Regressions"},
@@ -33,11 +34,11 @@
 {"name": "psa3p0_regr.png", "desc": "??", "cat": "Regressions"},
 
 
-{"name": "info.json", "desc": "ShakeMap metadata", "cat": "Other files"},
-{"name": "stationlist.json", "desc": "GeoJSON file describing the seismic station and macroseismic data", "cat": "Other files"},
-{"name": "rupture.json", "desc": "Fault GeoJSON contours", "cat": "Other files"},
-{"name": "shake_result.hdf", "desc": "HDF5 results file", "cat": "Other files"},
-{"name": "attenuation_curves.json", "desc": "??", "cat": "Other files"},
+{"name": "info.json", "desc": "JSON file of processing and constraints parameters, input data, output paramaters, timestamps, and versioning", "cat": "Other files"},
+{"name": "stationlist.json", "desc": "GeoJSON station file containing seismic stations, DYFI observations, predictions, converted parameters (e.g., MMI to PGM, or PGM to MMI)", "cat": "Other files"},
+{"name": "rupture.json", "desc": "GeoJSON file of the finite rupture geometry ", "cat": "Other files"},
+{"name": "shake_result.hdf", "desc": "HDF file containing input parameters and data, output grids, and metadata", "cat": "Other files"},
+{"name": "attenuation_curves.json", "desc": "Set of GMPE values as a function of distance (and their standard deviations) for soft soil and for rock site conditions", "cat": "Other files"},
 
 {"name": "mmi_legend.png", "desc": "PNG image of the legend for MMI and PGMs", "cat": "??"},
 {"name": "cont_mmi.json", "desc": "MMI contours GeoJSON file", "cat": "??"}
