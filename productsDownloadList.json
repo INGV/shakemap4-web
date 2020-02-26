@@ -13,6 +13,7 @@
 {"name": "intensity.pdf", "desc": "PDF map of intensity", "cat": "Peak Ground Motion Maps"},
 
 {"name": "cont_mmi.json", "desc": "MMI contours GeoJSON file", "cat": "Contours and shape files"},
+{"name": "cont_mi.json", "desc": "MI contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_pga.json", "desc": "PGA contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_pgv.json", "desc": "PGV contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_psa0p3.json", "desc": "PSA 0.3s contours GeoJSON file", "cat": "Contours and shape files"},
@@ -39,8 +40,6 @@
 {"name": "rupture.json", "desc": "GeoJSON file of the finite rupture geometry ", "cat": "Other files"},
 {"name": "shake_result.hdf", "desc": "HDF file containing input parameters and data, output grids, and metadata", "cat": "Other files"},
 {"name": "attenuation_curves.json", "desc": "Set of GMPE values as a function of distance (and their standard deviations) for soft soil and for rock site conditions", "cat": "Other files"},
-
-{"name": "mmi_legend.png", "desc": "MMI legend file appropriate for the selected GMICE", "cat": "??"},
-{"name": "cont_mi.json", "desc": "MI contours GeoJSON file", "cat": "??"}
+{"name": "mmi_legend.png", "desc": "MMI legend file appropriate for the selected GMICE", "cat": "Other files"}
 
 ]

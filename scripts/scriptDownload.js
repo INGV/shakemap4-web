@@ -67,25 +67,25 @@ function listProducts (eventid, productList) {
     '<table class="table table-hover table-sm archive_table">' +
     '<thead>' +
     '<tr class="table-dark">' +
-    '<th scope="col";>File name</th>' +
-    '<th scope="col";>Description</th>' +
+    '<th style="text-align:left" scope="col";>File name</th>' +
+    '<th style="text-align:left" scope="col";>Description</th>' +
     '</thead>' +
     '</tr>' +
     '<tbody>';
 
   for (var k = 0; k < catList.length; k++) {
     if (categories.indexOf(catList[k]) >= 0) {
-      myvar += '<tr><td colspan = "100%" bgcolor="#DA6713"><font size="3" color="#ffffff"><b>' + catList[k] +
+      myvar += '<tr><td colspan = "100%" bgcolor="#DA6713" style="text-align:left"><font size="3" color="#ffffff"><b>' + catList[k] +
        '</b></font></td></tr>';
       for (var i = 0; i < productsNumber; i++) {
         if (productsList[i].cat === catList[k]) {
           myvar += '<tr data-href="' + baseLink + productsList[i].file + '">' +
-              '<td>' +
+              '<td style="text-align:left"><font size="2"> ' +
               productsList[i].file +
-              '</td>' +
-              '<td>' +
+              '</font></td>' +
+              '<td style="text-align:left"><font size="2">' +
               productsList[i].desc +
-              '</td>';
+              '</td></font>';
         }
       }
     }
