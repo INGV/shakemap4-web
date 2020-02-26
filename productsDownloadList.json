@@ -12,7 +12,7 @@
 {"name": "psa3p0.pdf", "desc": "PDF map of PSA 3.0s contours", "cat": "Peak Ground Motion Maps"},
 {"name": "intensity.pdf", "desc": "PDF map of intensity", "cat": "Peak Ground Motion Maps"},
 
-{"name": "cont_mi.json", "desc": "MI contours GeoJSON file", "cat": "Contours and shape files"},
+{"name": "cont_mmi.json", "desc": "MMI contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_pga.json", "desc": "PGA contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_pgv.json", "desc": "PGV contours GeoJSON file", "cat": "Contours and shape files"},
 {"name": "cont_psa0p3.json", "desc": "PSA 0.3s contours GeoJSON file", "cat": "Contours and shape files"},
@@ -26,12 +26,12 @@
 {"name": "grid.xml", "desc": "XML grid of ground motions", "cat": "Rasters and grid"},
 {"name": "uncertainty.xml", "desc": "XML grid of ground-motion uncertainty", "cat": "Rasters and grid"},
 
-{"name": "mmi_regr.png", "desc": "??", "cat": "Regressions"},
-{"name": "pga_regr.png", "desc": "??", "cat": "Regressions"},
-{"name": "pgv_regr.png", "desc": "??", "cat": "Regressions"},
-{"name": "psa0p3_regr.png", "desc": "??", "cat": "Regressions"},
-{"name": "psa1p0_regr.png", "desc": "??", "cat": "Regressions"},
-{"name": "psa3p0_regr.png", "desc": "??", "cat": "Regressions"},
+{"name": "mmi_regr.png", "desc": "Regression (GMPE) plot with data for MMI", "cat": "Regressions"},
+{"name": "pga_regr.png", "desc": "Regression (GMPE) plot with data for PGA", "cat": "Regressions"},
+{"name": "pgv_regr.png", "desc": "Regression (GMPE) plot with data for PGV", "cat": "Regressions"},
+{"name": "psa0p3_regr.png", "desc": "Regression (GMPE) plot with data for PSA 0.3s", "cat": "Regressions"},
+{"name": "psa1p0_regr.png", "desc": "Regression (GMPE) plot with data for PSA 1.0s", "cat": "Regressions"},
+{"name": "psa3p0_regr.png", "desc": "Regression (GMPE) plot with data for PSA 3.0s", "cat": "Regressions"},
 
 
 {"name": "info.json", "desc": "JSON file of processing and constraints parameters, input data, output paramaters, timestamps, and versioning", "cat": "Other files"},
@@ -40,7 +40,7 @@
 {"name": "shake_result.hdf", "desc": "HDF file containing input parameters and data, output grids, and metadata", "cat": "Other files"},
 {"name": "attenuation_curves.json", "desc": "Set of GMPE values as a function of distance (and their standard deviations) for soft soil and for rock site conditions", "cat": "Other files"},
 
-{"name": "mmi_legend.png", "desc": "PNG image of the legend for MMI and PGMs", "cat": "??"},
-{"name": "cont_mmi.json", "desc": "MMI contours GeoJSON file", "cat": "??"}
+{"name": "mmi_legend.png", "desc": "MMI legend file appropriate for the selected GMICE", "cat": "??"},
+{"name": "cont_mi.json", "desc": "MI contours GeoJSON file", "cat": "??"}
 
 ]
