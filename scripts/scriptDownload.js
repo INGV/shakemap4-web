@@ -59,7 +59,9 @@ function listProducts (eventid, productList) {
 
   var categories = find_unique_cats(productList);
   var categoriesNumber = categories.length;
-  console.log(categoriesNumber);
+  var catList = ['Peak Ground Motion Maps', 'Contours and shape files', 'Rasters and grid',
+    'Regressions', 'Other files', '??'];
+
   var baseLink = 'data/' + eventid + '/current/products/';
   var myvar =
     '<table class="table table-hover table-sm archive_table">' +
@@ -71,18 +73,20 @@ function listProducts (eventid, productList) {
     '</tr>' +
     '<tbody>';
 
-  for (var j = 0; j < categoriesNumber; j++) {
-    myvar += '<tr><td colspan = "100%" bgcolor="#DA6713"><font size="3" color="#ffffff"><b>' + categories[j] +
-     '</b></font></td></tr>';
-    for (var i = 0; i < productsNumber; i++) {
-      if (productsList[i].cat === categories[j]) {
-        myvar += '<tr data-href="' + baseLink + productsList[i].file + '">' +
-            '<td>' +
-            productsList[i].file +
-            '</td>' +
-            '<td>' +
-            productsList[i].desc +
-            '</td>';
+  for (var k = 0; k < catList.length; k++) {
+    if (categories.indexOf(catList[k]) >= 0) {
+      myvar += '<tr><td colspan = "100%" bgcolor="#DA6713"><font size="3" color="#ffffff"><b>' + catList[k] +
+       '</b></font></td></tr>';
+      for (var i = 0; i < productsNumber; i++) {
+        if (productsList[i].cat === catList[k]) {
+          myvar += '<tr data-href="' + baseLink + productsList[i].file + '">' +
+              '<td>' +
+              productsList[i].file +
+              '</td>' +
+              '<td>' +
+              productsList[i].desc +
+              '</td>';
+        }
       }
     }
   }

@@ -23,7 +23,7 @@
 {"name": "intensity_overlay.png", "desc": "PNG map overlay of intensity", "cat": "Rasters and grid"},
 {"name": "raster.zip", "desc": "!!Raster files", "cat": "Rasters and grid"},
 {"name": "grid.xml", "desc": "!!grid XML file", "cat": "Rasters and grid"},
-{"name": "raster.zip", "desc": "Shape files", "cat": "Rasters and grid"},
+{"name": "uncertainty.xml", "desc": "!!Uncertainty", "cat": "Rasters and grid"},
 
 {"name": "mmi_regr.png", "desc": "??", "cat": "Regressions"},
 {"name": "pga_regr.png", "desc": "??", "cat": "Regressions"},
