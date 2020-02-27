@@ -40,8 +40,6 @@ def overlay_to_json(event_id):
             'upper_left_y': overlay_file[5]
         }
 
-    # with open('./data/' + event_id + '/current/products/overlay.js', 'w') as f:
-    #         print('var overlayCoords =', file=f)
     with open('./data/' + event_id + '/current/products/overlay.json', 'w') as outfile:
             json.dump(js_file, outfile)
 
@@ -56,25 +54,15 @@ def get_products_list(event_id):
 
     products_path = './data/' + event_id + '/current/products/'
 
-    filesNotForList = ['productList.json', 'productList.js', 'overlay.json', 'pin-thumbnail.png']
-
     fileList = [ item for item in os.listdir(products_path) if os.path.isfile(os.path.join(products_path, item)) ]
 
     productsList = []
-    for fileName in fileList:
-        if fileName not in filesNotForList:
-            fileMeta = next((x for x in productMeta if x['name']==fileName),
-                         {'name': fileName, 'desc': '-', 'cat': '-'}
-                         )
-            product_dict = {
-                    'file': fileName,
-                    'desc': fileMeta['desc'],
-                    'cat': fileMeta['cat']
-                    }
-            productsList.append(product_dict)
+    
+    for product in productMeta:
+        if product['name'] in fileList:
+            productsList.append(product)
 
-#    with open(products_path + 'productList.js', 'w') as f:
-#        print('var productsList =', file=f)
+
     with open(products_path + 'productList.json', 'w') as outfile:
         json.dump(productsList, outfile)
 

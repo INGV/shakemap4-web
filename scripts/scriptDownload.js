@@ -60,7 +60,7 @@ function listProducts (eventid, productList) {
   var categories = find_unique_cats(productList);
   var categoriesNumber = categories.length;
   var catList = ['Peak Ground Motion Maps', 'Contours and shape files', 'Rasters and grid',
-    'Regressions', 'Other files', '??'];
+    'Regressions', 'Other files'];
 
   var baseLink = 'data/' + eventid + '/current/products/';
   var myvar =
@@ -79,9 +79,9 @@ function listProducts (eventid, productList) {
        '</b></font></td></tr>';
       for (var i = 0; i < productsNumber; i++) {
         if (productsList[i].cat === catList[k]) {
-          myvar += '<tr data-href="' + baseLink + productsList[i].file + '">' +
+          myvar += '<tr data-href="' + baseLink + productsList[i].name + '">' +
               '<td style="text-align:left"><font size="2"> ' +
-              productsList[i].file +
+              productsList[i].name +
               '</font></td>' +
               '<td style="text-align:left"><font size="2">' +
               productsList[i].desc +
