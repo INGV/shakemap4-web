@@ -76,17 +76,17 @@ function listProducts (eventid, productList) {
   var mapType=0;
   for (var k = 0; k < catList.length; k++) {
     if (categories.indexOf(catList[k]) >= 0) {
-      myvar += '<tr><td colspan = "100%" bgcolor="#DA6713" style="text-align:left"><font size="3" color="#ffffff"><b>' + catList[k] +
+      myvar += '<tr data-href="#"><td colspan = "100%" bgcolor="#DA6713" style="text-align:left"><font size="3" color="#ffffff"><b>' + catList[k] +
        '</b></font></td></tr>';
       for (var i = 0; i < productsNumber; i++) {
         if (productsList[i].cat === catList[k]) {
 
           if (productList[i].name.slice(-4) === '.jpg' && catList[k]==='Peak Ground Motion Maps' && mapType===0) {
-            myvar += '<tr><td colspan = "100%" bgcolor="#F6C564" style="text-align:left"><font size="2" color="#ffffff"><b> JPG maps </b></font></td></tr>';
+            myvar += '<tr data-href="#"><td colspan = "100%" bgcolor="#F6C564" style="text-align:left"><font size="2" color="#ffffff"><b> JPG maps </b></font></td></tr>';
             mapType = 1;
           }
           if (productList[i].name.slice(-4) === '.pdf' && catList[k]==='Peak Ground Motion Maps' && mapType===1) {
-            myvar += '<tr><td colspan = "100%" bgcolor="#F6C564" style="text-align:left"><font size="2" color="#ffffff"><b> PDF maps </b></font></td></tr>';
+            myvar += '<tr data-href="#"><td colspan = "100%" bgcolor="#F6C564" style="text-align:left"><font size="2" color="#ffffff"><b> PDF maps </b></font></td></tr>';
             mapType = 2;
           }
 
