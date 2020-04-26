@@ -14,10 +14,10 @@ $ cp ./Docker/env-example ./Docker/.env
 Set `NGINX_HOST_HTTP_PORT` in `./Docker/.env` file (default port is `8091`).
 
 ### Set 'data' path
-Set `SHAKEMAP_DATA_PATH` with the absolte `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
+Set `SHAKEMAP_DATA_PATH` with the absolute `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
 
 ### !!! On Linux machine and no 'root' user !!!
-To run container as *linux-user* (intead of `root`), set `WORKSPACE_PUID` and `WORKSPACE_PGID` in `./Docker/.env` file with:
+To run containers as *linux-user* (intead of `root`), set `WORKSPACE_PUID` and `WORKSPACE_PGID` in `./Docker/.env` file with:
 - `WORKSPACE_PUID` should be equal to the output of `id -u` command
 - `WORKSPACE_PGID` should be equal to the output of `id -g` command
 
