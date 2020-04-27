@@ -46,7 +46,7 @@ function attr_div(attr_collection, div_id) {
 
 // ##################################################
 // Show fault
-function faultSurface() {
+function faultSurface(controlName) {
   $.getJSON('./data/' + eventid + '/current/products/rupture.json', function(
     json
   ) {
@@ -57,19 +57,19 @@ function faultSurface() {
   function show_fault(fault) {
     if (fault[0].geometry.coordinates[0].constructor === Array) {
       var faultLayer = L.geoJSON(fault);
-      control.addOverlay(faultLayer, 'Show fault');
+      controlName.addOverlay(faultLayer, 'Show fault');
     }
   }
 }
 
 // ##################################################
 // Show stations
-function stationList() {
+function stationList(mapName, controlName, showOnMap) {
   $.getJSON(
     './data/' + eventid + '/current/products/stationlist.json',
     function(json) {
       var stations = json.features;
-      show_stations(stations);
+      show_stations(stations, controlName);
     }
   );
 
@@ -119,8 +119,10 @@ function stationList() {
       }
     });
 
-    control.addOverlay(stations_layer, 'Show stations');
-    stations_layer.addTo(map1);
+    controlName.addOverlay(stations_layer, 'Show stations');
+    if (showOnMap == true) {
+      stations_layer.addTo(mapName);
+    }
   }
 }
 
@@ -942,8 +944,8 @@ show_pgv();
 show_psa0p3();
 show_psa1p0();
 show_psa3p0();
-stationList();
-faultSurface();
+stationList(map1, control, true);
+faultSurface(control);
 legend_box();
 
 show_intensity2();
@@ -953,5 +955,7 @@ intensityOverlay2();
 show_psa0p32();
 show_psa1p02();
 show_psa3p02();
+stationList(map2, control2, false);
+faultSurface(control2);
 
 var sidebar = L.control.sidebar('sidebar').addTo(map1);
