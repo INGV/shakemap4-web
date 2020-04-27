@@ -521,10 +521,11 @@ function intensityOverlay() {
                             [lower_right_y, lower_right_x]];
 
         overlayLayer = L.imageOverlay(imagePath, imageBounds,
-          {opacity: 0.4}
+          {opacity: 0.3}
         );
 
-        control.addBaseLayer(overlayLayer, 'Intensity-overlay');
+        // control.addBaseLayer(overlayLayer, 'Intensity-overlay');
+        control.addOverlay(overlayLayer, 'Intensity-overlay');
         // console.log(imageBounds)
       }
       imgIntHelper.src = imagePath;
@@ -574,11 +575,16 @@ var myMapIndex = {
 var control = L.control.layers();
 control.addTo(mymap);
 
+L.control.scale({
+  position: 'bottomright'
+}).addTo(mymap);
+
 L.control
   .zoom({
     position: 'bottomright'
   })
   .addTo(mymap);
+
 
 // #####################################################
 //  Map used for background
@@ -601,9 +607,5 @@ faultSurface();
 intensityOverlay();
 legend_box();
 
-// L.control.watermark.removeFrom(mymap)
-// var imageUrl = './data/' + eventid + '/current/products/mmi_legend.png';
-// var imageBounds = [[43.712216, 18], [45.773941, 19.12544]];
-// L.imageOverlay(imageUrl, imageBounds).addTo(mymap);
 
 var sidebar = L.control.sidebar('sidebar').addTo(mymap);
