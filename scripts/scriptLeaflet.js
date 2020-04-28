@@ -304,7 +304,6 @@ function intensityOverlay() {
           {opacity: 0.3}
         );
 
-        // control.addBaseLayer(overlayLayer, 'Intensity-overlay');
         control.addOverlay(overlayLayer, 'Intensity-overlay');
         // console.log(imageBounds)
       }
