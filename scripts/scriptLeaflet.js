@@ -187,133 +187,25 @@ function event_info() {
 }
 
 // ##################################################
-// Function call to show pga contours on the map
+// Function call to show contours of PGA, PGV and PSAs on the map
 
-function show_pga() {
+function show_contours(fileName, layerName) {
   $.getJSON(
-    './data/' + eventid + '/current/products/cont_pga.json',
+    './data/' + eventid + '/current/products/' + fileName,
     function(json) {
-      var pga = json.features;
-      plot_pga(pga);
+      var contours = json.features;
+      plot_contours(contours);
     }
   );
 
-  function plot_pga(pga) {
-    var pga_layer = L.layerGroup([L.geoJSON(pga, {
+  function plot_contours(contours) {
+    var unit = ' %g';
+    if (layerName == 'PGV') {
+      unit = ' cm/s'
+    };
+    var contours_layer = L.layerGroup([L.geoJSON(contours, {
       onEachFeature: function (feature, layer) {
-        var popupContent = 'PGA: ' + feature.properties.value.toString() + ' %g';
-        layer.bindPopup(popupContent);
-      },
-      style: function(feature) {
-        return {
-          color: feature.properties.color,
-          weight: feature.properties.weight
-        };
-      }
-    })]);
-
-    var marker_layer = L.geoJSON(pga, {
-      onEachFeature: function (feature, layer) {
-        for (i = 0; i < feature.geometry.coordinates.length; i++) {
-          for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
-            if (j % 50 == 0) {
-              var marker = L.circleMarker(
-                [
-                  feature.geometry.coordinates[i][j][1],
-                  feature.geometry.coordinates[i][j][0]
-                ], {
-                  fillColor: '#f03',
-                  fillOpacity: 0,
-                  radius: 0.1
-                }
-              ).bindTooltip(feature.properties.value.toString() + ' %g', {
-                permanent: true,
-                direction: 'center',
-                className: 'my-labels'
-              });
-              pga_layer.addLayer(marker);
-            }
-          }
-        }
-      }
-    });
-
-    control.addBaseLayer(pga_layer, 'PGA');
-  }
-}
-
-// ##################################################
-// Function call to show pgv contours on the map
-
-function show_pgv() {
-  $.getJSON(
-    './data/' + eventid + '/current/products/cont_pgv.json',
-    function(json) {
-      var pgv = json.features;
-      plot_pgv(pgv);
-    }
-  );
-
-  function plot_pgv(pgv) {
-    var pgv_layer = L.layerGroup([L.geoJSON(pgv, {
-      onEachFeature: function (feature, layer) {
-        var popupContent = 'PGV: ' + feature.properties.value.toString() + ' cm/s';
-        layer.bindPopup(popupContent);
-      },
-      style: function(feature) {
-        return {
-          color: feature.properties.color,
-          weight: feature.properties.weight
-        };
-      }
-    })]);
-
-    var marker_layer = L.geoJSON(pgv, {
-      onEachFeature: function (feature, layer) {
-        for (i = 0; i < feature.geometry.coordinates.length; i++) {
-          for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
-            if (j % 50 == 0) {
-              var marker = L.circleMarker(
-                [
-                  feature.geometry.coordinates[i][j][1],
-                  feature.geometry.coordinates[i][j][0]
-                ], {
-                  fillColor: '#f03',
-                  fillOpacity: 0,
-                  radius: 0.1
-                }
-              ).bindTooltip(feature.properties.value.toString() + ' cm/s', {
-                permanent: true,
-                direction: 'center',
-                className: 'my-labels'
-              });
-              pgv_layer.addLayer(marker);
-            }
-          }
-        }
-      }
-    });
-
-    control.addBaseLayer(pgv_layer, 'PGV');
-  }
-}
-
-// ##################################################
-// Function call to show PSA 0.3 contours on the map
-
-function show_psa0p3() {
-  $.getJSON(
-    './data/' + eventid + '/current/products/cont_psa0p3.json',
-    function(json) {
-      var psa0p3 = json.features;
-      plot_psa0p3(psa0p3);
-    }
-  );
-
-  function plot_psa0p3(psa0p3) {
-    var psa0p3_layer = L.layerGroup([L.geoJSON(psa0p3, {
-      onEachFeature: function (feature, layer) {
-        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
+        var popupContent = layerName + ': ' + feature.properties.value.toString() + unit;
         layer.bindPopup(popupContent);
       },
       style: function (feature) {
@@ -324,7 +216,7 @@ function show_psa0p3() {
       }
     })]);
 
-    var marker_layer = L.geoJSON(psa0p3, {
+    var marker_layer = L.geoJSON(contours, {
       onEachFeature: function(feature, layer) {
         for (i = 0; i < feature.geometry.coordinates.length; i++) {
           for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
@@ -338,131 +230,19 @@ function show_psa0p3() {
                   fillOpacity: 0,
                   radius: 0.1
                 }
-              ).bindTooltip(feature.properties.value.toString() + ' %g', {
+              ).bindTooltip(feature.properties.value.toString() + unit, {
                 permanent: true,
                 direction: 'center',
                 className: 'my-labels'
               });
-              psa0p3_layer.addLayer(marker);
+              contours_layer.addLayer(marker);
             }
           }
         }
       }
     });
 
-    control.addBaseLayer(psa0p3_layer, 'PSA 0.3');
-  }
-}
-
-// ##################################################
-// Function call to show PSA 1.0 contours on the map
-
-function show_psa1p0() {
-  $.getJSON(
-    './data/' + eventid + '/current/products/cont_psa1p0.json',
-    function(json) {
-      var psa1p0 = json.features;
-      plot_psa1p0(psa1p0);
-    }
-  );
-
-  function plot_psa1p0(psa1p0) {
-    var psa1p0_layer = L.layerGroup([L.geoJSON(psa1p0, {
-      onEachFeature: function (feature, layer) {
-        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
-        layer.bindPopup(popupContent);
-      },
-      style: function (feature) {
-        return {
-          color: feature.properties.color,
-          weight: feature.properties.weight
-        };
-      }
-    })]);
-
-    var marker_layer = L.geoJSON(psa1p0, {
-      onEachFeature: function(feature, layer) {
-        for (i = 0; i < feature.geometry.coordinates.length; i++) {
-          for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
-            if (j % 50 == 0) {
-              var marker = L.circleMarker(
-                [
-                  feature.geometry.coordinates[i][j][1],
-                  feature.geometry.coordinates[i][j][0]
-                ], {
-                  fillColor: '#f03',
-                  fillOpacity: 0,
-                  radius: 0.1
-                }
-              ).bindTooltip(feature.properties.value.toString() + ' %g', {
-                permanent: true,
-                direction: 'center',
-                className: 'my-labels'
-              });
-              psa1p0_layer.addLayer(marker);
-            }
-          }
-        }
-      }
-    });
-
-    control.addBaseLayer(psa1p0_layer, 'PSA 1.0 s');
-  }
-}
-
-// ##################################################
-// Function call to show PSA 3.0 contours on the map
-
-function show_psa3p0() {
-  $.getJSON(
-    './data/' + eventid + '/current/products/cont_psa3p0.json',
-    function(json) {
-      var psa3p0 = json.features;
-      plot_psa3p0(psa3p0);
-    }
-  );
-
-  function plot_psa3p0(psa3p0) {
-    var psa3p0_layer = L.layerGroup([L.geoJSON(psa3p0, {
-      onEachFeature: function (feature, layer) {
-        var popupContent = 'PSA 0.3: ' + feature.properties.value.toString() + ' %g';
-        layer.bindPopup(popupContent);
-      },
-      style: function (feature) {
-        return {
-          color: feature.properties.color,
-          weight: feature.properties.weight
-        };
-      }
-    })]);
-
-    var marker_layer = L.geoJSON(psa3p0, {
-      onEachFeature: function(feature, layer) {
-        for (i = 0; i < feature.geometry.coordinates.length; i++) {
-          for (j = 0; j < feature.geometry.coordinates[i].length; j++) {
-            if (j % 50 == 0) {
-              var marker = L.circleMarker(
-                [
-                  feature.geometry.coordinates[i][j][1],
-                  feature.geometry.coordinates[i][j][0]
-                ], {
-                  fillColor: '#f03',
-                  fillOpacity: 0,
-                  radius: 0.1
-                }
-              ).bindTooltip(feature.properties.value.toString() + ' %g', {
-                permanent: true,
-                direction: 'center',
-                className: 'my-labels'
-              });
-              psa3p0_layer.addLayer(marker);
-            }
-          }
-        }
-      }
-    });
-
-    control.addBaseLayer(psa3p0_layer, 'PSA 3.0 s');
+    control.addBaseLayer(contours_layer, layerName);
   }
 }
 
@@ -497,7 +277,7 @@ function show_intensity() {
 }
 
 // #######################################################
-// Loading raster intensity file
+// Show raster intensity overlay
 
 function intensityOverlay() {
   var imgIntHelper = new Image();
@@ -597,11 +377,11 @@ var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 event_info();
 show_intensity();
-show_pga();
-show_pgv();
-show_psa0p3();
-show_psa1p0();
-show_psa3p0();
+show_contours('cont_pga.json', 'PGA');
+show_contours('cont_pgv.json', 'PGV');
+show_contours('cont_psa0p3.json', 'PSA 0.3 s');
+show_contours('cont_psa1p0.json', 'PSA 1.0 s');
+show_contours('cont_psa3p0.json', 'PSA 3.0 s');
 stationList();
 faultSurface();
 intensityOverlay();
