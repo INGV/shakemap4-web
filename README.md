@@ -67,7 +67,8 @@ $ docker-compose pull nginx
 ```
 
 ## Thanks to
-This project uses the [Laradock](https://github.com/laradock/laradock) idea to start docker containers
+This project uses the [Laradock](https://github.com/laradock/laradock) idea to start docker containers.   
+This  work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
 
 ## Contribute
 Please, feel free to contribute.
