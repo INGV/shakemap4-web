@@ -165,10 +165,6 @@ function event_info() {
   function show_epi(latitude, longitude, magnitude, depth) {
     mymap.setView(new L.LatLng(latitude, longitude), 8);
 
-    // options = {
-    //   html: '<i class="material-icons epi_icon">star</i>'
-    // };
-
     var pulsingIcon = L.icon.pulse({
       iconSize: [10, 10],
       color: 'red',
@@ -181,8 +177,6 @@ function event_info() {
       .addTo(mymap)
       .bindPopup('Latitude:' + latitude + '° <br/>Longitude: ' + longitude +
         '° <br/>Magnitude: ' + magnitude + '<br/>Depth: ' + depth + ' km');
-
-    // epi.bindPopup("Latitude: <br/>Longitude: ");
   }
 }
 
