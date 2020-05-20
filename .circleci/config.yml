@@ -1,0 +1,49 @@
+version: 2
+jobs:
+  start:
+    docker:
+      - image: debian:stretch
+    steps:
+      - run:
+          name: Date start
+          command: date
+  build_docker_image:
+    docker:
+      - image: docker:18.06.0-ce
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Configure project
+          command: cp ./Docker/env-example ./Docker/.env
+      - run:
+          name: Build docker image
+          command: cd Docker & docker-compose up -d && cd ..
+  end:
+    docker:
+      - image: debian:stretch
+    steps:
+      - run:
+          name: Date end
+          command: date
+
+  test_publiccode:
+    docker:
+      - image: circleci/golang:1.12
+    steps:
+      - checkout
+      - run: go get -v github.com/italia/publiccode-parser-go/pcvalidate
+      - run: /go/bin/pcvalidate --remote-base-url https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BRANCH publiccode.yml
+
+workflows:
+  version: 2
+  shakemap4-web-workflow:
+    jobs:
+      - start
+      - build_docker_image:
+          requires:
+            - start
+      - end:
+          requires:
+            - build_docker_image
+      - test_publiccode
