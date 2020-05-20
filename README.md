@@ -1,7 +1,7 @@
 # shakemap4-web
 
 The development presented in this project is aimed towards providing a simple web interface to show the products of the USGS ShakeMap v. 4 software (http://usgs.github.io/shakemap/sm4_index.html). The web interface renders the standard products provided by ShakeMap dynamically (using leafelet https://github.com/Leaflet/Leaflet) and statically (standard shakemaps).   
-The apperance of the web portal is easily configurable by replacing the logo and banners. The software can be installed both laptops and on server computers.  
+The apperance of the web portal is easily configurable by replacing the logo and banners. The software can be installed both laptops and on server computers.
 
 ## Installation
 
