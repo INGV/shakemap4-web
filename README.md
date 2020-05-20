@@ -7,8 +7,6 @@
 
 [![License](https://img.shields.io/github/license/INGV/shakemap4-web.svg)](https://github.com/INGV/shakemap4-web/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/INGV/shakemap4-web.svg)](https://github.com/INGV/shakemap4-web/issues)
-[![Join the #general channel](https://img.shields.io/badge/Slack%20channel-%23general-blue.svg)](https://ingv-institute.slack.com/messages/CKS902Y5B)
-[![Get invited](https://slack.developers.italia.it/badge.svg)](https://join.slack.com/t/ingv-institute/shared_invite/zt-ckoji8va-mutwycltiCw_EAhUWSND8Q)
 
 # shakemap4-web
 
