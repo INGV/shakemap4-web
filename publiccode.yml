@@ -18,7 +18,8 @@ platforms:
 usedBy:
   - INGV
 categories:
-  - web
+  - geographic-information-systems
+  - data-visualization 
 maintenance:
   type: internal
   contacts:
