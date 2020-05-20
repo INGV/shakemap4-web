@@ -1,50 +1,23 @@
 version: 2
 jobs:
-  start:
-    docker:
-      - image: debian:stretch
-    steps:
-      - run:
-          name: Date start
-          command: date
-  build_docker_image:
-    docker:
-      - image: docker:18.06.0-ce
+  build_and_test:
+    machine:
+      image: ubuntu-1604:201903-01
     steps:
       - checkout
-
-      - setup_remote_docker
-
-      - run:
-          name: Install packages and dependencies
-          command: |
-            apt-get update
-            apt-get install curl
-
-      - run:
-          name: Install Docker Compose
-          command: |
-            set -x
-            curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-
       - run:
           name: Configure project
           command: cp ./Docker/env-example ./Docker/.env
-
       - run:
           name: Build docker image
           command: |
             cd Docker 
             docker-compose up -d
-  end:
-    docker:
-      - image: debian:stretch
-    steps:
       - run:
-          name: Date end
-          command: date
-
+          name: Check Docker started
+          command: |
+            docker ps -a 
+            
   test_publiccode:
     docker:
       - image: circleci/golang:1.12
@@ -52,16 +25,10 @@ jobs:
       - checkout
       - run: go get -v github.com/italia/publiccode-parser-go/pcvalidate
       - run: /go/bin/pcvalidate --remote-base-url https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BRANCH publiccode.yml
-
+      
 workflows:
   version: 2
   shakemap4-web-workflow:
     jobs:
-      - start
-      - build_docker_image:
-          requires:
-            - start
-      - end:
-          requires:
-            - build_docker_image
+      - build_and_test
       - test_publiccode
