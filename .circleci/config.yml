@@ -29,11 +29,11 @@ jobs:
           name: Validate publiccode file
           command: |
             # create a dummy container which will hold a volume with config
-            docker create -v /publiccode_folder --name configs alpine:3.4 /bin/true
+            docker create -v /publiccode_folder --name myfolder alpine:3.4 /bin/true
             # copy a config file into this volume
-            docker cp publiccode.yml configs:/publiccode_folder
+            docker cp publiccode.yml myfolder:/publiccode_folder
             # start an application container using this volume
-            docker run --rm --volumes-from config italia/publiccode-parser-go publiccode_folder/publiccode.yml 
+            docker run --rm --volumes-from myfolder italia/publiccode-parser-go publiccode_folder/publiccode.yml 
       
 workflows:
   version: 2
