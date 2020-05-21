@@ -30,7 +30,7 @@ jobs:
           command: |
             pwd
             ls -l 
-            docker run --rm -v $(pwd):/files italia/publiccode-parser-go files/publiccode.yml 
+            docker run --rm -v /root/project:/files italia/publiccode-parser-go files/publiccode.yml 
       
 workflows:
   version: 2
