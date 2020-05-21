@@ -20,11 +20,14 @@ jobs:
             
   test_publiccode:
     docker:
-      - image: circleci/golang:1.12
+      - image: docker:18.06.0-ce 
     steps:
       - checkout
-      - run: go get -v github.com/italia/publiccode-parser-go/pcvalidate
-      - run: /go/bin/pcvalidate --remote-base-url https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BRANCH publiccode.yml
+      - run: 
+          # https://github.com/italia/publiccode-parser-go
+          name: Validate publiccode file
+          command: |
+            docker run -v $(pwd)/:/files italia/publiccode-parser-go 
       
 workflows:
   version: 2
