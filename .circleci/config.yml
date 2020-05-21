@@ -28,12 +28,12 @@ jobs:
           # https://github.com/italia/publiccode-parser-go
           name: Validate publiccode file
           command: |
-            #pwd
-            #ls -l 
-            docker run --rm -v /root/project:/files --entrypoint="/bin/pwd" italia/publiccode-parser-go 
-            #docker run --rm -v /root/project:/files --entrypoint="/bin/ls" italia/publiccode-parser-go -l 
-            docker run --rm -v /root/project:/files --entrypoint="/bin/ls" italia/publiccode-parser-go -l /files/ 
-            #docker run --rm -v /root/project:/files italia/publiccode-parser-go files/publiccode.yml 
+            # create a dummy container which will hold a volume with config
+            docker create -v /publiccode_folder --name configs alpine:3.4 /bin/true
+            # copy a config file into this volume
+            docker cp publiccode.yml configs:/publiccode_folder
+            # start an application container using this volume
+            docker run --rm --volumes-from config italia/publiccode-parser-go publiccode_folder/publiccode.yml 
       
 workflows:
   version: 2
