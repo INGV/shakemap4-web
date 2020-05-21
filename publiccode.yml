@@ -4,11 +4,11 @@
 
 publiccodeYmlVersion: '0.2'
 name: 'INGV - ShakeMap4 Web Page' 
-releaseDate: '2020-05-20'
+releaseDate: '2020-05-21'
 url: 'https://github.com/INGV/shakemap4-web'
 logo: images/ingv_logo_text_two_lines.png
 landingURL: 'https://github.com/INGV/shakemap4-web'
-softwareVersion: 1.1.2
+softwareVersion: 1.3.0
 developmentStatus: stable
 softwareType: standalone/other
 platforms:
@@ -54,6 +54,6 @@ description:
       The apperance of the web portal is easily configurable by replacing the logo and banners. The software can be installed both laptops and on server computers.
 
       This work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
-    localisedName: 'Seismic Tools'
+    localisedName: 'ShakeMap4 Web Page'
     features:
-      - Seismic tools 
+      - ShakeMap4 Web Page 
