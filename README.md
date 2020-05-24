@@ -14,7 +14,6 @@ The development presented in this project is aimed towards providing a simple we
 The apperance of the web portal is easily configurable by replacing the logo and banners. The software can be installed both laptops and on server computers.
 
 ## Installation
-
 ```
 $ git clone https://github.com/INGV/shakemap4-web
 $ cd shakemap4-web
