@@ -76,6 +76,10 @@ $ docker-compose build --no-cache workspace
 $ docker-compose pull nginx
 ```
 
+### Example screenshot
+![alt text](images/screenshot_1.png)
+![alt text](images/screenshot_2.png)
+
 ## Thanks to
 This project uses the [Laradock](https://github.com/laradock/laradock) idea to start docker containers.   
 This  work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
