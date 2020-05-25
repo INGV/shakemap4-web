@@ -45,7 +45,7 @@ $ cd ..
 ```
 
 ## How to use it
-When all containers are started, connect to: 
+When all containers are started, connect to:
 - http://<your_host>:<your_port>/
 
 default is:
@@ -74,6 +74,15 @@ $ docker-compose build --no-cache workspace
 ```
 $ docker-compose pull nginx
 ```
+### Add a banner above the menu bar
+
+To add a banner above the menu bar (e.g. like the INGV banner that can be seen on the screenshots below), you can just uncomment the following code in all the `.html` files:
+```
+ <!-- <div style="width: 100%; margin: 0 auto;">
+      <img src="ingv_logo_colore.png"/>
+ </div> -->
+```
+ and replace the `src` attribute value with the location of your banner image. The code can be uncommented by removing the `<!--` and `-->` from the code. The banner image can be of any size.
 
 ### Example screenshot
 ![alt text](images/screenshot_1.png)
