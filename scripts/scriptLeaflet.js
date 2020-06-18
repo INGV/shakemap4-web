@@ -34,6 +34,13 @@ function open_download() {
 }
 
 // #####################################################
+// Open the download page for event
+//
+function open_analysis() {
+  window.location = './viewAnalysis.html?eventid=' + eventid;
+}
+
+// #####################################################
 // Write json attributes to a div
 
 function attr_div(attr_collection, div_id) {
