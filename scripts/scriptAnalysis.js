@@ -31,7 +31,10 @@ function open_leaflet () {
 // #####################################################
 // Plot data
 //
-function plot_data (data, div_id) {
+function plot_data (data, comp_id) {
+  var div_id = '#' + comp_id;
+  var predID = comp_id + 'Prediction';
+
   // set the dimensions and margins of the graph
   var margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = 1100 - margin.left - margin.right,
@@ -47,44 +50,83 @@ function plot_data (data, div_id) {
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
+  var div = d3.select(div_id).append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
   // set the scales
   var x = d3.scaleLog().range([0, width]);
   if (div_id == "#intensity") {
     var y = d3.scaleLinear().range([height, 0]);
+    var tickNumber = 10;
   } else {
     var y = d3.scaleLog().range([height, 0]);
+    var tickNumber = 4;
   };
+
 
 // Define axes maximums
   distance_max = Math.max(...data.map(o => o.distance), 0)
 
-  x.domain([0.5, distance_max + distance_max*0.05]).nice();
-  y.domain([Math.min(...data.map(o => o.value), 0)+0.01, Math.max(...data.map(o => o.value), 0)+0.5]).nice();
+  x.domain([1, distance_max]).nice();
+  y.domain([Math.min(...data.map(o => o[comp_id]), 0)+0.01, Math.max(...data.map(o => o[comp_id]), 0)+0.5]).nice();
+
 
 // Add the scatterplot
   svg.selectAll("dot")
       .data(data)
-    // .enter().append("circle")
-    //   .attr("r", 2)
-    //   .attr("cx", function(d) { return x(d.distance); })
-    //   .attr("cy", function(d) { return y(d.value); })
-    //   .style("fill", "#69b3a2"Math.round(number * 10) / 10);
       .enter().append("path")
         .attr("class", "point")
         .attr("r", 1)
         .style("fill", function (d) { return d.color})
         .style("stroke", "#000000")
         .attr("d", d3.symbol().type(d3.symbolTriangle))
-        .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d.value) + ")"; });
-        console.log(intColors[4.5])
-  // Add the X Axis
+        .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d[comp_id]) + ")"; })
+        .on("mouseover", function(d) {
+               div.transition()
+                 .duration(200)
+                 .style("opacity", .7);
+               div.html(
+                 'Station ID: ' + d.id +
+                 '<br/>Distance: ' + d.distance +
+                 ' km<br/> MMI: ' + d.intensity +
+                 '<br/> PGA: ' + d.pga +
+                 ' %g<br/> PGV: ' + d.pgv +
+                 ' cm/s'
+                  )
+                 .style("left", (d3.event.pageX + 5) + "px")
+                 .style("top", (d3.event.pageY - 28) + "px");
+               })
+          .on("mouseout", function(d){
+            div.transition()
+              .duration(2000)
+              .style("opacity", 0);
+            });
+
+// Add the X Axis
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).ticks(5));
 
   // Add the Y Axis
   svg.append("g")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y).ticks(tickNumber));
+
+};
+
+// #####################################################
+// Clean array from null values
+//
+function clean_array(array, keyName) {
+  var newArray = [];
+
+  for (var i=0; i<array.length; i++) {
+    if (array[i][keyName] != "null") {
+      newArray.push(array[i]);
+    };
+  };
+
+  return newArray;
 };
 // #####################################################
 // Get stationList
@@ -99,36 +141,42 @@ function stationList() {
     }
   );
   function return_data(stations) {
-    var intArr = [];
-    var pgaArr = [];
-    var pgvArr = [];
+    var objArr = [];
     for (var i=0; i<stations.length; i++) {
-      if (stations[i].properties.intensity != "null") {
-        intArr.push({distance:stations[i].properties.distance,
-                      value:stations[i].properties.intensity,
-                      color:intColors[Math.round(stations[i].properties.intensity)],
-                      prediction:stations[i].properties.predictions[5].value});
+      objArr.push({ id: stations[i].id,
+                    distance:stations[i].properties.distance,
+                    intensity:stations[i].properties.intensity,
+                    pga:stations[i].properties.pga,
+                    pgv:stations[i].properties.pgv,
+                    color:intColors[Math.round(stations[i].properties.intensity)],
+                    intensityPrediction:stations[i].properties.predictions[5].value,
+                    pgaPrediction:stations[i].properties.predictions[4].value,
+                    pgvPrediction:stations[i].properties.predictions[2].value});
+      // if (stations[i].properties.intensity != "null") {
+      //   intArr.push({distance:stations[i].properties.distance,
+      //                 value:stations[i].properties.intensity,
+      //                 color:intColors[Math.round(stations[i].properties.intensity)],
+      //                 prediction:stations[i].properties.predictions[5].value});
+      // };
+      //
+      // if (stations[i].properties.pga != "null") {
+      //   pgaArr.push({distance:stations[i].properties.distance,
+      //               value:stations[i].properties.pga,
+      //               color:intColors[Math.round(stations[i].properties.intensity)],
+      //               prediction:stations[i].properties.predictions[4].value});
+      // };
+      // if (stations[i].properties.pgv != "null") {
+      //   pgvArr.push({distance:stations[i].properties.distance,
+      //               value:stations[i].properties.pgv,
+      //               color:intColors[Math.round(stations[i].properties.intensity)],
+      //               prediction:stations[i].properties.predictions[2].value});
+      // };
       };
 
-      if (stations[i].properties.pga != "null") {
-        pgaArr.push({distance:stations[i].properties.distance,
-                    value:stations[i].properties.pga,
-                    color:intColors[Math.round(stations[i].properties.intensity)],
-                    prediction:stations[i].properties.predictions[4].value});
-      };
-      if (stations[i].properties.pgv != "null") {
-        pgvArr.push({distance:stations[i].properties.distance,
-                    value:stations[i].properties.pgv,
-                    color:intColors[Math.round(stations[i].properties.intensity)],
-                    prediction:stations[i].properties.predictions[2].value});
-      };
-      };
-  plot_data(intArr, "#intensity");
-  plot_data(pgaArr, "#pga");
-  plot_data(pgvArr, "#pgv");
-  // plot_data(sa03Arr, "#dropdown1");
-  // plot_data(sa10Arr, "#dropdown2");
-  // plot_data(sa30Arr, "#dropdown3")
+
+  plot_data(clean_array(objArr, 'intensity'), 'intensity');
+  plot_data(clean_array(objArr, 'pga'), 'pga');
+  plot_data(clean_array(objArr, 'pgv'), 'pgv');
   }
 }
 
