@@ -114,6 +114,8 @@ def write_version_file():
 
     versionElement = [s for s in yaml_file if "softwareVersion" in s][0][:-1]
 
+    versionElement = versionElement.replace('software', 'Website ')
+
     with open('softwareVersion.js', 'w') as f:
         print('var softwareVersion = "' + versionElement +
         '";document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
