@@ -1,0 +1,1 @@
+var softwareVersion = "softwareVersion: 1.6.0";document.getElementById("footer_text").innerHTML = softwareVersion;

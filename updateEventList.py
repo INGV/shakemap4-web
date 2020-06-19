@@ -57,7 +57,7 @@ def get_products_list(event_id):
     fileList = [ item for item in os.listdir(products_path) if os.path.isfile(os.path.join(products_path, item)) ]
 
     productsList = []
-    
+
     for product in productMeta:
         if product['name'] in fileList:
             productsList.append(product)
@@ -107,6 +107,19 @@ def write_list_to_file(event_list):
     with open('events.js', 'a') as outfile:
         json.dump(event_list, outfile)
 
+def write_version_file():
+    yaml_file_path = 'publiccode.yml'
+    with open(yaml_file_path, 'r') as yaml:
+        yaml_file = yaml.readlines()
+
+    versionElement = [s for s in yaml_file if "softwareVersion" in s][0][:-1]
+
+    with open('softwareVersion.js', 'w') as f:
+        print('var softwareVersion = "' + versionElement +
+        '";document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
+
+    return
+
 def main():
     event_list = []
     products_list = []
@@ -135,6 +148,7 @@ def main():
             print(e)
 
     write_list_to_file(event_list)
+    write_version_file()
 
 if __name__ == "__main__":
     main()
