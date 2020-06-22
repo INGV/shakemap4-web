@@ -108,9 +108,30 @@ function plot_data (data, comp_id) {
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).ticks(5));
 
+  svg.append("text")
+    .attr("transform",
+          "translate(" + (width/2) + " ," +
+                         (height + margin.top + 20) + ")")
+    .style("text-anchor", "middle")
+    .text("Distance (km)");
   // Add the Y Axis
   svg.append("g")
       .call(d3.axisLeft(y).ticks(tickNumber));
+
+  var yVar = 'Intensity (MMI)';
+  if (comp_id == 'pga') {
+    yVar = 'Peak ground acceleration (%g)'
+  } else if (comp_id == 'pgv') {
+      yVar = 'Peak ground velocity (cm/s)'
+  };
+  
+  svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(yVar);
 
 };
 
