@@ -73,6 +73,18 @@ function plot_data (data, comp_id) {
 
 
 // Add the scatterplot
+    // Predicted scatterplot
+svg.selectAll("dot")
+    .data(data)
+    .enter().append("path")
+      .attr("class", "point")
+      .attr("r", 0.1)
+      .style("fill", "#808080")
+      .style("stroke", "#000000")
+      .attr("d", d3.symbol().type(d3.symbolCircle))
+      .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d[predID]) + ")"; });
+
+      // Observed data scatterplot
   svg.selectAll("dot")
       .data(data)
       .enter().append("path")
@@ -90,8 +102,11 @@ function plot_data (data, comp_id) {
                  'Station ID: ' + d.id +
                  '<br/>Distance: ' + d.distance +
                  ' km<br/> MMI: ' + d.intensity +
+                 '<br/> MMI predicted: ' + d.intensityPrediction +
                  '<br/> PGA: ' + d.pga +
+                 ' %g<br/> PGA pred: ' + d.pgaPrediction +
                  ' %g<br/> PGV: ' + d.pgv +
+                 ' cm/s<br/> PGV pred: ' + d.pgvPrediction +
                  ' cm/s'
                   )
                  .style("left", (d3.event.pageX + 5) + "px")
@@ -102,6 +117,31 @@ function plot_data (data, comp_id) {
               .duration(2000)
               .style("opacity", 0);
             });
+
+  // Legend
+ svg.append("rect")
+     .attr("x", width-width*0.21)
+     .attr("y", 0)
+     .attr("width", 100)
+     .attr("height", 40)
+     .style("stroke", "#000000")
+     .attr("stroke-width", 2)
+     .style("fill", "#F0E0C0");
+
+  svg.selectAll("dot")
+      .data([0])
+      .enter().append("path")
+        .attr("class", "point")
+        .attr("r", 0.1)
+        .style("fill", "#FFFFFF")
+        .style("stroke", "#000000")
+        .attr("d", d3.symbol().type(d3.symbolTriangle))
+        .attr("transform","translate(" + (width-width*0.2).toString() + ", 10)" );
+
+  svg.append("circle").attr("cx", width-width*0.2).attr("cy", 30).attr("r", 6).style("fill", "#808080").style("stroke", "#000000");
+  svg.append("text").attr("x", width-width*0.18).attr("y", 10).text("Observed").style("font-size", "15px").attr("alignment-baseline","middle");
+  svg.append("text").attr("x", width-width*0.18).attr("y", 30).text("Predicted").style("font-size", "15px").attr("alignment-baseline","middle");
+
 
 // Add the X Axis
   svg.append("g")
@@ -124,7 +164,7 @@ function plot_data (data, comp_id) {
   } else if (comp_id == 'pgv') {
       yVar = 'Peak ground velocity (cm/s)'
   };
-  
+
   svg.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - margin.left)
@@ -173,25 +213,6 @@ function stationList() {
                     intensityPrediction:stations[i].properties.predictions[5].value,
                     pgaPrediction:stations[i].properties.predictions[4].value,
                     pgvPrediction:stations[i].properties.predictions[2].value});
-      // if (stations[i].properties.intensity != "null") {
-      //   intArr.push({distance:stations[i].properties.distance,
-      //                 value:stations[i].properties.intensity,
-      //                 color:intColors[Math.round(stations[i].properties.intensity)],
-      //                 prediction:stations[i].properties.predictions[5].value});
-      // };
-      //
-      // if (stations[i].properties.pga != "null") {
-      //   pgaArr.push({distance:stations[i].properties.distance,
-      //               value:stations[i].properties.pga,
-      //               color:intColors[Math.round(stations[i].properties.intensity)],
-      //               prediction:stations[i].properties.predictions[4].value});
-      // };
-      // if (stations[i].properties.pgv != "null") {
-      //   pgvArr.push({distance:stations[i].properties.distance,
-      //               value:stations[i].properties.pgv,
-      //               color:intColors[Math.round(stations[i].properties.intensity)],
-      //               prediction:stations[i].properties.predictions[2].value});
-      // };
       };
 
 
