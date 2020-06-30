@@ -323,7 +323,7 @@ function legend_box() {
 
       img.src = './data/' + eventid + '/current/products/mmi_legend.png';
       // img.style.width = '70%';
-      var widthSize = 0.25 * $(window).width();
+      var widthSize = 0.375 * $(window).width();
       img.style.width =  widthSize.toString() + 'px';
       return img;
   },
