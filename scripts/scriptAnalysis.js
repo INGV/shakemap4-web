@@ -76,7 +76,7 @@ function plot_data (data, comp_id) {
   };
 
   x.domain([distance_min, distance_max]);
-  y.domain([Math.min(...data.map(o => o[comp_id]), 0)+0.01, Math.max(...data.map(o => o[comp_id]), 0)+0.5]).nice();
+  y.domain([Math.min(...data.map(o => o[comp_id]), +0.01)-0.001, Math.max(...data.map(o => o[comp_id]), 0)+0.5]);
 
 
 // Add the scatterplot
@@ -211,7 +211,7 @@ function stationList() {
   function return_data(stations) {
     var objArr = [];
     for (var i=0; i<stations.length; i++) {
-      if (stations[i].properties.distance  < 301 && stations[i].properties.distance > 1) {
+      if (stations[i].properties.distance  < 301 && stations[i].properties.distance > 1 && stations[i].properties.pga > 0.0098) {
         objArr.push({ id: stations[i].id,
                       distance:stations[i].properties.distance,
                       intensity:stations[i].properties.intensity,
