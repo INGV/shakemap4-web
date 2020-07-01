@@ -66,9 +66,16 @@ function plot_data (data, comp_id) {
 
 
 // Define axes maximums
-  distance_max = Math.max(...data.map(o => o.distance), 0)
+  var distance_max = Math.max(...data.map(o => o.distance), 0)
+  var distance_min = Math.min(...data.map(o => o.distance), distance_max)
 
-  x.domain([1, distance_max]).nice();
+  if (distance_min < 10) {
+    distance_min = 1;
+  } else {
+    distance_min = 10;
+  };
+
+  x.domain([distance_min, distance_max]);
   y.domain([Math.min(...data.map(o => o[comp_id]), 0)+0.01, Math.max(...data.map(o => o[comp_id]), 0)+0.5]).nice();
 
 
@@ -204,17 +211,18 @@ function stationList() {
   function return_data(stations) {
     var objArr = [];
     for (var i=0; i<stations.length; i++) {
-      objArr.push({ id: stations[i].id,
-                    distance:stations[i].properties.distance,
-                    intensity:stations[i].properties.intensity,
-                    pga:stations[i].properties.pga,
-                    pgv:stations[i].properties.pgv,
-                    color:intColors[Math.round(stations[i].properties.intensity)],
-                    intensityPrediction:stations[i].properties.predictions[5].value,
-                    pgaPrediction:stations[i].properties.predictions[4].value,
-                    pgvPrediction:stations[i].properties.predictions[2].value});
+      if (stations[i].properties.distance  < 301 && stations[i].properties.distance > 1) {
+        objArr.push({ id: stations[i].id,
+                      distance:stations[i].properties.distance,
+                      intensity:stations[i].properties.intensity,
+                      pga:stations[i].properties.pga,
+                      pgv:stations[i].properties.pgv,
+                      color:intColors[Math.round(stations[i].properties.intensity)],
+                      intensityPrediction:stations[i].properties.predictions[5].value,
+                      pgaPrediction:stations[i].properties.predictions[4].value,
+                      pgvPrediction:stations[i].properties.predictions[2].value});
+        };
       };
-
 
   plot_data(clean_array(objArr, 'intensity'), 'intensity');
   plot_data(clean_array(objArr, 'pga'), 'pga');
