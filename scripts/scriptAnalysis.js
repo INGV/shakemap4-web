@@ -65,7 +65,7 @@ function plot_data (data, comp_id) {
   };
 
 
-// Define axes maximums
+// Define axes domains
   var distance_max = Math.max(...data.map(o => o.distance), 0)
   var distance_min = Math.min(...data.map(o => o.distance), distance_max)
 
@@ -75,8 +75,11 @@ function plot_data (data, comp_id) {
     distance_min = 10;
   };
 
+  var yMax = Math.max(...data.map(o => o[comp_id]), 0);
+  var yMin = Math.min(...data.map(o => o[comp_id]), yMax);
+
   x.domain([distance_min, distance_max]);
-  y.domain([Math.min(...data.map(o => o[comp_id]), +0.01)-0.001, Math.max(...data.map(o => o[comp_id]), 0)+0.5]);
+  y.domain([yMin-0.1*yMin, yMax+0.1*yMax]);
 
 
 // Add the scatterplot
@@ -211,7 +214,10 @@ function stationList() {
   function return_data(stations) {
     var objArr = [];
     for (var i=0; i<stations.length; i++) {
-      if (stations[i].properties.distance  < 301 && stations[i].properties.distance > 1 && stations[i].properties.pga > 0.0098) {
+      if (stations[i].properties.distance  < 301
+            && stations[i].properties.distance > 1
+            && stations[i].properties.pga > 0.0098
+            && stations[i].properties.pgv > 0.00098) {
         objArr.push({ id: stations[i].id,
                       distance:stations[i].properties.distance,
                       intensity:stations[i].properties.intensity,
