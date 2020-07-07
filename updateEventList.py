@@ -45,6 +45,14 @@ def overlay_to_json(event_id):
 
     return None
 
+def get_bBox_dict():
+    if (os.path.isfile('bBox.txt')):
+        with open('bBox.txt') as json_file:
+            bBox = json.load(json_file)[0]
+        return bBox 
+    else:
+        return False
+
 def get_products_list(event_id):
     """
         Get the list of products generated for an event and write them to file
@@ -68,7 +76,7 @@ def get_products_list(event_id):
 
     return None
 
-def get_parameters (event_id):
+def get_parameters (event_id, bBox):
     """
         Get the event parameters from the info.json file of an event
     """
@@ -92,13 +100,13 @@ def get_parameters (event_id):
             'magnitude': float(info_file['input']['event_information']['magnitude']),
             'depth': float(info_file['input']['event_information']['depth'])
             }
-    minLat = 36.0
-    maxLat = 48.0
-    minLon = 6.0
-    maxLon = 20.0
     
-    if ( parameter_dict['latitude'] < minLat or parameter_dict['latitude'] > maxLat or
-        parameter_dict['longitude'] < minLon or parameter_dict['longitude'] > maxLon):
+    if (bBox == False):
+        bBox = {"minLat": -90.0, "maxLat": 90.0, "minLon": -180.0, "maxLon" : 180.0}
+    
+    
+    if ( parameter_dict['latitude'] < bBox["minLat"] or parameter_dict['latitude'] > bBox["maxLat"] or
+        parameter_dict['longitude'] < bBox["minLon"] or parameter_dict['longitude'] > bBox["maxLon"]):
         return False
     else:
         return parameter_dict
@@ -131,15 +139,15 @@ def write_version_file():
 
 def main():
     event_list = []
-    products_list = []
+    bBox = get_bBox_dict()
     for event in get_event_ids():
         print('Processing event:' + event)
 
         ## Try to read the info.json file to put the events in a list for the website to read
         try:
-            evenParameters = get_parameters(event)
-            if (evenParameters != False):
-                event_list.append(evenParameters)
+            eventParameters = get_parameters(event, bBox)
+            if (eventParameters != False):
+                event_list.append(eventParameters)
         except Exception as e:
             print('Following error occurred for event ' + event + ':')
             print(e)
