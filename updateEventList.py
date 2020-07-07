@@ -87,15 +87,22 @@ def get_parameters (event_id):
             'hour': hour,
             'minute': minute,
             'second': second,
-            'latitude': info_file['input']['event_information']['latitude'],
-            'longitude': info_file['input']['event_information']['longitude'],
-            'magnitude': info_file['input']['event_information']['magnitude'],
-            'depth': info_file['input']['event_information']['depth']
+            'latitude': float(info_file['input']['event_information']['latitude']),
+            'longitude': float(info_file['input']['event_information']['longitude']),
+            'magnitude': float(info_file['input']['event_information']['magnitude']),
+            'depth': float(info_file['input']['event_information']['depth'])
             }
-
-
-    return parameter_dict
-
+    minLat = 36.0
+    maxLat = 48.0
+    minLon = 6.0
+    maxLon = 20.0
+    
+    if ( parameter_dict['latitude'] < minLat or parameter_dict['latitude'] > maxLat or
+        parameter_dict['longitude'] < minLon or parameter_dict['longitude'] > maxLon):
+        return False
+    else:
+        return parameter_dict
+    
 def write_list_to_file(event_list):
     """
         Write event information to file.
@@ -130,7 +137,9 @@ def main():
 
         ## Try to read the info.json file to put the events in a list for the website to read
         try:
-            event_list.append(get_parameters(event))
+            evenParameters = get_parameters(event)
+            if (evenParameters != False):
+                event_list.append(evenParameters)
         except Exception as e:
             print('Following error occurred for event ' + event + ':')
             print(e)
