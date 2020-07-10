@@ -287,6 +287,17 @@ function getRegression (obsArr) {
       plot_data(clean_array(obsArr, 'pgv'),  clean_array(regrArr, 'pgv'), 'pgv');
 }
 }
+// #####################################################
+// Get stationList
+//
+
+function getPredictedValue(component, predictions) {
+  for (var i=0; i<predictions.length; i++) {
+    if (predictions[i].name == component) {
+      return predictions[i].value;
+    };
+  };
+};
 
 // #####################################################
 // Get stationList
@@ -307,15 +318,17 @@ function stationList() {
             && stations[i].properties.distance > 1
             && stations[i].properties.pga > 0.0098
             && stations[i].properties.pgv > 0.00098) {
+        console.log(stations[i].properties.predictions.length);
         objArr.push({ id: stations[i].id,
                       distance:stations[i].properties.distance,
                       intensity:stations[i].properties.intensity,
                       pga:stations[i].properties.pga,
                       pgv:stations[i].properties.pgv,
                       color:intColors[Math.round(stations[i].properties.intensity)],
-                      intensityPrediction:stations[i].properties.predictions[5].value,
-                      pgaPrediction:stations[i].properties.predictions[4].value,
-                      pgvPrediction:stations[i].properties.predictions[2].value});
+                      intensityPrediction:getPredictedValue('mmi', stations[i].properties.predictions),
+                      pgaPrediction:getPredictedValue('pga', stations[i].properties.predictions),
+                      pgvPrediction:getPredictedValue('pgv', stations[i].properties.predictions)
+                    });
         };
       };
     getRegression(objArr);
