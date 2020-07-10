@@ -31,9 +31,10 @@ function open_leaflet () {
 // #####################################################
 // Plot data
 //
-function plot_data (data, comp_id) {
+function plot_data (data, regrArr, comp_id) {
   var div_id = '#' + comp_id;
   var predID = comp_id + 'Prediction';
+  var stdID = comp_id + 'Std';
 
   // set the dimensions and margins of the graph
   var margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -82,17 +83,60 @@ function plot_data (data, comp_id) {
   y.domain([yMin-0.1*yMin, yMax+0.1*yMax]);
 
 
+// Regression plot
+
+
+  var stdArr = regrArr.map(function(item) { return {[stdID]:item[stdID], "distance":item.distance}; });
+  var stdArrRev = stdArr.map(a => Object.assign({}, a));
+  stdArrRev =  stdArrRev.reverse();
+  for (var i=0; i<stdArrRev.length; i++) {
+      stdArr[i][stdID] = regrArr[i][comp_id]+stdArr[i][stdID];
+
+      stdArrRev[i][stdID] = stdArrRev[i][stdID]*(-1)+regrArr[stdArrRev.length-1-i][comp_id];
+
+      stdArr.push(stdArrRev[i]);
+    };
+
+console.log(stdArr);
+
+var regrStdLine = d3.line()
+    .x(function(d) { return x(d.distance); })
+    .y(function(d) { return y(d[stdID]); });
+
+svg.append("path")
+    .data([stdArr])
+    .attr("class", "line")
+    .attr("stroke", "#E0D6E0")
+    .attr("stroke-width", 4)
+    .attr("fill", "#E0D6E0")
+    .attr('r', 2)
+    .attr("d", regrStdLine);
+
+
+var regrLine = d3.line()
+    .x(function(d) { return x(d.distance); })
+    .y(function(d) { return y(d[comp_id]); });
+
+  svg.append("path")
+    .data([regrArr])
+    .attr("class", "line")
+    .attr("stroke", "#A971A8")
+    .attr("stroke-width", 4)
+    .attr("fill", "none")
+    .attr('r', 2)
+    .attr("d", regrLine);
+
 // Add the scatterplot
     // Predicted scatterplot
-svg.selectAll("dot")
-    .data(data)
-    .enter().append("path")
-      .attr("class", "point")
-      .attr("r", 0.1)
-      .style("fill", "#808080")
-      .style("stroke", "#000000")
-      .attr("d", d3.symbol().type(d3.symbolCircle))
-      .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d[predID]) + ")"; });
+// svg.selectAll("dot")
+//     .data(data)
+//     .enter().append("path")
+//       .attr("class", "point")
+//       .attr("r", 0.1)
+//       .style("fill", "#808080")
+//       .style("stroke", "#000000")
+//       .attr("d", d3.symbol().type(d3.symbolCircle))
+//       .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d[predID]) + ")"; });
 
       // Observed data scatterplot
   svg.selectAll("dot")
@@ -132,8 +176,8 @@ svg.selectAll("dot")
  svg.append("rect")
      .attr("x", width-width*0.21)
      .attr("y", 0)
-     .attr("width", 100)
-     .attr("height", 40)
+     .attr("width", 140)
+     .attr("height", 58)
      .style("stroke", "#000000")
      .attr("stroke-width", 2)
      .style("fill", "#F0E0C0");
@@ -148,9 +192,16 @@ svg.selectAll("dot")
         .attr("d", d3.symbol().type(d3.symbolTriangle))
         .attr("transform","translate(" + (width-width*0.2).toString() + ", 10)" );
 
-  svg.append("circle").attr("cx", width-width*0.2).attr("cy", 30).attr("r", 6).style("fill", "#808080").style("stroke", "#000000");
+  svg.append("rect")
+    .attr("transform","translate(" + (width-width*0.207).toString() + ", 27)" )
+    .style("fill", "#A971A8")
+    .attr("width", 20)
+    .attr("height", 4);
+
+  // svg.append("circle").attr("cx", width-width*0.2).attr("cy", 30).attr("r", 6).style("fill", "#808080").style("stroke", "#000000");
   svg.append("text").attr("x", width-width*0.18).attr("y", 10).text("Observed").style("font-size", "15px").attr("alignment-baseline","middle");
   svg.append("text").attr("x", width-width*0.18).attr("y", 30).text("Predicted").style("font-size", "15px").attr("alignment-baseline","middle");
+  svg.append("text").attr("x", width-width*0.18).attr("y", 45).text("(+/- 1 std dev)").style("font-size", "15px").attr("alignment-baseline","middle");
 
 
 // Add the X Axis
@@ -200,6 +251,44 @@ function clean_array(array, keyName) {
   return newArray;
 };
 // #####################################################
+// Get regression curve
+//
+function getRegression (obsArr) {
+  $.getJSON(
+    './data/' + eventid + '/current/products/attenuation_curves.json',
+    function(json) {
+      var regrPoints = json;
+      return_data(regrPoints, obsArr);
+    }
+  );
+  function return_data(regrPoints, obsArr) {
+    var regrArr = [];
+
+    for (var i=0; i<regrPoints['distances']['repi'].length; i++) {
+      if (regrPoints['distances']['repi'][i]  < 301
+            && regrPoints['distances']['repi'][i] > 1
+            // && (100*Math.exp(regrPoints['gmpe']['rock']['PGA']['mean'][i])-Math.exp(regrPoints['gmpe']['rock']['PGA']['stddev'][i])) > 0.0098
+            && (Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i])-Math.exp(regrPoints['gmpe']['rock']['PGV']['stddev'][i])) > 0.00098
+            ) {
+        regrArr.push({
+                      distance:regrPoints['distances']['repi'][i],
+                      intensity:regrPoints['gmpe']['rock']['MMI']['mean'][i],
+                      intensityStd:regrPoints['gmpe']['rock']['MMI']['stddev'][i],
+                      pga:100*Math.exp(regrPoints['gmpe']['rock']['PGA']['mean'][i]),
+                      pgaStd:100*Math.exp(regrPoints['gmpe']['rock']['PGA']['stddev'][i]),
+                      pgv:Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i]),
+                      pgvStd:Math.exp(regrPoints['gmpe']['rock']['PGV']['stddev'][i])});
+        };
+
+      };
+
+      plot_data(clean_array(obsArr, 'intensity'),  clean_array(regrArr, 'intensity'), 'intensity');
+      plot_data(clean_array(obsArr, 'pga'),  clean_array(regrArr, 'pga'), 'pga');
+      plot_data(clean_array(obsArr, 'pgv'),  clean_array(regrArr, 'pgv'), 'pgv');
+}
+}
+
+// #####################################################
 // Get stationList
 //
 function stationList() {
@@ -229,10 +318,8 @@ function stationList() {
                       pgvPrediction:stations[i].properties.predictions[2].value});
         };
       };
+    getRegression(objArr);
 
-  plot_data(clean_array(objArr, 'intensity'), 'intensity');
-  plot_data(clean_array(objArr, 'pga'), 'pga');
-  plot_data(clean_array(objArr, 'pgv'), 'pgv');
   }
 }
 
