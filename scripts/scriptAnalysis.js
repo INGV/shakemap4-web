@@ -32,6 +32,10 @@ function open_leaflet () {
 // Plot data
 //
 function plot_data (data, regrArr, comp_id) {
+console.log(comp_id);
+console.log(data);
+console.log(regrArr);
+
   var div_id = '#' + comp_id;
   var predID = comp_id + 'Prediction';
   var stdID = comp_id + 'Std';
@@ -97,7 +101,6 @@ function plot_data (data, regrArr, comp_id) {
       stdArr.push(stdArrRev[i]);
     };
 
-console.log(stdArr);
 
 var regrStdLine = d3.line()
     .x(function(d) { return x(d.distance); })
