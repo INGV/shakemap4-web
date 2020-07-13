@@ -32,9 +32,6 @@ function open_leaflet () {
 // Plot data
 //
 function plot_data (data, regrArr, comp_id) {
-console.log(comp_id);
-console.log(data);
-console.log(regrArr);
 
   var div_id = '#' + comp_id;
   var predID = comp_id + 'Prediction';
@@ -271,7 +268,7 @@ function getRegression (obsArr) {
       if (regrPoints['distances']['repi'][i]  < 301
             && regrPoints['distances']['repi'][i] > 1
             // && (100*Math.exp(regrPoints['gmpe']['rock']['PGA']['mean'][i])-Math.exp(regrPoints['gmpe']['rock']['PGA']['stddev'][i])) > 0.0098
-            && (Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i])-Math.exp(regrPoints['gmpe']['rock']['PGV']['stddev'][i])) > 0.00098
+            // && (Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i])-Math.exp(regrPoints['gmpe']['rock']['PGV']['stddev'][i])) > 0.00098
             ) {
         regrArr.push({
                       distance:regrPoints['distances']['repi'][i],
@@ -285,6 +282,7 @@ function getRegression (obsArr) {
 
       };
 
+      console.log(regrArr);
       plot_data(clean_array(obsArr, 'intensity'),  clean_array(regrArr, 'intensity'), 'intensity');
       plot_data(clean_array(obsArr, 'pga'),  clean_array(regrArr, 'pga'), 'pga');
       plot_data(clean_array(obsArr, 'pgv'),  clean_array(regrArr, 'pgv'), 'pgv');
@@ -311,7 +309,6 @@ function stationList() {
     function(json) {
       var stations = json.features;
       return_data(stations);
-      console.log(stations[0]);
     }
   );
   function return_data(stations) {
@@ -321,7 +318,6 @@ function stationList() {
             && stations[i].properties.distance > 1
             && stations[i].properties.pga > 0.0098
             && stations[i].properties.pgv > 0.00098) {
-        console.log(stations[i].properties.predictions.length);
         objArr.push({ id: stations[i].id,
                       distance:stations[i].properties.distance,
                       intensity:stations[i].properties.intensity,
