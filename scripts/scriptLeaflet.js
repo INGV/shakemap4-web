@@ -146,7 +146,14 @@ function stationList() {
     stations_layer.addTo(mymap);
   }
 }
-
+// ##################################################
+// Show event title above the map
+function ev_title(desc, or_time, magnitude, lat, lon, depth) {
+  or_time = new Date(Date.parse(or_time));
+  document.getElementById('evInfo').innerHTML += 'ShakeMap:' + desc + '<br/>'
+      + or_time.toUTCString() + ' '  +magnitude + ' ' + Number(lat).toFixed(2) + ' ' + Number(lon).toFixed(2)
+        + ' Depth:' + depth + 'km ID:' + eventid;
+};
 // ##################################################
 // Show epicenter and write info in sidebar
 function event_info() {
@@ -159,12 +166,15 @@ function event_info() {
 
     magnitude = info_input.magnitude;
     depth = info_input.depth;
+    desc = info_input.event_description;
+    or_time = info_input.origin_time;
 
     attr_div(info_input, 'input_content');
     attr_div(json.output.uncertainty, 'motions_content');
     attr_div(json.processing.ground_motion_modules, 'processing_content');
 
-
+    console.log(json);
+    ev_title(desc, or_time, magnitude, epi_lat, epi_lon, depth);
 
     show_epi(epi_lat, epi_lon, magnitude, depth);
   });
