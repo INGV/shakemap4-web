@@ -91,10 +91,15 @@ function plot_data (data, regrArr, comp_id) {
   var stdArrRev = stdArr.map(a => Object.assign({}, a));
   stdArrRev =  stdArrRev.reverse();
   for (var i=0; i<stdArrRev.length; i++) {
-      stdArr[i][stdID] = regrArr[i][comp_id]+stdArr[i][stdID];
+      if (stdID == 'intensityStd') {
+        stdArr[i][stdID] = regrArr[i][comp_id]+stdArr[i][stdID];
 
-      stdArrRev[i][stdID] = stdArrRev[i][stdID]*(-1)+regrArr[stdArrRev.length-1-i][comp_id];
+        stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]-stdArrRev[i][stdID];
+      } else {
+      stdArr[i][stdID] = regrArr[i][comp_id]*stdArr[i][stdID];
 
+      stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]/stdArrRev[i][stdID];
+      };
       stdArr.push(stdArrRev[i]);
     };
 
@@ -277,7 +282,7 @@ function getRegression (obsArr) {
                       intensity:regrPoints['gmpe']['rock']['MMI']['mean'][i],
                       intensityStd:regrPoints['gmpe']['rock']['MMI']['stddev'][i],
                       pga:100*Math.exp(regrPoints['gmpe']['rock']['PGA']['mean'][i]),
-                      pgaStd:100*Math.exp(regrPoints['gmpe']['rock']['PGA']['stddev'][i]),
+                      pgaStd:Math.exp(regrPoints['gmpe']['rock']['PGA']['stddev'][i]),
                       pgv:Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i]),
                       pgvStd:Math.exp(regrPoints['gmpe']['rock']['PGV']['stddev'][i])});
         };
