@@ -53,6 +53,13 @@ default is:
 
 If all works, you should see ShakeMap4-Web web page.
 
+## Restart containers at boot
+Insert into `crontab` the lines:
+```
+# Restart shakemap4-web
+@reboot (sleep 30s ; cd <absolute_path>/shakemap4-web/Docker ; /usr/local/bin/docker-compose up -d )&
+```
+
 ## Tips and tricks
 ### To change nginx port live:
 1) Update `NGINX_HOST_HTTP_PORT` in `.env`
