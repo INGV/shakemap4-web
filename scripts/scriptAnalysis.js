@@ -37,6 +37,23 @@ function plot_data (data, regrArr, comp_id) {
   var predID = comp_id + 'Prediction';
   var stdID = comp_id + 'Std';
 
+  // Calculate standard deviation array
+  var stdArr = regrArr.map(function(item) { return {[stdID]:item[stdID], "distance":item.distance}; });
+  var stdArrRev = stdArr.map(a => Object.assign({}, a));
+  stdArrRev =  stdArrRev.reverse();
+  for (var i=0; i<stdArrRev.length; i++) {
+      if (stdID == 'intensityStd') {
+        stdArr[i][stdID] = regrArr[i][comp_id]+stdArr[i][stdID];
+
+        stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]-stdArrRev[i][stdID];
+      } else {
+      stdArr[i][stdID] = regrArr[i][comp_id]*stdArr[i][stdID];
+
+      stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]/stdArrRev[i][stdID];
+      };
+      stdArr.push(stdArrRev[i]);
+    };
+
   // set the dimensions and margins of the graph
   var margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = 1100 - margin.left - margin.right,
@@ -80,29 +97,20 @@ function plot_data (data, regrArr, comp_id) {
   var yMax = Math.max(...data.map(o => o[comp_id]), 0);
   var yMin = Math.min(...data.map(o => o[comp_id]), yMax);
 
+  var stdMax = Math.max(...stdArr.map(o => o[stdID]), 0);
+  var stdMin = Math.min(...stdArr.map(o => o[stdID]), stdMax);
+
+  if (stdMax > yMax) {
+    yMax = stdMax;
+  } else if (stdMin < yMin) {
+    yMin = stdMin;
+  };
+
   x.domain([distance_min, distance_max]);
   y.domain([yMin-0.1*yMin, yMax+0.1*yMax]);
 
 
 // Regression plot
-
-
-  var stdArr = regrArr.map(function(item) { return {[stdID]:item[stdID], "distance":item.distance}; });
-  var stdArrRev = stdArr.map(a => Object.assign({}, a));
-  stdArrRev =  stdArrRev.reverse();
-  for (var i=0; i<stdArrRev.length; i++) {
-      if (stdID == 'intensityStd') {
-        stdArr[i][stdID] = regrArr[i][comp_id]+stdArr[i][stdID];
-
-        stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]-stdArrRev[i][stdID];
-      } else {
-      stdArr[i][stdID] = regrArr[i][comp_id]*stdArr[i][stdID];
-
-      stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]/stdArrRev[i][stdID];
-      };
-      stdArr.push(stdArrRev[i]);
-    };
-
 
 var regrStdLine = d3.line()
     .x(function(d) { return x(d.distance); })
@@ -131,17 +139,6 @@ var regrLine = d3.line()
     .attr('r', 2)
     .attr("d", regrLine);
 
-// Add the scatterplot
-    // Predicted scatterplot
-// svg.selectAll("dot")
-//     .data(data)
-//     .enter().append("path")
-//       .attr("class", "point")
-//       .attr("r", 0.1)
-//       .style("fill", "#808080")
-//       .style("stroke", "#000000")
-//       .attr("d", d3.symbol().type(d3.symbolCircle))
-//       .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d[predID]) + ")"; });
 
       // Observed data scatterplot
   svg.selectAll("dot")
@@ -289,7 +286,6 @@ function getRegression (obsArr) {
 
       };
 
-      console.log(regrArr);
       plot_data(clean_array(obsArr, 'intensity'),  clean_array(regrArr, 'intensity'), 'intensity');
       plot_data(clean_array(obsArr, 'pga'),  clean_array(regrArr, 'pga'), 'pga');
       plot_data(clean_array(obsArr, 'pgv'),  clean_array(regrArr, 'pgv'), 'pgv');
