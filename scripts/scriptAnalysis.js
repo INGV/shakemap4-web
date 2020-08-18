@@ -102,7 +102,8 @@ function plot_data (data, regrArr, comp_id) {
 
   if (stdMax > yMax) {
     yMax = stdMax;
-  } else if (stdMin < yMin) {
+  };
+  if (stdMin < yMin) {
     yMin = stdMin;
   };
 
