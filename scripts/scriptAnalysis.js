@@ -97,6 +97,9 @@ function plot_data (data, regrArr, comp_id) {
     distance_min = distance_minData-10;
   };
 
+  console.log(distance_minData);
+  console.log(distance_min);
+  
   var yMax = Math.max(...data.map(o => o[comp_id]), 0);
   var yMin = Math.min(...data.map(o => o[comp_id]), yMax);
 
