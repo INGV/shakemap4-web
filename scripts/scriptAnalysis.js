@@ -274,12 +274,14 @@ function getRegression (obsArr) {
     var regrArr = [];
 
     var distance_min = Math.min(...obsArr.map(o => o.distance), 300);
+    var pga_min = Math.min(...obsArr.map(o => o.pga), 0.0098);
+    var pgv_min = Math.min(...obsArr.map(o => o.pgv), 0.00098);
 
     for (var i=0; i<regrPoints['distances']['repi'].length; i++) {
       if (regrPoints['distances']['repi'][i]  < 301
             && regrPoints['distances']['repi'][i] > distance_min
-            && (100*Math.exp(regrPoints['gmpe']['rock']['PGA']['mean'][i])) > 0.0098
-            && (Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i])) > 0.00098
+            && (100*Math.exp(regrPoints['gmpe']['rock']['PGA']['mean'][i])) > pga_min
+            && (Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i])) > pgv_min
             ) {
         regrArr.push({
                       distance:regrPoints['distances']['repi'][i],
