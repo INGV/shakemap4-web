@@ -1,0 +1,221 @@
+INFO -- 2020-06-16 06:00:42 -- shake.main -- Running command aqms_eq2xml
+INFO -- 2020-06-16 06:00:42 -- shake.main -- Finished running command aqms_eq2xml: Elapsed 0.62 secs
+INFO -- 2020-06-16 06:00:42 -- shake.main -- Running command aqms_db2xml
+INFO -- 2020-06-16 06:01:02 -- shake.main -- Finished running command aqms_db2xml: Elapsed 20.04 secs
+INFO -- 2020-06-16 06:01:02 -- shake.main -- Running command associate
+INFO -- 2020-06-16 06:01:02 -- shake.main -- Finished running command associate: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:01:02 -- shake.main -- Running command assemble
+INFO -- 2020-06-16 06:01:03 -- shake.main -- Finished running command assemble: Elapsed 0.20 secs
+INFO -- 2020-06-16 06:01:03 -- shake.main -- Running command model
+INFO -- 2020-06-16 06:01:25 -- shake.main -- Finished running command model: Elapsed 22.83 secs
+INFO -- 2020-06-16 06:01:25 -- shake.main -- Running command contour
+INFO -- 2020-06-16 06:01:27 -- shake.main -- Finished running command contour: Elapsed 1.18 secs
+INFO -- 2020-06-16 06:01:27 -- shake.main -- Running command gridxml
+INFO -- 2020-06-16 06:01:27 -- shake.main -- Finished running command gridxml: Elapsed 0.62 secs
+INFO -- 2020-06-16 06:01:27 -- shake.main -- Running command info
+INFO -- 2020-06-16 06:01:27 -- shake.main -- Finished running command info: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:01:27 -- shake.main -- Running command kml
+INFO -- 2020-06-16 06:01:29 -- shake.main -- Finished running command kml: Elapsed 2.02 secs
+INFO -- 2020-06-16 06:01:29 -- shake.main -- Running command mapping
+INFO -- 2020-06-16 06:01:52 -- shake.main -- Finished running command mapping: Elapsed 22.62 secs
+INFO -- 2020-06-16 06:01:52 -- shake.main -- Running command plotregr
+INFO -- 2020-06-16 06:01:58 -- shake.main -- Finished running command plotregr: Elapsed 5.73 secs
+INFO -- 2020-06-16 06:01:58 -- shake.main -- Running command raster
+WARNING -- 2020-06-16 06:01:58 -- warnings._showwarnmsg -- /home/shake/miniconda/envs/shakemap/lib/python3.8/site-packages/mapio/gdal.py:490: DataSetWarning: 'Down-casting double precision floating point to single precision'
+  warnings.warn(DataSetWarning('Down-casting double precision '
+
+INFO -- 2020-06-16 06:01:58 -- shake.main -- Finished running command raster: Elapsed 0.25 secs
+INFO -- 2020-06-16 06:01:58 -- shake.main -- Running command shape
+INFO -- 2020-06-16 06:01:59 -- shake.main -- Finished running command shape: Elapsed 1.07 secs
+INFO -- 2020-06-16 06:01:59 -- shake.main -- Running command rupture
+INFO -- 2020-06-16 06:01:59 -- rupture.execute -- Writing rupture.json file...
+INFO -- 2020-06-16 06:01:59 -- shake.main -- Finished running command rupture: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:01:59 -- shake.main -- Running command stations
+INFO -- 2020-06-16 06:01:59 -- shake.main -- Finished running command stations: Elapsed 0.15 secs
+INFO -- 2020-06-16 06:01:59 -- shake.main -- Running command transfer_pdl
+INFO -- 2020-06-16 06:01:59 -- transfer_base.execute -- Making backup directory...
+INFO -- 2020-06-16 06:02:02 -- transfer_pdl.execute -- 40 files sent.  Message from sender: 
+"40 files sent successfully: resulting in output: "urn:usgs-product:ci:shakemap:39481424:1592287320046
+""
+INFO -- 2020-06-16 06:02:02 -- shake.main -- Finished running command transfer_pdl: Elapsed 3.01 secs
+INFO -- 2020-06-16 06:02:02 -- shake.main -- Running command transfer_email
+INFO -- 2020-06-16 06:02:03 -- transfer_email.execute -- 1 files sent.  Message from sender: 
+"1 files successfully sent to 2 recipients."
+INFO -- 2020-06-16 06:02:03 -- shake.main -- Finished running command transfer_email: Elapsed 0.06 secs
+INFO -- 2020-06-16 06:02:03 -- shake.main -- shake finished with event 39481424
+INFO -- 2020-06-16 06:07:51 -- shake.main -- Running command aqms_eq2xml
+INFO -- 2020-06-16 06:07:52 -- shake.main -- Finished running command aqms_eq2xml: Elapsed 0.45 secs
+INFO -- 2020-06-16 06:07:52 -- shake.main -- Running command aqms_db2xml
+INFO -- 2020-06-16 06:08:14 -- shake.main -- Finished running command aqms_db2xml: Elapsed 21.82 secs
+INFO -- 2020-06-16 06:08:14 -- shake.main -- Running command associate
+INFO -- 2020-06-16 06:08:14 -- shake.main -- Finished running command associate: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:08:14 -- shake.main -- Running command assemble
+INFO -- 2020-06-16 06:08:14 -- shake.main -- Finished running command assemble: Elapsed 0.24 secs
+INFO -- 2020-06-16 06:08:14 -- shake.main -- Running command model
+INFO -- 2020-06-16 06:08:39 -- shake.main -- Finished running command model: Elapsed 24.86 secs
+INFO -- 2020-06-16 06:08:39 -- shake.main -- Running command contour
+INFO -- 2020-06-16 06:08:40 -- shake.main -- Finished running command contour: Elapsed 1.18 secs
+INFO -- 2020-06-16 06:08:40 -- shake.main -- Running command gridxml
+INFO -- 2020-06-16 06:08:41 -- shake.main -- Finished running command gridxml: Elapsed 0.61 secs
+INFO -- 2020-06-16 06:08:41 -- shake.main -- Running command info
+INFO -- 2020-06-16 06:08:41 -- shake.main -- Finished running command info: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:08:41 -- shake.main -- Running command kml
+INFO -- 2020-06-16 06:08:43 -- shake.main -- Finished running command kml: Elapsed 2.27 secs
+INFO -- 2020-06-16 06:08:43 -- shake.main -- Running command mapping
+INFO -- 2020-06-16 06:09:08 -- shake.main -- Finished running command mapping: Elapsed 25.02 secs
+INFO -- 2020-06-16 06:09:08 -- shake.main -- Running command plotregr
+INFO -- 2020-06-16 06:09:16 -- shake.main -- Finished running command plotregr: Elapsed 7.47 secs
+INFO -- 2020-06-16 06:09:16 -- shake.main -- Running command raster
+WARNING -- 2020-06-16 06:09:16 -- warnings._showwarnmsg -- /home/shake/miniconda/envs/shakemap/lib/python3.8/site-packages/mapio/gdal.py:490: DataSetWarning: 'Down-casting double precision floating point to single precision'
+  warnings.warn(DataSetWarning('Down-casting double precision '
+
+INFO -- 2020-06-16 06:09:16 -- shake.main -- Finished running command raster: Elapsed 0.25 secs
+INFO -- 2020-06-16 06:09:16 -- shake.main -- Running command shape
+INFO -- 2020-06-16 06:09:17 -- shake.main -- Finished running command shape: Elapsed 0.94 secs
+INFO -- 2020-06-16 06:09:17 -- shake.main -- Running command rupture
+INFO -- 2020-06-16 06:09:17 -- rupture.execute -- Writing rupture.json file...
+INFO -- 2020-06-16 06:09:17 -- shake.main -- Finished running command rupture: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:09:17 -- shake.main -- Running command stations
+INFO -- 2020-06-16 06:09:17 -- shake.main -- Finished running command stations: Elapsed 0.21 secs
+INFO -- 2020-06-16 06:09:17 -- shake.main -- Running command transfer_pdl
+INFO -- 2020-06-16 06:09:17 -- transfer_base.execute -- Making backup directory...
+INFO -- 2020-06-16 06:09:21 -- transfer_pdl.execute -- 40 files sent.  Message from sender: 
+"40 files sent successfully: resulting in output: "urn:usgs-product:ci:shakemap:39481424:1592287757801
+""
+INFO -- 2020-06-16 06:09:21 -- shake.main -- Finished running command transfer_pdl: Elapsed 3.50 secs
+INFO -- 2020-06-16 06:09:21 -- shake.main -- Running command transfer_email
+INFO -- 2020-06-16 06:09:21 -- transfer_email.execute -- Mail has already been generated for this event. Returning.
+INFO -- 2020-06-16 06:09:21 -- shake.main -- Finished running command transfer_email: Elapsed 0.01 secs
+INFO -- 2020-06-16 06:09:21 -- shake.main -- shake finished with event 39481424
+INFO -- 2020-06-16 06:58:24 -- shake.main -- Running command aqms_eq2xml
+INFO -- 2020-06-16 06:58:25 -- shake.main -- Finished running command aqms_eq2xml: Elapsed 0.53 secs
+INFO -- 2020-06-16 06:58:25 -- shake.main -- Running command aqms_db2xml
+INFO -- 2020-06-16 06:58:47 -- shake.main -- Finished running command aqms_db2xml: Elapsed 22.62 secs
+INFO -- 2020-06-16 06:58:47 -- shake.main -- Running command associate
+INFO -- 2020-06-16 06:58:47 -- shake.main -- Finished running command associate: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:58:47 -- shake.main -- Running command assemble
+INFO -- 2020-06-16 06:58:48 -- shake.main -- Finished running command assemble: Elapsed 0.25 secs
+INFO -- 2020-06-16 06:58:48 -- shake.main -- Running command model
+INFO -- 2020-06-16 06:59:13 -- shake.main -- Finished running command model: Elapsed 25.42 secs
+INFO -- 2020-06-16 06:59:13 -- shake.main -- Running command contour
+INFO -- 2020-06-16 06:59:14 -- shake.main -- Finished running command contour: Elapsed 1.17 secs
+INFO -- 2020-06-16 06:59:14 -- shake.main -- Running command gridxml
+INFO -- 2020-06-16 06:59:15 -- shake.main -- Finished running command gridxml: Elapsed 0.61 secs
+INFO -- 2020-06-16 06:59:15 -- shake.main -- Running command info
+INFO -- 2020-06-16 06:59:15 -- shake.main -- Finished running command info: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:59:15 -- shake.main -- Running command kml
+INFO -- 2020-06-16 06:59:17 -- shake.main -- Finished running command kml: Elapsed 2.30 secs
+INFO -- 2020-06-16 06:59:17 -- shake.main -- Running command mapping
+INFO -- 2020-06-16 06:59:43 -- shake.main -- Finished running command mapping: Elapsed 25.56 secs
+INFO -- 2020-06-16 06:59:43 -- shake.main -- Running command plotregr
+INFO -- 2020-06-16 06:59:51 -- shake.main -- Finished running command plotregr: Elapsed 8.18 secs
+INFO -- 2020-06-16 06:59:51 -- shake.main -- Running command raster
+WARNING -- 2020-06-16 06:59:51 -- warnings._showwarnmsg -- /home/shake/miniconda/envs/shakemap/lib/python3.8/site-packages/mapio/gdal.py:490: DataSetWarning: 'Down-casting double precision floating point to single precision'
+  warnings.warn(DataSetWarning('Down-casting double precision '
+
+INFO -- 2020-06-16 06:59:51 -- shake.main -- Finished running command raster: Elapsed 0.25 secs
+INFO -- 2020-06-16 06:59:51 -- shake.main -- Running command shape
+INFO -- 2020-06-16 06:59:52 -- shake.main -- Finished running command shape: Elapsed 1.03 secs
+INFO -- 2020-06-16 06:59:52 -- shake.main -- Running command rupture
+INFO -- 2020-06-16 06:59:52 -- rupture.execute -- Writing rupture.json file...
+INFO -- 2020-06-16 06:59:52 -- shake.main -- Finished running command rupture: Elapsed 0.00 secs
+INFO -- 2020-06-16 06:59:52 -- shake.main -- Running command stations
+INFO -- 2020-06-16 06:59:53 -- shake.main -- Finished running command stations: Elapsed 0.23 secs
+INFO -- 2020-06-16 06:59:53 -- shake.main -- Running command transfer_pdl
+INFO -- 2020-06-16 06:59:53 -- transfer_base.execute -- Making backup directory...
+INFO -- 2020-06-16 06:59:56 -- transfer_pdl.execute -- 40 files sent.  Message from sender: 
+"40 files sent successfully: resulting in output: "urn:usgs-product:ci:shakemap:39481424:1592290793443
+""
+INFO -- 2020-06-16 06:59:56 -- shake.main -- Finished running command transfer_pdl: Elapsed 3.11 secs
+INFO -- 2020-06-16 06:59:56 -- shake.main -- Running command transfer_email
+INFO -- 2020-06-16 06:59:56 -- transfer_email.execute -- Mail has already been generated for this event. Returning.
+INFO -- 2020-06-16 06:59:56 -- shake.main -- Finished running command transfer_email: Elapsed 0.01 secs
+INFO -- 2020-06-16 06:59:56 -- shake.main -- shake finished with event 39481424
+INFO -- 2020-06-16 14:48:08 -- shake.main -- Running command aqms_eq2xml
+INFO -- 2020-06-16 14:48:09 -- shake.main -- Finished running command aqms_eq2xml: Elapsed 0.44 secs
+INFO -- 2020-06-16 14:48:09 -- shake.main -- Running command aqms_db2xml
+INFO -- 2020-06-16 14:48:30 -- shake.main -- Finished running command aqms_db2xml: Elapsed 21.29 secs
+INFO -- 2020-06-16 14:48:30 -- shake.main -- Running command associate
+INFO -- 2020-06-16 14:48:30 -- shake.main -- Finished running command associate: Elapsed 0.00 secs
+INFO -- 2020-06-16 14:48:30 -- shake.main -- Running command assemble
+INFO -- 2020-06-16 14:48:30 -- shake.main -- Finished running command assemble: Elapsed 0.25 secs
+INFO -- 2020-06-16 14:48:30 -- shake.main -- Running command model
+INFO -- 2020-06-16 14:48:56 -- shake.main -- Finished running command model: Elapsed 26.06 secs
+INFO -- 2020-06-16 14:48:56 -- shake.main -- Running command contour
+INFO -- 2020-06-16 14:48:58 -- shake.main -- Finished running command contour: Elapsed 1.19 secs
+INFO -- 2020-06-16 14:48:58 -- shake.main -- Running command gridxml
+INFO -- 2020-06-16 14:48:58 -- shake.main -- Finished running command gridxml: Elapsed 0.62 secs
+INFO -- 2020-06-16 14:48:58 -- shake.main -- Running command info
+INFO -- 2020-06-16 14:48:58 -- shake.main -- Finished running command info: Elapsed 0.00 secs
+INFO -- 2020-06-16 14:48:58 -- shake.main -- Running command kml
+INFO -- 2020-06-16 14:49:01 -- shake.main -- Finished running command kml: Elapsed 2.31 secs
+INFO -- 2020-06-16 14:49:01 -- shake.main -- Running command mapping
+INFO -- 2020-06-16 14:49:26 -- shake.main -- Finished running command mapping: Elapsed 25.74 secs
+INFO -- 2020-06-16 14:49:26 -- shake.main -- Running command plotregr
+INFO -- 2020-06-16 14:49:35 -- shake.main -- Finished running command plotregr: Elapsed 8.24 secs
+INFO -- 2020-06-16 14:49:35 -- shake.main -- Running command raster
+WARNING -- 2020-06-16 14:49:35 -- warnings._showwarnmsg -- /home/shake/miniconda/envs/shakemap/lib/python3.8/site-packages/mapio/gdal.py:490: DataSetWarning: 'Down-casting double precision floating point to single precision'
+  warnings.warn(DataSetWarning('Down-casting double precision '
+
+INFO -- 2020-06-16 14:49:35 -- shake.main -- Finished running command raster: Elapsed 0.25 secs
+INFO -- 2020-06-16 14:49:35 -- shake.main -- Running command shape
+INFO -- 2020-06-16 14:49:36 -- shake.main -- Finished running command shape: Elapsed 1.04 secs
+INFO -- 2020-06-16 14:49:36 -- shake.main -- Running command rupture
+INFO -- 2020-06-16 14:49:36 -- rupture.execute -- Writing rupture.json file...
+INFO -- 2020-06-16 14:49:36 -- shake.main -- Finished running command rupture: Elapsed 0.00 secs
+INFO -- 2020-06-16 14:49:36 -- shake.main -- Running command stations
+INFO -- 2020-06-16 14:49:36 -- shake.main -- Finished running command stations: Elapsed 0.23 secs
+INFO -- 2020-06-16 14:49:36 -- shake.main -- Running command transfer_pdl
+INFO -- 2020-06-16 14:49:36 -- transfer_base.execute -- Making backup directory...
+INFO -- 2020-06-16 14:49:40 -- transfer_pdl.execute -- 40 files sent.  Message from sender: 
+"40 files sent successfully: resulting in output: "urn:usgs-product:ci:shakemap:39481424:1592318977118
+""
+INFO -- 2020-06-16 14:49:40 -- shake.main -- Finished running command transfer_pdl: Elapsed 3.55 secs
+INFO -- 2020-06-16 14:49:40 -- shake.main -- Running command transfer_email
+INFO -- 2020-06-16 14:49:40 -- transfer_email.execute -- Mail has already been generated for this event. Returning.
+INFO -- 2020-06-16 14:49:40 -- shake.main -- Finished running command transfer_email: Elapsed 0.01 secs
+INFO -- 2020-06-16 14:49:40 -- shake.main -- shake finished with event 39481424
+INFO -- 2020-06-17 05:58:31 -- shake.main -- Running command aqms_eq2xml
+INFO -- 2020-06-17 05:58:32 -- shake.main -- Finished running command aqms_eq2xml: Elapsed 0.51 secs
+INFO -- 2020-06-17 05:58:32 -- shake.main -- Running command aqms_db2xml
+INFO -- 2020-06-17 05:58:53 -- shake.main -- Finished running command aqms_db2xml: Elapsed 21.82 secs
+INFO -- 2020-06-17 05:58:53 -- shake.main -- Running command associate
+INFO -- 2020-06-17 05:58:53 -- shake.main -- Finished running command associate: Elapsed 0.00 secs
+INFO -- 2020-06-17 05:58:53 -- shake.main -- Running command assemble
+INFO -- 2020-06-17 05:58:54 -- shake.main -- Finished running command assemble: Elapsed 0.24 secs
+INFO -- 2020-06-17 05:58:54 -- shake.main -- Running command model
+INFO -- 2020-06-17 05:59:19 -- shake.main -- Finished running command model: Elapsed 25.71 secs
+INFO -- 2020-06-17 05:59:19 -- shake.main -- Running command contour
+INFO -- 2020-06-17 05:59:21 -- shake.main -- Finished running command contour: Elapsed 1.17 secs
+INFO -- 2020-06-17 05:59:21 -- shake.main -- Running command gridxml
+INFO -- 2020-06-17 05:59:21 -- shake.main -- Finished running command gridxml: Elapsed 0.62 secs
+INFO -- 2020-06-17 05:59:21 -- shake.main -- Running command info
+INFO -- 2020-06-17 05:59:21 -- shake.main -- Finished running command info: Elapsed 0.00 secs
+INFO -- 2020-06-17 05:59:21 -- shake.main -- Running command kml
+INFO -- 2020-06-17 05:59:24 -- shake.main -- Finished running command kml: Elapsed 2.29 secs
+INFO -- 2020-06-17 05:59:24 -- shake.main -- Running command mapping
+INFO -- 2020-06-17 05:59:49 -- shake.main -- Finished running command mapping: Elapsed 25.56 secs
+INFO -- 2020-06-17 05:59:49 -- shake.main -- Running command plotregr
+INFO -- 2020-06-17 05:59:57 -- shake.main -- Finished running command plotregr: Elapsed 8.16 secs
+INFO -- 2020-06-17 05:59:57 -- shake.main -- Running command raster
+WARNING -- 2020-06-17 05:59:57 -- warnings._showwarnmsg -- /home/shake/miniconda/envs/shakemap/lib/python3.8/site-packages/mapio/gdal.py:490: DataSetWarning: 'Down-casting double precision floating point to single precision'
+  warnings.warn(DataSetWarning('Down-casting double precision '
+
+INFO -- 2020-06-17 05:59:58 -- shake.main -- Finished running command raster: Elapsed 0.25 secs
+INFO -- 2020-06-17 05:59:58 -- shake.main -- Running command shape
+INFO -- 2020-06-17 05:59:59 -- shake.main -- Finished running command shape: Elapsed 1.02 secs
+INFO -- 2020-06-17 05:59:59 -- shake.main -- Running command rupture
+INFO -- 2020-06-17 05:59:59 -- rupture.execute -- Writing rupture.json file...
+INFO -- 2020-06-17 05:59:59 -- shake.main -- Finished running command rupture: Elapsed 0.00 secs
+INFO -- 2020-06-17 05:59:59 -- shake.main -- Running command stations
+INFO -- 2020-06-17 05:59:59 -- shake.main -- Finished running command stations: Elapsed 0.23 secs
+INFO -- 2020-06-17 05:59:59 -- shake.main -- Running command transfer_pdl
+INFO -- 2020-06-17 05:59:59 -- transfer_base.execute -- Making backup directory...
+INFO -- 2020-06-17 06:00:03 -- transfer_pdl.execute -- 40 files sent.  Message from sender: 
+"40 files sent successfully: resulting in output: "urn:usgs-product:ci:shakemap:39481424:1592373599759
+""
+INFO -- 2020-06-17 06:00:03 -- shake.main -- Finished running command transfer_pdl: Elapsed 3.55 secs
+INFO -- 2020-06-17 06:00:03 -- shake.main -- Running command transfer_email
+INFO -- 2020-06-17 06:00:03 -- transfer_email.execute -- Mail has already been generated for this event. Returning.
+INFO -- 2020-06-17 06:00:03 -- shake.main -- Finished running command transfer_email: Elapsed 0.01 secs
+INFO -- 2020-06-17 06:00:03 -- shake.main -- shake finished with event 39481424
