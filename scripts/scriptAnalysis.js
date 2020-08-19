@@ -86,12 +86,15 @@ function plot_data (data, regrArr, comp_id) {
 
 // Define axes domains
   var distance_max = Math.max(...data.map(o => o.distance), 0)
-  var distance_min = Math.min(...data.map(o => o.distance), distance_max)
+  var distance_minData = Math.min(...data.map(o => o.distance), distance_max)
 
-  if (distance_min < 10) {
+  var distance_min = 1;
+  if (distance_minData < 1) {
     distance_min = 1;
+  } else if (distance_minData < 10){
+    distance_min = distance_minData-1;
   } else {
-    distance_min = 10;
+    distance_min = distance_minData-10;
   };
 
   var yMax = Math.max(...data.map(o => o[comp_id]), 0);
@@ -107,7 +110,7 @@ function plot_data (data, regrArr, comp_id) {
     yMin = stdMin;
   };
 
-  x.domain([distance_min, distance_max]);
+  x.domain([Math.round(distance_min), distance_max]);
   y.domain([yMin-0.1*yMin, yMax+0.1*yMax]);
 
 
