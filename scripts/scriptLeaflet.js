@@ -151,7 +151,7 @@ function stationList() {
 }
 
 // ##################################################
-// Show stations
+// Show DYFI observations
 function dyfiList() {
   $.getJSON(
     './data/' + eventid + '/current/products/stationlist.json',
