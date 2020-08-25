@@ -329,7 +329,8 @@ function stationList() {
       if (stations[i].properties.distance  < 301
             && stations[i].properties.distance > 1
             && stations[i].properties.pga > 0.0098
-            && stations[i].properties.pgv > 0.00098) {
+            && stations[i].properties.pgv > 0.00098
+            && stations[i].properties.station_type == 'seismic') {
         objArr.push({ id: stations[i].id,
                       distance:stations[i].properties.distance,
                       intensity:stations[i].properties.intensity,
