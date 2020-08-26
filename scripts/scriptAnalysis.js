@@ -31,7 +31,10 @@ function open_leaflet () {
 // #####################################################
 // Plot data
 //
-function plot_data (data, regrArr, comp_id) {
+function plot_data (data, regrArr, comp_id, newPlot) {
+  if (newPlot == true) {
+      d3.selectAll('svg').remove();
+    };
 
   var div_id = '#' + comp_id;
   var predID = comp_id + 'Prediction';
@@ -96,9 +99,6 @@ function plot_data (data, regrArr, comp_id) {
   } else {
     distance_min = Math.floor(distance_minData/10)*10;
   };
-
-  console.log(distance_minData);
-  console.log(distance_min);
 
   var yMax = Math.max(...data.map(o => o[comp_id]), 0);
   var yMin = Math.min(...data.map(o => o[comp_id]), yMax);
@@ -262,7 +262,7 @@ function clean_array(array, keyName) {
 // #####################################################
 // Get regression curve
 //
-function getRegression (obsArr) {
+function getRegression (obsArr, newPlot, regrType) {
   $.getJSON(
     './data/' + eventid + '/current/products/attenuation_curves.json',
     function(json) {
@@ -287,19 +287,20 @@ function getRegression (obsArr) {
             ) {
         regrArr.push({
                       distance:regrPoints['distances']['repi'][i],
-                      intensity:regrPoints['gmpe']['rock']['MMI']['mean'][i],
-                      intensityStd:regrPoints['gmpe']['rock']['MMI']['stddev'][i],
-                      pga:100*Math.exp(regrPoints['gmpe']['rock']['PGA']['mean'][i]),
-                      pgaStd:Math.exp(regrPoints['gmpe']['rock']['PGA']['stddev'][i]),
-                      pgv:Math.exp(regrPoints['gmpe']['rock']['PGV']['mean'][i]),
-                      pgvStd:Math.exp(regrPoints['gmpe']['rock']['PGV']['stddev'][i])});
+                      intensity:regrPoints['gmpe'][regrType]['MMI']['mean'][i],
+                      intensityStd:regrPoints['gmpe'][regrType]['MMI']['stddev'][i],
+                      pga:100*Math.exp(regrPoints['gmpe'][regrType]['PGA']['mean'][i]),
+                      pgaStd:Math.exp(regrPoints['gmpe'][regrType]['PGA']['stddev'][i]),
+                      pgv:Math.exp(regrPoints['gmpe'][regrType]['PGV']['mean'][i]),
+                      pgvStd:Math.exp(regrPoints['gmpe'][regrType]['PGV']['stddev'][i])});
         };
 
       };
 
-      plot_data(clean_array(obsArr, 'intensity'),  clean_array(regrArr, 'intensity'), 'intensity');
-      plot_data(clean_array(obsArr, 'pga'),  clean_array(regrArr, 'pga'), 'pga');
-      plot_data(clean_array(obsArr, 'pgv'),  clean_array(regrArr, 'pgv'), 'pgv');
+      plot_data(clean_array(obsArr, 'intensity'),  clean_array(regrArr, 'intensity'), 'intensity', newPlot);
+      newPlot = false;
+      plot_data(clean_array(obsArr, 'pga'),  clean_array(regrArr, 'pga'), 'pga', newPlot);
+      plot_data(clean_array(obsArr, 'pgv'),  clean_array(regrArr, 'pgv'), 'pgv', newPlot);
 }
 }
 // #####################################################
@@ -317,14 +318,15 @@ function getPredictedValue(component, predictions) {
 // #####################################################
 // Get stationList
 //
-function stationList() {
+function stationList(newPlot, regrType) {
   $.getJSON(
     './data/' + eventid + '/current/products/stationlist.json',
     function(json) {
       var stations = json.features;
       return_data(stations);
     }
-  );
+  )
+  ;
   function return_data(stations) {
     var objArr = [];
     for (var i=0; i<stations.length; i++) {
@@ -345,11 +347,15 @@ function stationList() {
                     });
         };
       };
-    getRegression(objArr);
-
+    getRegression(objArr, newPlot, regrType);
   }
 }
 
+function changePlot() {
+  var selType = document.getElementById('selectRegrType');
+  var selectedType = selType.options[selType.selectedIndex].value;
+  stationList(true, selectedType);
+};
 var eventid = getURLParameter('eventid');
 
-stationList();
+stationList(false, 'rock');
