@@ -170,7 +170,7 @@ var regrLine = d3.line()
                  ' %g<br/> PGA pred: ' + d.pgaPrediction +
                  ' %g<br/> PGV: ' + d.pgv +
                  ' cm/s<br/> PGV pred: ' + d.pgvPrediction +
-                 ' cm/s'
+                 ' cm/s <br/> Vs30: ' + d.vs30 + ' m/s'
                   )
                  .style("left", (d3.event.pageX + 5) + "px")
                  .style("top", (d3.event.pageY - 28) + "px");
@@ -343,7 +343,8 @@ function stationList(newPlot, regrType) {
                       color:intColors[Math.round(stations[i].properties.intensity)],
                       intensityPrediction:getPredictedValue('mmi', stations[i].properties.predictions),
                       pgaPrediction:getPredictedValue('pga', stations[i].properties.predictions),
-                      pgvPrediction:getPredictedValue('pgv', stations[i].properties.predictions)
+                      pgvPrediction:getPredictedValue('pgv', stations[i].properties.predictions),
+                      vs30:stations[i].properties.vs30
                     });
         };
       };
