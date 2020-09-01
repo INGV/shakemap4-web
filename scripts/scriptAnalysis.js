@@ -203,7 +203,7 @@ var regrLine = d3.line()
      .attr("x", width-width*0.21)
      .attr("y", 0)
      .attr("width", 140)
-     .attr("height", 58)
+     .attr("height", 90)
      .style("stroke", "#000000")
      .attr("stroke-width", 2)
      .style("fill", "#F0E0C0");
@@ -216,18 +216,29 @@ var regrLine = d3.line()
         .style("fill", "#FFFFFF")
         .style("stroke", "#000000")
         .attr("d", d3.symbol().type(d3.symbolTriangle))
-        .attr("transform","translate(" + (width-width*0.2).toString() + ", 10)" );
+        .attr("transform","translate(" + (width-width*0.2).toString() + ", 15)" );
+
+  svg.selectAll("dot")
+      .data([0])
+      .enter().append("path")
+        .attr("class", "point")
+        .attr("r", 0.1)
+        .style("fill", "#FFFFFF")
+        .style("stroke", "#000000")
+        .attr("d", d3.symbol().type(d3.symbolCircle))
+        .attr("transform","translate(" + (width-width*0.2).toString() + ", 40)" );
 
   svg.append("rect")
-    .attr("transform","translate(" + (width-width*0.207).toString() + ", 27)" )
+    .attr("transform","translate(" + (width-width*0.207).toString() + ", 69)" )
     .style("fill", "#A971A8")
     .attr("width", 20)
     .attr("height", 4);
 
   // svg.append("circle").attr("cx", width-width*0.2).attr("cy", 30).attr("r", 6).style("fill", "#808080").style("stroke", "#000000");
-  svg.append("text").attr("x", width-width*0.18).attr("y", 10).text("Observed").style("font-size", "15px").attr("alignment-baseline","middle");
-  svg.append("text").attr("x", width-width*0.18).attr("y", 30).text("Predicted").style("font-size", "15px").attr("alignment-baseline","middle");
-  svg.append("text").attr("x", width-width*0.18).attr("y", 45).text("(+/- 1 std dev)").style("font-size", "15px").attr("alignment-baseline","middle");
+  svg.append("text").attr("x", width-width*0.18).attr("y", 15).text("Seismic").style("font-size", "15px").attr("alignment-baseline","middle");
+  svg.append("text").attr("x", width-width*0.18).attr("y", 40).text("Macroseismic").style("font-size", "15px").attr("alignment-baseline","middle");
+  svg.append("text").attr("x", width-width*0.18).attr("y", 65).text("Predicted").style("font-size", "15px").attr("alignment-baseline","middle");
+  svg.append("text").attr("x", width-width*0.18).attr("y", 78).text("(+/- 1 std dev)").style("font-size", "15px").attr("alignment-baseline","middle");
 
 
 // Add the X Axis
