@@ -148,6 +148,15 @@ var regrLine = d3.line()
 
 
       // Observed data scatterplot
+      var arc = d3.symbol().type(function(d) {
+      	if(d.obsType == 'seismic') {
+      		return d3.symbolTriangle;
+      	}
+      	else {
+      		return  d3.symbolCircle;
+      	};
+      });
+
   svg.selectAll("dot")
       .data(data)
       .enter().append("path")
@@ -155,7 +164,14 @@ var regrLine = d3.line()
         .attr("r", 1)
         .style("fill", function (d) { return d.color})
         .style("stroke", "#000000")
-        .attr("d", d3.symbol().type(d3.symbolTriangle))
+        .attr("d", arc)
+       //  function (d) {
+       //   if (d.obsType == 'seismic') {
+       //   return d3.symbol().type(d3.symbolTriangle);
+       // } else {
+       //   return d3.symbol().type(d3.symbolTriangle);
+       // };
+       // })
         .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d[comp_id]) + ")"; })
         .on("mouseover", function(d) {
                div.transition()
@@ -163,6 +179,7 @@ var regrLine = d3.line()
                  .style("opacity", .7);
                div.html(
                  'Station ID: ' + d.id +
+                 '<br/> Station type: ' + d.obsType +
                  '<br/>Distance: ' + d.distance +
                  ' km<br/> MMI: ' + d.intensity +
                  '<br/> MMI predicted: ' + d.intensityPrediction +
@@ -318,7 +335,7 @@ function getPredictedValue(component, predictions) {
 // #####################################################
 // Get stationList
 //
-function stationList(newPlot, regrType) {
+function stationList(newPlot, regrType, showDYFI) {
   $.getJSON(
     './data/' + eventid + '/current/products/stationlist.json',
     function(json) {
@@ -329,12 +346,16 @@ function stationList(newPlot, regrType) {
   ;
   function return_data(stations) {
     var objArr = [];
+    var dontUseStationType = 'macroseismic';
+    if (showDYFI == true) {
+      dontUseStationType = '';
+    }
     for (var i=0; i<stations.length; i++) {
       if (stations[i].properties.distance  < 301
             && stations[i].properties.distance > 1
             && stations[i].properties.pga > 0.0098
             && stations[i].properties.pgv > 0.00098
-            && stations[i].properties.station_type == 'seismic') {
+            && stations[i].properties.station_type != dontUseStationType) {
         objArr.push({ id: stations[i].id,
                       distance:stations[i].properties.distance,
                       intensity:stations[i].properties.intensity,
@@ -344,7 +365,8 @@ function stationList(newPlot, regrType) {
                       intensityPrediction:getPredictedValue('mmi', stations[i].properties.predictions),
                       pgaPrediction:getPredictedValue('pga', stations[i].properties.predictions),
                       pgvPrediction:getPredictedValue('pgv', stations[i].properties.predictions),
-                      vs30:stations[i].properties.vs30
+                      vs30:stations[i].properties.vs30,
+                      obsType: stations[i].properties.station_type
                     });
         };
       };
@@ -355,7 +377,10 @@ function stationList(newPlot, regrType) {
 function changePlot() {
   var selType = document.getElementById('selectRegrType');
   var selectedType = selType.options[selType.selectedIndex].value;
-  stationList(true, selectedType);
+
+  var showDYFI = document.getElementById('dyfiCheck').checked;
+
+  stationList(true, selectedType, showDYFI);
 };
 var eventid = getURLParameter('eventid');
 
