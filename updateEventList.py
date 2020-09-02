@@ -45,6 +45,14 @@ def overlay_to_json(event_id):
 
     return None
 
+def get_bBox_dict():
+    if (os.path.isfile('bBox.txt')):
+        with open('bBox.txt') as json_file:
+            bBox = json.load(json_file)[0]
+        return bBox 
+    else:
+        return False
+
 def get_products_list(event_id):
     """
         Get the list of products generated for an event and write them to file
@@ -57,7 +65,7 @@ def get_products_list(event_id):
     fileList = [ item for item in os.listdir(products_path) if os.path.isfile(os.path.join(products_path, item)) ]
 
     productsList = []
-    
+
     for product in productMeta:
         if product['name'] in fileList:
             productsList.append(product)
@@ -68,7 +76,7 @@ def get_products_list(event_id):
 
     return None
 
-def get_parameters (event_id):
+def get_parameters (event_id, bBox):
     """
         Get the event parameters from the info.json file of an event
     """
@@ -87,15 +95,22 @@ def get_parameters (event_id):
             'hour': hour,
             'minute': minute,
             'second': second,
-            'latitude': info_file['input']['event_information']['latitude'],
-            'longitude': info_file['input']['event_information']['longitude'],
-            'magnitude': info_file['input']['event_information']['magnitude'],
-            'depth': info_file['input']['event_information']['depth']
+            'latitude': float(info_file['input']['event_information']['latitude']),
+            'longitude': float(info_file['input']['event_information']['longitude']),
+            'magnitude': float(info_file['input']['event_information']['magnitude']),
+            'depth': float(info_file['input']['event_information']['depth'])
             }
-
-
-    return parameter_dict
-
+    
+    if (bBox == False):
+        bBox = {"minLat": -90.0, "maxLat": 90.0, "minLon": -180.0, "maxLon" : 180.0}
+    
+    
+    if ( parameter_dict['latitude'] < bBox["minLat"] or parameter_dict['latitude'] > bBox["maxLat"] or
+        parameter_dict['longitude'] < bBox["minLon"] or parameter_dict['longitude'] > bBox["maxLon"]):
+        return False
+    else:
+        return parameter_dict
+    
 def write_list_to_file(event_list):
     """
         Write event information to file.
@@ -107,15 +122,32 @@ def write_list_to_file(event_list):
     with open('events.js', 'a') as outfile:
         json.dump(event_list, outfile)
 
+def write_version_file():
+    yaml_file_path = 'publiccode.yml'
+    with open(yaml_file_path, 'r') as yaml:
+        yaml_file = yaml.readlines()
+
+    versionElement = [s for s in yaml_file if "softwareVersion" in s][0][:-1]
+
+    versionElement = versionElement.replace('software', 'Website ')
+
+    with open('softwareVersion.js', 'w') as f:
+        print('var softwareVersion = "' + versionElement +
+        '";document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
+
+    return
+
 def main():
     event_list = []
-    products_list = []
+    bBox = get_bBox_dict()
     for event in get_event_ids():
         print('Processing event:' + event)
 
         ## Try to read the info.json file to put the events in a list for the website to read
         try:
-            event_list.append(get_parameters(event))
+            eventParameters = get_parameters(event, bBox)
+            if (eventParameters != False):
+                event_list.append(eventParameters)
         except Exception as e:
             print('Following error occurred for event ' + event + ':')
             print(e)
@@ -135,6 +167,7 @@ def main():
             print(e)
 
     write_list_to_file(event_list)
+    write_version_file()
 
 if __name__ == "__main__":
     main()

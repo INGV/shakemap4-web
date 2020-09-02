@@ -20,7 +20,7 @@ function initTableClick() {
 //# Creating an object from events list
 //##################################################################
 
-var Event = function (id, year, month, day, hour, minute, second, description, magnitude, date, list) {
+var Event = function (id, year, month, day, hour, minute, second, description, magnitude, depth, date, list) {
   this.id = id;
   this.year = year;
   this.month = month;
@@ -31,6 +31,7 @@ var Event = function (id, year, month, day, hour, minute, second, description, m
   this.description = description;
   this.magnitude = magnitude;
   this.date = date;
+  this.depth = depth;
   list.push(this);
 };
 
@@ -129,6 +130,7 @@ function listEvents () {
           events[i].second,
           events[i].description,
           events[i].magnitude,
+          events[i].depth,
           events[i].date,
           showEvents
         );
@@ -166,6 +168,7 @@ function listEvents () {
           events[i].second,
           showEvents[i].description,
           showEvents[i].magnitude,
+          showEvents[i].depth,
           events[i].date,
           helpObject
         );
@@ -194,6 +197,7 @@ function listEvents () {
           events[i].second,
           showEvents[i].description,
           showEvents[i].magnitude,
+          showEvents[i].depth,
           events[i].date,
           helpObject
         );
@@ -230,6 +234,7 @@ function listEvents () {
     '<th scope="col";>Day</th>' +
     '<th scope="col";>Time (HH:MM)</th>' +
     '<th scope="col";>Location</th>' +
+    '<th scope="col";>Depth (km)</th>' +
     '<th scope="col";" width="10%">' +
     '<a href="#" onclick="magn_sort(2);" class="table_arrow_link">↓</a>' +
     'Magnitude' +
@@ -264,6 +269,9 @@ function listEvents () {
       showEvents[i].description +
       '</td>' +
       '<td>' +
+      showEvents[i].depth +
+      '</td>' +
+      '<td>' +
       (Math.round(showEvents[i].magnitude * 10) / 10 + '.0').slice(0, 3) +
       '</td>' +
       '</tr>';
@@ -286,6 +294,5 @@ var events = events.map(function (o) {
   return o;
 });
 
-console.log(events);
 
 listEvents();

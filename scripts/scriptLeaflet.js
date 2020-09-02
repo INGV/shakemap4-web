@@ -34,6 +34,13 @@ function open_download() {
 }
 
 // #####################################################
+// Open the download page for event
+//
+function open_analysis() {
+  window.location = './viewAnalysis.html?eventid=' + eventid;
+}
+
+// #####################################################
 // Write json attributes to a div
 
 function attr_div(attr_collection, div_id) {
@@ -89,30 +96,33 @@ function stationList() {
   );
 
   function show_stations (stations) {
+    console.log(stations);
     var stations_layer = L.geoJSON (stations, {
       pointToLayer: function (feature, latlng) {
-        if (feature.properties.intensity < 5) {
-          var result = feature.properties.mmi_from_pgm.filter(obj => {
-            return obj.name === 'pga';
+        if (feature.properties.station_type == 'seismic') {
+          if (feature.properties.intensity < 5) {
+            var result = feature.properties.mmi_from_pgm.filter(obj => {
+              return obj.name === 'pga';
+            });
+            var stationColor = Math.round(result[0].value);
+          } else if (feature.properties.intensity >= 5) {
+            var result = feature.properties.mmi_from_pgm.filter(obj => {
+              return obj.name === 'pgv';
+            });
+            var stationColor = Math.round(result[0].value);
+          } else {
+            var stationWidth = 1;
+            var stationRadius = 3;
+          }
+          var stationShape = 'triangle';
+          return new L.shapeMarker (latlng, {
+            fillColor: 'black',
+            color: intColors_USGS[stationColor] || 'black',
+            shape: 'triangle',
+            radius: stationRadius || 5,
+            weight: stationWidth || 3
           });
-          var stationColor = Math.round(result[0].value);
-        } else if (feature.properties.intensity >= 5) {
-          var result = feature.properties.mmi_from_pgm.filter(obj => {
-            return obj.name === 'pgv';
-          });
-          var stationColor = Math.round(result[0].value);
-
-        } else {
-          var stationWidth = 1;
-          var stationRadius = 3;
-        }
-        return new L.shapeMarker (latlng, {
-          fillColor: 'black',
-          color: intColors_USGS[stationColor] || 'black',
-          shape: 'triangle',
-          radius: stationRadius || 5,
-          weight: stationWidth || 3
-        });
+        };
       },
       onEachFeature: function (feature, layer) {
         layer.bindPopup(
@@ -141,6 +151,65 @@ function stationList() {
 }
 
 // ##################################################
+// Show DYFI observations
+function dyfiList() {
+  $.getJSON(
+    './data/' + eventid + '/current/products/stationlist.json',
+    function(json) {
+      var stations = json.features;
+      show_dyfi(stations);
+    }
+  );
+
+  function show_dyfi (stations) {
+    var dyfi_layer = L.geoJSON (stations, {
+      pointToLayer: function (feature, latlng) {
+        if (feature.properties.station_type == 'macroseismic') {
+           var stationShape = 'circle';
+           var stationColor = Math.round(feature.properties.intensity)
+          return new L.shapeMarker (latlng, {
+            fillColor: 'black',
+            color: intColors_USGS[stationColor] || 'black',
+            shape: 'circle',
+            radius: 4,
+            weight: 2
+          });
+        };
+      },
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          'Station: ' +
+          feature.properties.code +
+          '<br/>Network: ' +
+          feature.properties.network +
+          '<br/>Distance: ' +
+          feature.properties.distance +
+          ' km <br/>Intensity: ' +
+          feature.properties.intensity +
+          '<br/>PGA: ' +
+          feature.properties.pga +
+          '<br/>PGV: ' +
+          feature.properties.pgv +
+          '<br/>Vs30: ' +
+          feature.properties.vs30 +
+          ' m/s'
+        );
+      }
+    });
+
+    control.addOverlay(dyfi_layer, 'Show DYFI observations');
+    // dyfi_layer.addTo(mymap);
+  }
+}
+// ##################################################
+// Show event title above the map
+function ev_title(desc, or_time, magnitude, lat, lon, depth) {
+  or_time = new Date(Date.parse(or_time));
+  document.getElementById('evInfo').innerHTML += 'ShakeMap:' + desc + '<br/>'
+      + or_time.toUTCString() + ' '  +magnitude + ' ' + Number(lat).toFixed(2) + ' ' + Number(lon).toFixed(2)
+        + ' Depth:' + depth + 'km ID:' + eventid;
+};
+// ##################################################
 // Show epicenter and write info in sidebar
 function event_info() {
   $.getJSON('./data/' + eventid + '/current/products/info.json', function(
@@ -152,12 +221,15 @@ function event_info() {
 
     magnitude = info_input.magnitude;
     depth = info_input.depth;
+    desc = info_input.event_description;
+    or_time = info_input.origin_time;
 
     attr_div(info_input, 'input_content');
     attr_div(json.output.uncertainty, 'motions_content');
     attr_div(json.processing.ground_motion_modules, 'processing_content');
 
-
+    console.log(json);
+    ev_title(desc, or_time, magnitude, epi_lat, epi_lon, depth);
 
     show_epi(epi_lat, epi_lon, magnitude, depth);
   });
@@ -316,7 +388,7 @@ function legend_box() {
 
       img.src = './data/' + eventid + '/current/products/mmi_legend.png';
       // img.style.width = '70%';
-      var widthSize = 0.25 * $(window).width();
+      var widthSize = 0.375 * $(window).width();
       img.style.width =  widthSize.toString() + 'px';
       return img;
   },
@@ -376,6 +448,7 @@ show_contours('cont_psa0p3.json', 'PSA 0.3 s');
 show_contours('cont_psa1p0.json', 'PSA 1.0 s');
 show_contours('cont_psa3p0.json', 'PSA 3.0 s');
 stationList();
+dyfiList();
 faultSurface();
 intensityOverlay();
 legend_box();

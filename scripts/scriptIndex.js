@@ -17,6 +17,7 @@ function makeTable() {
     '<th scope="col";>Day</th>' +
     '<th scope="col";>Time (HH:MM)</th>' +
     '<th scope="col";>Location</th>' +
+    '<th scope="col";>Depth (km)</th>' +
     '<th scope="col";>Magnitude</th>' +
     '</thead>' +
     '</tr>' +
@@ -48,6 +49,9 @@ function makeTable() {
         events[i].description +
         '</td>' +
         '<td>' +
+        events[i].depth +
+        '</td>' +
+        '<td>' +
         (Math.round(events[i].magnitude * 10) / 10 + '.0').slice(0, 3) +
         '</td>' +
         '</tr>';
@@ -77,6 +81,9 @@ function makeTable() {
         events[i].description +
         '</td>' +
         '<td>' +
+        events[i].depth +
+        '</td>' +
+        '<td>' +
         (Math.round(events[i].magnitude * 10) / 10 + '.0').slice(0, 3) +
         '</td>' +
         '</tr>';
@@ -87,8 +94,6 @@ function makeTable() {
 
   document.getElementById('event_table').innerHTML = myvar;
 }
-
-console.log(events);
 
 var events = events.map(function (o) {
   o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);

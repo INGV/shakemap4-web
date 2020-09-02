@@ -75,9 +75,13 @@
       <div style="width: 100%;">
            <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
       </div>
+      <div id="evInfo" style="width: 100%; text-align: center;"></div>
+
       <button type="button" class="btn btn-outline-primary go_left" id="leafletButton"  onclick="open_double()">Double View</button>
       <button type="button" class="btn btn-outline-primary go_right" id="downloadButton"  onclick="open_download()">Download products</button>
       <button type="button" class="btn btn-outline-primary go_right" id="staticButton"  onclick="open_static()">Static View</button>
+      <button type="button" class="btn btn-outline-primary go_right" id="staticButton"  onclick="open_analysis()">Analysis View</button>
+
  <div id="mapid" class="sidebar-map">
 
 
@@ -94,60 +98,6 @@
 
              <!-- Tab panes -->
                      <div class="sidebar-content">
-                        <!-- <div class="sidebar-pane" id="home">
-                             <h1 class="sidebar-header">
-                                 Legend
-                                 <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                                 <div>
-                                   <div>
-                                     <p class="legend">Epicenter &nbsp;&nbsp;&nbsp;<i class="material-icons epi_icon">adjust</i></p>
-                                   </div>
-                                   <table class="table table-bordered table-sm legend_table">
-                                     <thead class="thead-dark">
-                                       <tr>
-                                         <th scope="col">Intensity</th>
-                                       </tr>
-                                     </thead>
-                                      "#FFFFFF", "#FFFFFF", "#ACD8E9", "#ACD8E9", "#83D0DA", "#7BC87F", "#F9F518", "#FAC611", "#FA8A11", "#F7100C", "#C80F0A",
-                                     <tbody>
-                                       <tr style="background-color: #FFFFFF;">
-                                         <td>I</td>
-                                       </tr>
-                                       <tr style="background-color: #ACD8E9;">
-                                         <td>II</td>
-                                       </tr>
-                                       <tr style="background-color: #ACD8E9;">
-                                          <td>III</td>
-                                       </tr>
-                                       <tr style="background-color: #83D0DA;">
-                                          <td>IV</td>
-                                       </tr>
-                                       <tr style="background-color: #7BC87F;">
-                                          <td>V</td>
-                                       </tr>
-                                       <tr style="background-color: #F9F518;">
-                                          <td>VI</td>
-                                       </tr>
-                                       <tr style="background-color: #FAC611;">
-                                          <td>VII</td>
-                                       </tr>
-                                       <tr style="background-color: #FA8A11;">
-                                          <td>VIII</td>
-                                       </tr>
-                                       <tr style="background-color: #F7100C;">
-                                          <td>IX</td>
-                                       </tr>
-                                       <tr style="background-color: #C80F0A;">
-                                          <td>X</td>
-                                       </tr>
-                                     </tbody>
-                                   </table>
-
-
-                                 </div>
-                             </h1>
-                         </div> -->
-
                          <div class="sidebar-pane" id="input_info">
                              <h1 class="sidebar-header">Input information<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
                              <div id="input_content">
@@ -181,12 +131,11 @@
       # Footer
       ###############################################
        -->
-<!--
-     <footer class="footer">
-           <div class="container">
-             <span class="text-muted">Place sticky footer content here.</span>
-           </div>
-         </footer> -->
+       <footer class="footer">
+             <div class="container">
+               <span id="footer_text" class="text-muted"></span>
+             </div>
+           </footer>
 
 
 
@@ -240,6 +189,7 @@
 
     <!--  My scripts -->
     <script src="scripts/colors.js"></script>
+    <script src="./softwareVersion.js"></script>
     <script src="scripts/scriptLeaflet.js"></script>
   </body>
 </html>

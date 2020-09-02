@@ -75,29 +75,31 @@ function stationList(mapName, controlName, showOnMap) {
 
   function show_stations(stations) {
     var stations_layer = L.geoJSON(stations, {
-      pointToLayer: function(feature, latlng) {
-        if (feature.properties.intensity < 5) {
-          var result = feature.properties.mmi_from_pgm.filter(obj => {
-            return obj.name === 'pga';
+      pointToLayer: function (feature, latlng) {
+        if (feature.properties.station_type == 'seismic') {
+          if (feature.properties.intensity < 5) {
+            var result = feature.properties.mmi_from_pgm.filter(obj => {
+              return obj.name === 'pga';
+            });
+            var stationColor = Math.round(result[0].value);
+          } else if (feature.properties.intensity >= 5) {
+            var result = feature.properties.mmi_from_pgm.filter(obj => {
+              return obj.name === 'pgv';
+            });
+            var stationColor = Math.round(result[0].value);
+          } else {
+            var stationWidth = 1;
+            var stationRadius = 3;
+          }
+          var stationShape = 'triangle';
+          return new L.shapeMarker (latlng, {
+            fillColor: 'black',
+            color: intColors_USGS[stationColor] || 'black',
+            shape: 'triangle',
+            radius: stationRadius || 5,
+            weight: stationWidth || 3
           });
-          var stationColor = Math.round(result[0].value);
-        } else if (feature.properties.intensity >= 5) {
-          var result = feature.properties.mmi_from_pgm.filter(obj => {
-            return obj.name === 'pgv';
-          });
-          var stationColor = Math.round(result[0].value);
-
-        } else {
-          var stationWidth = 1;
-          var stationRadius = 3;
-        }
-        return new L.shapeMarker (latlng, {
-          fillColor: 'black',
-          color: intColors_USGS[stationColor] || 'black',
-          shape: 'triangle',
-          radius: stationRadius || 5,
-          weight: stationWidth || 3
-        });
+        };
       },
       onEachFeature: function(feature, layer) {
         layer.bindPopup(
@@ -123,6 +125,58 @@ function stationList(mapName, controlName, showOnMap) {
     if (showOnMap == true) {
       stations_layer.addTo(mapName);
     }
+  }
+}
+
+// ##################################################
+// Show DYFI observations
+function dyfiList(controlName) {
+  $.getJSON(
+    './data/' + eventid + '/current/products/stationlist.json',
+    function(json) {
+      var stations = json.features;
+      show_dyfi(stations, controlName);
+    }
+  );
+
+  function show_dyfi (stations) {
+    var dyfi_layer = L.geoJSON (stations, {
+      pointToLayer: function (feature, latlng) {
+        if (feature.properties.station_type == 'macroseismic') {
+           var stationShape = 'circle';
+           var stationColor = Math.round(feature.properties.intensity)
+          return new L.shapeMarker (latlng, {
+            fillColor: 'black',
+            color: intColors_USGS[stationColor] || 'black',
+            shape: 'circle',
+            radius: 4,
+            weight: 2
+          });
+        };
+      },
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          'Station: ' +
+          feature.properties.code +
+          '<br/>Network: ' +
+          feature.properties.network +
+          '<br/>Distance: ' +
+          feature.properties.distance +
+          ' km <br/>Intensity: ' +
+          feature.properties.intensity +
+          '<br/>PGA: ' +
+          feature.properties.pga +
+          '<br/>PGV: ' +
+          feature.properties.pgv +
+          '<br/>Vs30: ' +
+          feature.properties.vs30 +
+          ' m/s'
+        );
+      }
+    });
+
+    controlName.addOverlay(dyfi_layer, 'Show DYFI observations');
+    // dyfi_layer.addTo(mapName);
   }
 }
 
@@ -390,6 +444,7 @@ show_contours('cont_psa0p3.json', 'PSA 0.3 s', control, false);
 show_contours('cont_psa1p0.json', 'PSA 1.0 s', control, false);
 show_contours('cont_psa3p0.json', 'PSA 3.0 s', control, false);
 stationList(map1, control, true);
+dyfiList(control);
 faultSurface(control);
 legend_box();
 
@@ -401,6 +456,7 @@ show_contours('cont_psa0p3.json', 'PSA 0.3 s', control2, false);
 show_contours('cont_psa1p0.json', 'PSA 1.0 s', control2, false);
 show_contours('cont_psa3p0.json', 'PSA 3.0 s', control2, false);
 stationList(map2, control2, false);
+dyfiList(control2);
 faultSurface(control2);
 
 var sidebar = L.control.sidebar('sidebar').addTo(map1);

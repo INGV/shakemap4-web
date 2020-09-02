@@ -156,9 +156,20 @@ h3 {
 
 /* ########### */
 .input_text {
-  color: silver;
+  color: gray;
 }
 
 /*  ################
- ### Download products page
+ ### Analysis page
  ####################*/
+ div.tooltip {
+   position: absolute;
+   text-align: center;
+   width: 150px;
+   padding: 2px;
+   font: 12px sans-serif;
+   color: white;
+   background: black;
+   border: 1px;
+   border-radius: 8px;
+ }
