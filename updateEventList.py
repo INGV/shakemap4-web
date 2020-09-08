@@ -95,10 +95,10 @@ def get_parameters (event_id, bBox):
             'hour': hour,
             'minute': minute,
             'second': second,
-            'latitude': float(info_file['input']['event_information']['latitude']),
-            'longitude': float(info_file['input']['event_information']['longitude']),
-            'magnitude': float(info_file['input']['event_information']['magnitude']),
-            'depth': float(info_file['input']['event_information']['depth'])
+            'latitude': round(float(info_file['input']['event_information']['latitude']), 2),
+            'longitude': round(float(info_file['input']['event_information']['longitude']), 2),
+            'magnitude': round(float(info_file['input']['event_information']['magnitude']), 1),
+            'depth': round(float(info_file['input']['event_information']['depth']), 1)
             }
     
     if (bBox == False):
