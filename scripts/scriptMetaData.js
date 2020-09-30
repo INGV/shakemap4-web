@@ -77,15 +77,23 @@ function col_exp() {
 //  #################################################################
 //  #  Get subkeys for an Object
 //  ##################################################################
-function get_subs(subObj) {
+function get_subs(subObj, depth) {
+  var subMeta = '';
+  var tabNum = '';
+  for (var i=0; i<depth; i++) {
+    tabNum = tabNum + '&emsp;';
+  };
   Object.keys(subObj).forEach(function(key,index) {
     if (subObj[key] !== null) {
       if(typeof subObj[key] == 'object'){
-          console.log(key);
+        subMeta = subMeta + tabNum + '<b>' + key + ':</b><br/>' + get_subs(subObj[key], depth+1);
+      } else {
+        subMeta = subMeta + tabNum + '<b>' + key + ':</b>&emsp;' + subObj[key] + '<br/>';
       };
     };
     });
-// };
+    return subMeta;
+};
 //  #################################################################
 //  #  Writing the table
 //  ##################################################################
@@ -94,19 +102,20 @@ function list_meta(eventid) {
     json
   ) {
     var metaHTML = '';
+    console.log(json);
     Object.keys(json).forEach(function(key,index) {
     subMeta = json[key];
     keyName = key.charAt(0).toUpperCase() + key.slice(1)
 
     metaHTML = metaHTML + '<button type="button" class="collapsible"> '
       + keyName + '</button><div class="content"><p>';
-    // console.log(JSON.stringify(json[key]));
-    Object.keys(subMeta).forEach(function(key2,index) {
-      metaHTML = metaHTML + '<br/><b>' + key2 + '</b><br/>' + JSON.stringify(subMeta[key2], null, 4);
-      // get_subs(subMeta);
-    });
 
-    metaHTML = metaHTML + '</p></div>';
+    // Object.keys(subMeta).forEach(function(key2,index) {
+    //   // metaHTML = metaHTML + '<br/><b>' + key2 + '</b><br/>' + JSON.stringify(subMeta[key2], null, 4);
+    //   console.log(get_subs(subMeta[key2], metaHTML));
+    // });
+
+    metaHTML = metaHTML + get_subs(subMeta, 0) + '</p></div>';
     document.getElementById('metaTable').innerHTML = metaHTML;
 
   });
