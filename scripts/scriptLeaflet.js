@@ -34,10 +34,17 @@ function open_download() {
 }
 
 // #####################################################
-// Open the download page for event
+// Open the Analysis page for event
 //
 function open_analysis() {
   window.location = './viewAnalysis.html?eventid=' + eventid;
+}
+
+// #####################################################
+// Open the MetaData page for event
+//
+function open_meta() {
+  window.location = './metaDataPage.html?eventid=' + eventid;
 }
 
 // #####################################################
