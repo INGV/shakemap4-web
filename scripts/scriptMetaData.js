@@ -63,7 +63,7 @@ function col_exp() {
   var col = document.getElementsByClassName("collapsible");
   for (i = 0; i < col.length; i++) {
     col[i].addEventListener("click", function() {
-      this.classList.toggle("active");
+      this.classList.toggle("activeCol");
       var content = this.nextElementSibling;
       if (content.style.display === "block") {
         content.style.display = "none";
@@ -77,14 +77,14 @@ function col_exp() {
 //  #################################################################
 //  #  Get subkeys for an Object
 //  ##################################################################
-// function get_subs(subObj) {
-//   Object.keys(subObj).forEach(function(key,index) {
-//     if (subObj[key] !== null) {
-//       if(typeof subObj[key] == 'object'){
-//           console.log(key);
-//       };
-//     };
-//     });
+function get_subs(subObj) {
+  Object.keys(subObj).forEach(function(key,index) {
+    if (subObj[key] !== null) {
+      if(typeof subObj[key] == 'object'){
+          console.log(key);
+      };
+    };
+    });
 // };
 //  #################################################################
 //  #  Writing the table

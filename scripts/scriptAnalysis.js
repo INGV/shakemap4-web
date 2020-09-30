@@ -32,6 +32,8 @@ function open_leaflet () {
 // Plot data
 //
 function plot_data (data, regrArr, comp_id, newPlot) {
+  var sizeRegr = regrArr.length;
+
   if (newPlot == true) {
       d3.selectAll('svg').remove();
     };
@@ -41,22 +43,23 @@ function plot_data (data, regrArr, comp_id, newPlot) {
   var stdID = comp_id + 'Std';
 
   // Calculate standard deviation array
-  var stdArr = regrArr.map(function(item) { return {[stdID]:item[stdID], "distance":item.distance}; });
-  var stdArrRev = stdArr.map(a => Object.assign({}, a));
-  stdArrRev =  stdArrRev.reverse();
-  for (var i=0; i<stdArrRev.length; i++) {
-      if (stdID == 'intensityStd') {
-        stdArr[i][stdID] = regrArr[i][comp_id]+stdArr[i][stdID];
+  if (sizeRegr > 0) {
+    var stdArr = regrArr.map(function(item) { return {[stdID]:item[stdID], "distance":item.distance}; });
+    var stdArrRev = stdArr.map(a => Object.assign({}, a));
+    stdArrRev =  stdArrRev.reverse();
+    for (var i=0; i<stdArrRev.length; i++) {
+        if (stdID == 'intensityStd') {
+          stdArr[i][stdID] = regrArr[i][comp_id]+stdArr[i][stdID];
 
-        stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]-stdArrRev[i][stdID];
-      } else {
-      stdArr[i][stdID] = regrArr[i][comp_id]*stdArr[i][stdID];
+          stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]-stdArrRev[i][stdID];
+        } else {
+        stdArr[i][stdID] = regrArr[i][comp_id]*stdArr[i][stdID];
 
-      stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]/stdArrRev[i][stdID];
+        stdArrRev[i][stdID] = regrArr[stdArrRev.length-1-i][comp_id]/stdArrRev[i][stdID];
+        };
+        stdArr.push(stdArrRev[i]);
       };
-      stdArr.push(stdArrRev[i]);
     };
-
   // set the dimensions and margins of the graph
   var margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = 1100 - margin.left - margin.right,
@@ -71,6 +74,7 @@ function plot_data (data, regrArr, comp_id, newPlot) {
     .append("g")
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
+
 
   var div = d3.select(div_id).append("div")
       .attr("class", "tooltip")
@@ -103,14 +107,16 @@ function plot_data (data, regrArr, comp_id, newPlot) {
   var yMax = Math.max(...data.map(o => o[comp_id]), 0);
   var yMin = Math.min(...data.map(o => o[comp_id]), yMax);
 
-  var stdMax = Math.max(...stdArr.map(o => o[stdID]), 0);
-  var stdMin = Math.min(...stdArr.map(o => o[stdID]), stdMax);
+  if (sizeRegr > 0) {
+    var stdMax = Math.max(...stdArr.map(o => o[stdID]), 0);
+    var stdMin = Math.min(...stdArr.map(o => o[stdID]), stdMax);
 
-  if (stdMax > yMax) {
-    yMax = stdMax;
-  };
-  if (stdMin < yMin) {
-    yMin = stdMin;
+    if (stdMax > yMax) {
+      yMax = stdMax;
+    };
+    if (stdMin < yMin) {
+      yMin = stdMin;
+    };
   };
 
   x.domain([Math.round(distance_min), distance_max]);
@@ -118,24 +124,24 @@ function plot_data (data, regrArr, comp_id, newPlot) {
 
 
 // Regression plot
+if (sizeRegr > 0) {
+  var regrStdLine = d3.line()
+      .x(function(d) { return x(d.distance); })
+      .y(function(d) { return y(d[stdID]); });
 
-var regrStdLine = d3.line()
-    .x(function(d) { return x(d.distance); })
-    .y(function(d) { return y(d[stdID]); });
-
-svg.append("path")
-    .data([stdArr])
-    .attr("class", "line")
-    .attr("stroke", "#E0D6E0")
-    .attr("stroke-width", 4)
-    .attr("fill", "#E0D6E0")
-    .attr('r', 2)
-    .attr("d", regrStdLine);
+  svg.append("path")
+      .data([stdArr])
+      .attr("class", "line")
+      .attr("stroke", "#E0D6E0")
+      .attr("stroke-width", 4)
+      .attr("fill", "#E0D6E0")
+      .attr('r', 2)
+      .attr("d", regrStdLine);
 
 
-var regrLine = d3.line()
-    .x(function(d) { return x(d.distance); })
-    .y(function(d) { return y(d[comp_id]); });
+  var regrLine = d3.line()
+      .x(function(d) { return x(d.distance); })
+      .y(function(d) { return y(d[comp_id]); });
 
   svg.append("path")
     .data([regrArr])
@@ -145,17 +151,18 @@ var regrLine = d3.line()
     .attr("fill", "none")
     .attr('r', 2)
     .attr("d", regrLine);
+  };
 
 
       // Observed data scatterplot
-      var arc = d3.symbol().type(function(d) {
-      	if(d.obsType == 'seismic') {
-      		return d3.symbolTriangle;
-      	}
-      	else {
-      		return  d3.symbolCircle;
-      	};
-      });
+  var arc = d3.symbol().type(function(d) {
+  	if(d.obsType == 'seismic') {
+  		return d3.symbolTriangle;
+  	}
+  	else {
+  		return  d3.symbolCircle;
+  	};
+  });
 
   svg.selectAll("dot")
       .data(data)
@@ -165,13 +172,6 @@ var regrLine = d3.line()
         .style("fill", function (d) { return d.color})
         .style("stroke", "#000000")
         .attr("d", arc)
-       //  function (d) {
-       //   if (d.obsType == 'seismic') {
-       //   return d3.symbol().type(d3.symbolTriangle);
-       // } else {
-       //   return d3.symbol().type(d3.symbolTriangle);
-       // };
-       // })
         .attr("transform", function(d) { return "translate(" + x(d.distance) + "," + y(d[comp_id]) + ")"; })
         .on("mouseover", function(d) {
                div.transition()
@@ -287,6 +287,17 @@ function clean_array(array, keyName) {
 
   return newArray;
 };
+
+// #####################################################
+// Check if file exists
+//
+function fileExists(url)
+{
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return http.status!=404;
+}
 // #####################################################
 // Get regression curve
 //
@@ -381,7 +392,17 @@ function stationList(newPlot, regrType, showDYFI) {
                     });
         };
       };
-    getRegression(objArr, newPlot, regrType);
+
+      if(fileExists('./data/' + eventid + '/current/products/attenuation_curves.json')) {
+        getRegression(objArr, newPlot, regrType);
+      } else {
+        var regrArr = [];
+        plot_data(clean_array(objArr, 'intensity'),  regrArr, 'intensity', newPlot);
+        newPlot = false;
+        plot_data(clean_array(objArr, 'pga'),  regrArr, 'pga', newPlot);
+        plot_data(clean_array(objArr, 'pgv'), regrArr, 'pgv', newPlot);
+      };
+
   }
 }
 
