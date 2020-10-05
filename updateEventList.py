@@ -2,6 +2,7 @@
 import os
 import json
 import dateutil.parser
+import sys
 
 def get_event_ids ():
     """
@@ -137,9 +138,8 @@ def write_version_file():
 
     return
 
-def main():
+def do_for_all_events(bBox):
     event_list = []
-    bBox = get_bBox_dict()
     for event in get_event_ids():
         print('Processing event:' + event)
 
@@ -169,5 +169,49 @@ def main():
     write_list_to_file(event_list)
     write_version_file()
 
+def update_event_list(eventParameters, event_id):
+    with open('events.js', 'r') as f:
+        events_list = json.loads(f.readlines()[1])
+    
+    events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
+
+    write_list_to_file(events_list)
+    
+
+def do_for_one_event(event_id, bBox):
+    print('Processing event: ' + event_id)
+            ## Try to read the info.json file to put the events in a list for the website to read
+    try:
+        eventParameters = get_parameters(event_id, bBox)
+        if (eventParameters != False):
+            update_event_list(eventParameters, event_id)
+    except Exception as e:
+        print('Following error occurred for event ' + event_id + ':')
+        print(e)
+
+    ## Try to extract overlay parameters and put them into a json file, so the website can read it
+    try:
+        overlay_to_json(event_id)
+    except Exception as e:
+        print('No intensity overlay file for event:' + event_id)
+        print(e)
+        
+    try:
+        get_products_list(event_id)
+    except Exception as e:
+        print('Product file list error for event ' + event_id + ':')
+        print(e)
+
+
+def main(event_id):
+    bBox = get_bBox_dict()
+    if event_id == False:
+        do_for_all_events(bBox)
+    else:
+        do_for_one_event(event_id, bBox)
+
 if __name__ == "__main__":
-    main()
+    if len(sys.argv[:]) < 2:
+        main(False)
+    else:
+        main(sys.argv[1])
