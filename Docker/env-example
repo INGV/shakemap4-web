@@ -71,7 +71,7 @@ DOCKER_SYNC_STRATEGY=native_osx
 
 
 ### ShakeMap4 ########################################### 
-SHAKEMAP_DATA_PATH=/home/lauciani/gitwork/_shakemap/shakemap4/data/shakemap_profiles/world/data
+SHAKEMAP_DATA_PATH=/home/shake/shakemap/data
 
 ###########################################################
 ################ Containers Customization #################
