@@ -10,7 +10,7 @@ jobs:
           command: |
             #cp ./Docker/env-example ./Docker/.env
             sed \
-              -e "s|SHAKEMAP_DATA_PATH==.*|SHAKEMAP_DATA_PATH=/var/www/data|" \
+              -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/var/www/data|" \
               ./Docker/env-example > ./Docker/.env
       - run:
           name: Build docker image
