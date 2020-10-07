@@ -24,6 +24,9 @@ jobs:
       - run:
           name: Test one event
           command: |
+            pwd
+            ls -l
+            cd Docker
             docker-compose exec workspace bash -c 'cd /var/www /usr/bin/python3 /var/www/updateEventList.py --eventid=39481424'
             
   test_publiccode:
