@@ -2,6 +2,7 @@
 import os
 import json
 import dateutil.parser
+import argparse, sys
 
 def get_event_ids ():
     """
@@ -49,7 +50,7 @@ def get_bBox_dict():
     if (os.path.isfile('bBox.txt')):
         with open('bBox.txt') as json_file:
             bBox = json.load(json_file)[0]
-        return bBox 
+        return bBox
     else:
         return False
 
@@ -95,22 +96,22 @@ def get_parameters (event_id, bBox):
             'hour': hour,
             'minute': minute,
             'second': second,
-            'latitude': float(info_file['input']['event_information']['latitude']),
-            'longitude': float(info_file['input']['event_information']['longitude']),
-            'magnitude': float(info_file['input']['event_information']['magnitude']),
-            'depth': float(info_file['input']['event_information']['depth'])
+            'latitude': round(float(info_file['input']['event_information']['latitude']), 2),
+            'longitude': round(float(info_file['input']['event_information']['longitude']), 2),
+            'magnitude': round(float(info_file['input']['event_information']['magnitude']), 1),
+            'depth': round(float(info_file['input']['event_information']['depth']), 1)
             }
-    
+
     if (bBox == False):
         bBox = {"minLat": -90.0, "maxLat": 90.0, "minLon": -180.0, "maxLon" : 180.0}
-    
-    
+
+
     if ( parameter_dict['latitude'] < bBox["minLat"] or parameter_dict['latitude'] > bBox["maxLat"] or
         parameter_dict['longitude'] < bBox["minLon"] or parameter_dict['longitude'] > bBox["maxLon"]):
         return False
     else:
         return parameter_dict
-    
+
 def write_list_to_file(event_list):
     """
         Write event information to file.
@@ -137,9 +138,8 @@ def write_version_file():
 
     return
 
-def main():
+def do_for_all_events(bBox):
     event_list = []
-    bBox = get_bBox_dict()
     for event in get_event_ids():
         print('Processing event:' + event)
 
@@ -169,5 +169,56 @@ def main():
     write_list_to_file(event_list)
     write_version_file()
 
+def update_event_list(eventParameters, event_id):
+    with open('events.js', 'r') as f:
+        events_list = json.loads(f.readlines()[1])
+
+    events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
+
+    write_list_to_file(events_list)
+
+
+def do_for_one_event(event_id, bBox):
+    print('Processing event: ' + event_id)
+            ## Try to read the info.json file to put the events in a list for the website to read
+    try:
+        eventParameters = get_parameters(event_id, bBox)
+        if (eventParameters != False):
+            update_event_list(eventParameters, event_id)
+    except Exception as e:
+        print('Following error occurred for event ' + event_id + ':')
+        print(e)
+
+    ## Try to extract overlay parameters and put them into a json file, so the website can read it
+    try:
+        overlay_to_json(event_id)
+    except Exception as e:
+        print('No intensity overlay file for event:' + event_id)
+        print(e)
+
+    try:
+        get_products_list(event_id)
+    except Exception as e:
+        print('Product file list error for event ' + event_id + ':')
+        print(e)
+
+
+def main(event_id):
+    bBox = get_bBox_dict()
+    if event_id == False:
+        do_for_all_events(bBox)
+    else:
+        do_for_one_event(event_id, bBox)
+
 if __name__ == "__main__":
-    main()
+    parser=argparse.ArgumentParser()
+
+    parser.add_argument('--eventid', help='Provide the event ID under the script argument --eventid of the event for which the parameters or files have been changed. To run the script for all events write --eventid="all"')
+
+    if len(sys.argv[:]) < 2:
+        print('Error: No event ID has been provided. To run the script for all the events write eventid="all" as the argument')
+    else:
+        if (args.eventid == 'all'):
+            main(False)
+        else:
+            main(args.eventid)

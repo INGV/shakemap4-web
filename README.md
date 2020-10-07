@@ -53,6 +53,9 @@ default is:
 
 If all works, you should see ShakeMap4-Web web page.
 
+After you run ShakeMap4 for an event, you need to run the script updateEventList.py with the --eventid argument (e.g. --eventid=123456) provided so that the parameters and files are correct in the event list.
+If you want to run the update for all the events provide "all" as the argument (i.e. --eventid="all").
+
 ## Restart containers at boot
 Insert into `crontab` the lines:
 ```
@@ -103,7 +106,7 @@ This  work has been partially funded by the Seismology and Earthquake Engineerin
 Please, feel free to contribute.
 
 ## Author
-(c) 2019 Dario Jozinovic dario.jozinovic[at]ingv.it \
+(c) 2019 Dario Jozinović dario.jozinovic[at]ingv.it \
 (c) 2019 Valentino Lauciani valentino.lauciani[at]ingv.it
 
 
