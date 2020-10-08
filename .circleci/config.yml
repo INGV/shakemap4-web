@@ -39,7 +39,6 @@ jobs:
       - image: docker:18.06.0-ce
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           command: |
             VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
