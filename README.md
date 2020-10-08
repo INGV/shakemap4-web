@@ -53,11 +53,29 @@ default is:
 
 If all works, you should see ShakeMap4-Web web page.
 
-After you run ShakeMap4 for an event, you need to run the script updateEventList.py with the --eventid argument (e.g. --eventid=123456) provided so that the parameters and files are correct in the event list.
-If you want to run the update for all the events provide "all" as the argument (i.e. --eventid="all").
+### Under the hood
+*ShakeMap-Web* project runs 3 containers: 
+- *nginx* and *php-fpm*: are used to implement web server
+- *workspace*: is used to implements managment script/tools like `wget`, `crontab`, etc...
+
+The *workspace* container, implements a crontab file to run every minute the script `crontabScriptToUpdateEvents.sh`; this script checks the the `SHAKEMAP_DATA_PATH` path (specified previously) to find all `<eventid>` to process, modified in the last 2 days. The crontab runs every minute.
+
+You can also runs the update process by hand with command:
+#### !!! On Linux machine and no 'root' user !!!
+```
+$ cd Docker
+$ docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
+$ cd ..
+```
+#### !!! Others !!!
+```
+$ cd Docker
+$ docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
+$ cd ..
+```
 
 ## Restart containers at boot
-Insert into `crontab` the lines:
+To restart the containers automatically at boot, insert into `crontab` the lines:
 ```
 # Restart shakemap4-web
 @reboot (sleep 30s ; cd <absolute_path>/shakemap4-web/Docker ; /usr/local/bin/docker-compose up -d )&
