@@ -58,7 +58,7 @@ If all works, you should see ShakeMap4-Web web page.
 - *nginx* and *php-fpm*: are used to implement web server
 - *workspace*: is used to implements managment script/tools like `wget`, `crontab`, etc...
 
-The *workspace* container, implements a crontab file to run every minute the script `crontabScriptToUpdateEvents.sh`; this script checks the the `SHAKEMAP_DATA_PATH` path (specified previously) to find all `<eventid>` to process, modified in the last 2 days. The crontab runs every minute.
+The *workspace* container, implements a crontab file to run every minute the script `crontabScriptToUpdateEvents.sh`; this script checks the `SHAKEMAP_DATA_PATH` path (specified previously) to find all `<eventid>` to process, modified in the last 2 days. The crontab runs every minute.
 
 You can also runs the update process by hand with command:
 #### !!! On Linux machine and no 'root' user !!!
