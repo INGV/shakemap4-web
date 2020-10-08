@@ -8,7 +8,6 @@ jobs:
       - run:
           name: Configure project
           command: |
-            #cp ./Docker/env-example ./Docker/.env
             sed \
               -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/var/www/data|" \
               ./Docker/env-example > ./Docker/.env
@@ -30,6 +29,7 @@ jobs:
             docker-compose ps
             docker-compose exec -T workspace bash -c 'pwd' 
             docker-compose exec -T workspace bash -c 'ls -l ' 
+            docker-compose exec -T workspace bash -c 'ls -l *' 
             docker-compose exec -T workspace bash -c 'ls -l data/' 
             docker-compose exec -T workspace bash -c 'ls -l /usr/bin/python3' 
             docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
