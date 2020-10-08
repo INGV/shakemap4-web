@@ -19,7 +19,7 @@ jobs:
             cd Docker 
             docker-compose up -d
       - run:
-          name: Test docker are up and running
+          name: Test dockers are up and running
           command: |
             cd Docker
             docker-compose ps 
