@@ -70,7 +70,7 @@ $ cd ..
 #### !!! Others !!!
 ```
 $ cd Docker
-$ docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
+$ docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
 $ cd ..
 ```
 
