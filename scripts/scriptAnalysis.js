@@ -29,6 +29,12 @@ function open_leaflet () {
 }
 
 // #####################################################
+// Open the StationList page for event
+//
+function open_stations() {
+  window.location = './stationList.html?eventid=' + eventid;
+}
+// #####################################################
 // Plot data
 //
 function plot_data (data, regrArr, comp_id, newPlot) {

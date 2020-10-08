@@ -48,6 +48,13 @@ function open_meta() {
 }
 
 // #####################################################
+// Open the StationList page for event
+//
+function open_stations() {
+  window.location = './stationList.html?eventid=' + eventid;
+}
+
+// #####################################################
 // Write json attributes to a div
 
 function attr_div(attr_collection, div_id) {
