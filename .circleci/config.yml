@@ -32,7 +32,7 @@ jobs:
           name: Test web request
           command: |
             NGINX_HOST_HTTP_PORT=$(grep "NGINX_HOST_HTTP_PORT" Docker/.env | awk -F"=" '{print $2}' )
-            wget -O /tmp/test.html "hppt://127.0.0.1:${NGINX_HOST_HTTP_PORT}"
+            wget -O /tmp/test.html "http://127.0.0.1:${NGINX_HOST_HTTP_PORT}"
 
   test_version_match:
     docker:
