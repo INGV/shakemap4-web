@@ -93,6 +93,11 @@ $ docker-compose build nginx
 $ docker-compose up --no-deps -d nginx
 ```
 
+### Rebuild an image (if new) e restart container
+```
+$ docker-compose up --build -d workspace
+```
+
 ### Rebuild an image from existing `Dockerfile` (es: workspace)
 ```
 $ docker-compose build --no-cache workspace
