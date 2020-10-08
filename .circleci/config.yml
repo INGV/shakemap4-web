@@ -8,9 +8,10 @@ jobs:
       - run:
           name: Configure project
           command: |
-            #cp ./Docker/env-example ./Docker/.env
             sed \
-              -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/var/www/data|" \
+              -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/home/circleci/project/data|" \
+              -e "s|WORKSPACE_PUID=.*|WORKSPACE_PUID=$(id -u)|" \
+              -e "s|WORKSPACE_PGID=.*|WORKSPACE_PGID=$(id -g)|" \
               ./Docker/env-example > ./Docker/.env
       - run:
           name: Build docker image
@@ -18,15 +19,33 @@ jobs:
             cd Docker 
             docker-compose up -d
       - run:
-          name: Check Docker started
+          name: Test dockers are up and running
           command: |
-            docker ps -a 
+            cd Docker
+            docker-compose ps 
       - run:
-          name: Test one event
+          name: Test to process one event
           command: |
-            pwd
-            /usr/bin/python3 /var/www/updateEventList.py --eventid=39481424
-            echo "ciao"
+            cd Docker
+            docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
+      - run:
+          name: Test web request
+          command: |
+            NGINX_HOST_HTTP_PORT=$(grep "NGINX_HOST_HTTP_PORT" Docker/.env | awk -F"=" '{print $2}' )
+            wget -O /tmp/test.html "http://127.0.0.1:${NGINX_HOST_HTTP_PORT}"
+
+  test_version_match:
+    docker:
+      - image: docker:18.06.0-ce
+    steps:
+      - checkout
+      - run:
+          command: |
+            VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            VERSION_JS_FILE=$( grep "softwareVersion" softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            echo "VERSION_PUBLICCODE=${VERSION_PUBLICCODE}"
+            echo "VERSION_JS_FILE=${VERSION_JS_FILE}"
+            if [[ ${VERSION_PUBLICCODE} != ${VERSION_JS_FILE} ]]; then exit 1; fi;
             
   test_publiccode:
     docker:
@@ -51,4 +70,5 @@ workflows:
   shakemap4-web-workflow:
     jobs:
       - build_and_test
+      - test_version_match
       - test_publiccode
