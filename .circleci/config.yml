@@ -19,15 +19,20 @@ jobs:
             cd Docker 
             docker-compose up -d
       - run:
-          name: Check Docker started
+          name: Test docker are up and running
           command: |
             cd Docker
             docker-compose ps 
       - run:
-          name: Test one event
+          name: Test to process one event
           command: |
             cd Docker
             docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
+      - run:
+          name: Test web request
+          command: |
+            NGINX_HOST_HTTP_PORT=$(grep "NGINX_HOST_HTTP_PORT" Docker/.env | awk -F"=" '{print $2}' )
+            wget -O /tmp/test.html "hppt://127.0.0.1:${NGINX_HOST_HTTP_PORT}"
             
   test_publiccode:
     docker:
