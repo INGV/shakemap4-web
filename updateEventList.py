@@ -208,7 +208,11 @@ def main(event_id):
     if event_id == False:
         do_for_all_events(bBox)
     else:
-        do_for_one_event(event_id, bBox)
+        if os.path.isdir('./data/' + event_id):
+            do_for_one_event(event_id, bBox)
+        else:
+            print('Error: event ' + event_id + ' does not exist')
+            sys.exit(1)
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser()
