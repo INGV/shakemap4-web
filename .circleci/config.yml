@@ -46,7 +46,7 @@ jobs:
             VERSION_JS_FILE=$( grep "softwareVersion" softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
             echo "VERSION_PUBLICCODE=${VERSION_PUBLICCODE}"
             echo "VERSION_JS_FILE=${VERSION_JS_FILE}"
-            if (( ${VERSION_PUBLICCODE} != ${VERSION_JS_FILE} )); then exit 1; fi
+            if [[ ${VERSION_PUBLICCODE} != ${VERSION_JS_FILE} ]]; then exit 1; fi;
             
   test_publiccode:
     docker:
