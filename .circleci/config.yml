@@ -29,8 +29,8 @@ jobs:
             cd Docker
             docker-compose ps
             docker-compose exec -T workspace bash -c 'pwd' 
-            docker-compose exec -T workspace bash -c 'ls -l' 
             docker-compose exec -T workspace bash -c 'ls -l data/' 
+            docker-compose exec -T workspace bash -c 'ls -l /usr/bin/python3' 
             docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
             
   test_publiccode:
