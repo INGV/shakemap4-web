@@ -170,11 +170,14 @@ def do_for_all_events(bBox):
     write_version_file()
 
 def update_event_list(eventParameters, event_id):
-    with open('events.js', 'r') as f:
-        events_list = json.loads(f.readlines()[1])
+    if os.path.isfile('events.js'):
+        with open('events.js', 'r') as f:
+            events_list = json.loads(f.readlines()[1])
 
-    events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
-
+        events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
+    else:
+        events_list = []
+        events_list.append(eventParameters)
     write_list_to_file(events_list)
 
 
