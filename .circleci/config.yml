@@ -25,8 +25,8 @@ jobs:
           name: Test one event
           command: |
             pwd
-            /usr/bin/python3 /var/www/updateEventList.py --eventid=39481424
-            echo "ciao"
+            cd Docker
+            docker-compose ps
             
   test_publiccode:
     docker:
