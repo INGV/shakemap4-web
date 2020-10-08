@@ -26,6 +26,7 @@ jobs:
       - run:
           name: Test one event
           command: |
+            cd Docker
             docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
             
   test_publiccode:
