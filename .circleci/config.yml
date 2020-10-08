@@ -7,7 +7,11 @@ jobs:
       - checkout
       - run:
           name: Configure project
-          command: cp ./Docker/env-example ./Docker/.env
+          command: |
+            #cp ./Docker/env-example ./Docker/.env
+            sed \
+              -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/var/www/data|" \
+              ./Docker/env-example > ./Docker/.env
       - run:
           name: Build docker image
           command: |
@@ -17,6 +21,12 @@ jobs:
           name: Check Docker started
           command: |
             docker ps -a 
+      - run:
+          name: Test one event
+          command: |
+            pwd
+            /usr/bin/python3 /var/www/updateEventList.py --eventid=39481424
+            echo "ciao"
             
   test_publiccode:
     docker:

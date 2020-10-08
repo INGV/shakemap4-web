@@ -212,13 +212,10 @@ def main(event_id):
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser()
-
-    parser.add_argument('--eventid', help='Provide the event ID under the script argument --eventid of the event for which the parameters or files have been changed. To run the script for all events write --eventid="all"')
-
+    parser.add_argument('--eventid', help='Provide the event ID under the script argument --eventid of the event for which the parameters or files have been changed. To run the script for all events do not pass any arguments"')
+    args = parser.parse_args()
     if len(sys.argv[:]) < 2:
-        print('Error: No event ID has been provided. To run the script for all the events write eventid="all" as the argument')
+        print('No event ID has been provided. The script will run for all the events')
+        main(False)
     else:
-        if (args.eventid == 'all'):
-            main(False)
-        else:
-            main(args.eventid)
+        main(args.eventid)

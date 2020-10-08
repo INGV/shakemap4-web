@@ -1,3 +1,6 @@
 SHELL=/bin/bash
-* * * * * laradock (cd /var/www && echo "-----START-----" && time /usr/bin/flock --verbose -n /tmp/updateEventList.py.lock /usr/bin/python3 /var/www/updateEventList.py ; echo "-----END-----") >> /tmp/updateEventList.py.log 2>&1
-01 00 * * * laradock mv /tmp/updateEventList.py.log /tmp/updateEventList_yesterday.py.log
+#* * * * * laradock (cd /var/www && echo "-----START-----" && time /usr/bin/flock --verbose -n /tmp/updateEventList.py.lock /usr/bin/python3 /var/www/updateEventList.py ; echo "-----END-----") >> /tmp/updateEventList.py.log 2>&1
+#01 00 * * * laradock mv /tmp/updateEventList.py.log /tmp/updateEventList_yesterday.py.log
+
+* * * * * laradock (cd /var/www && echo "-----START-----" && time /usr/bin/flock --verbose -n /tmp/crontabScriptToUpdateEvents.sh.lock /var/www/crontabScriptToUpdateEvents.sh ; echo "-----END-----") >> /tmp/crontabScriptToUpdateEvents.sh.log 2>&1
+01 00 * * * laradock mv /tmp/crontabScriptToUpdateEvents.sh.log /tmp/crontabScriptToUpdateEvents.sh.log.yesterday
