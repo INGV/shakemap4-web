@@ -33,6 +33,18 @@ jobs:
           command: |
             NGINX_HOST_HTTP_PORT=$(grep "NGINX_HOST_HTTP_PORT" Docker/.env | awk -F"=" '{print $2}' )
             wget -O /tmp/test.html "hppt://127.0.0.1:${NGINX_HOST_HTTP_PORT}"
+
+  test_version_match:
+    docker:
+      - image:
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: |
+            VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            VERSION_JS_FILE=$( grep "softwareVersion" softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            if (( ${VERSION_PUBLICCODE} != ${VERSION_JS_FILE} )); then exit 1; fi
             
   test_publiccode:
     docker:
