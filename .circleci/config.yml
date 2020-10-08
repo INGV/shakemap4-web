@@ -36,7 +36,7 @@ jobs:
 
   test_version_match:
     docker:
-      - image:
+      - image: docker:18.06.0-ce
     steps:
       - checkout
       - setup_remote_docker
@@ -71,4 +71,5 @@ workflows:
   shakemap4-web-workflow:
     jobs:
       - build_and_test
+      - test_version_match
       - test_publiccode
