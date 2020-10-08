@@ -28,7 +28,8 @@ jobs:
             whoami
             cd Docker
             docker-compose ps
-            docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
+            #docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
+            docker-compose exec -T workspace bash -c 'ls -l' 
             
   test_publiccode:
     docker:
