@@ -54,7 +54,7 @@ default is:
 If all works, you should see ShakeMap4-Web web page.
 
 ### Under the hood
-*ShakeMap-Web* project runs 3 containers: 
+*ShakeMap4-Web* project runs 3 containers: 
 - *nginx* and *php-fpm*: are used to implement web server
 - *workspace*: is used to implements managment script/tools like `wget`, `crontab`, etc...
 
