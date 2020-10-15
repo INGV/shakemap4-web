@@ -51,8 +51,8 @@ def events_to_json():
         json.dump(events, outfile)
 
 def run_server():
-    PORT = 7400
-    webbrowser.open('http://localhost:7400/')
+    PORT = 7600
+    webbrowser.open('http://localhost:7600/')
     
     Handler = http.server.SimpleHTTPRequestHandler
     

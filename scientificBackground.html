@@ -28,29 +28,7 @@
      <!-- <div style="width: 100%; margin: 0 auto;">
           <img src="ingv_logo_colore.png"/>
      </div> -->
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-       <a class="navbar-brand" href="./index.html"><h3>ShakeMap <small class="text-muted">v4</small></h3></a>
-       <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavDropdown">
-         <ul class="navbar-nav">
-           <li class="nav-item active">
-             <a class="nav-link" href="./index.html">Home</a>
-           </li>
-           <li class="nav-item">
-             <a class="nav-link" href="./archive.html">Archive</a>
-           </li>
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Information
-             </a>
-             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-               <a class="dropdown-item" href="./disclaimer.html">Disclaimer</a>
-               <a class="dropdown-item" href="./links.html">Related Links</a>
-               <a class="dropdown-item" href="#">Something else here</a>
-             </div>
-           </li>
-         </ul>
-       </div>
-     </nav>
+     <div id="header"></div/>
 
 
 <!--
@@ -62,16 +40,18 @@
       <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
  </div>
 <div class="tab_menu squash_div">
-  Information on the shakemap procedure can be found at:
-  http://usgs.github.io/shakemap/sm4_index.html
+  <h5>
+  Information on the shakemap procedure can be found at: <br/>
+  <a href="http://usgs.github.io/shakemap/sm4_index.html"> ShakeMap v4 Documentation </a> <br/><br/>
+  </h5>
 
-  Bibliography:
-
-  Michelini, A., Faenza, L., Lauciani, V., & Malagnini, L. (2008). ShakeMap implementation in Italy. Seismological Research Letters, 79(5), 688–697.
-  Michelini, A., Faenza, L., Lanzano, G., Lauciani, V., Jozinovic, D., Puglia, R., & Luzi, L. (2020). The New ShakeMap in Italy: Progress and Advances in the Last 10 Yr. Seismological Research Letters, 91(1), 317–333. http://doi.org/10.1785/0220190130
-  Wald, D. J., Quitoriano, V., Heaton, T. H., & Kanamori, H. (1999). Relationships between Peak Ground Acceleration, Peak Ground Velopcity and Modified Mercalli Intensity in California. Earthquake Spectra, 15(3), 557–564.
-  Wald, D. J., Quitoriano, V., Heaton, T. H., Kanamori, H., Scrivner, C. W., & Worden, C. B. (1999). TriNet “ShakeMaps”: Rapid Generation of Peak Ground Motion and Intensity Maps for Earthquakes in Southern Califiornia. Earthquake Spectra, 15(3), 537–555.
-
+  <h5>Bibliography:</h5>
+<i>
+  1) Michelini, A., Faenza, L., Lauciani, V., & Malagnini, L. (2008). ShakeMap implementation in Italy. Seismological Research Letters, 79(5), 688–697.
+  <br/> 2) Michelini, A., Faenza, L., Lanzano, G., Lauciani, V., Jozinović, D., Puglia, R., & Luzi, L. (2020). The New ShakeMap in Italy: Progress and Advances in the Last 10 Yr. Seismological Research Letters, 91(1), 317–333. http://doi.org/10.1785/0220190130
+  <br/> 3) Wald, D. J., Quitoriano, V., Heaton, T. H., & Kanamori, H. (1999). Relationships between Peak Ground Acceleration, Peak Ground Velopcity and Modified Mercalli Intensity in California. Earthquake Spectra, 15(3), 557–564.
+  <br/> 4) Wald, D. J., Quitoriano, V., Heaton, T. H., Kanamori, H., Scrivner, C. W., & Worden, C. B. (1999). TriNet “ShakeMaps”: Rapid Generation of Peak Ground Motion and Intensity Maps for Earthquakes in Southern Califiornia. Earthquake Spectra, 15(3), 537–555.
+</i>
 </div>
 
 
@@ -97,6 +77,7 @@
          <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
          <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
+         <script src="./header.js"></script>
          <script src="./softwareVersion.js"></script>
 
   </body>
