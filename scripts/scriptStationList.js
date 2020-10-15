@@ -81,8 +81,8 @@ function list_meta(eventid) {
     json
   ) {
     var stations = json.features;
-    return_data(stations);
-    console.log(stations);
+    stationsSorted = stations.sort((a, b) => (a.properties.distance > b.properties.distance) ? 1 : -1);
+    return_data(stationsSorted);
   });
 function return_data(stations) {
   var dontUseStationType = 'macroseismic';
@@ -102,7 +102,7 @@ function return_data(stations) {
                 + '<div class="content"><p><br/>&emsp;&emsp; <b>Latitude: </b>' + coordinates[0]
                 + '&emsp;&emsp; <b> Longitude: </b>' + coordinates[1]
                 + '&emsp;&emsp; <b> Vs30 (m/s): </b>' + stations[i].properties.vs30 + '<br/>'
-      htmlCode = htmlCode + '<b><h6>Channels:</h6></b>&emsp;&emsp; Channel &emsp;&emsp; PGA (%g) &emsp;&emsp; PGV (m/s)'
+      htmlCode = htmlCode + '<b><h7>Channels:</h7></b><br/>&emsp;&emsp; Channel &emsp;&emsp; PGA (%g) &emsp;&emsp; PGV (m/s)'
                 + '&emsp;&emsp; SA(0.3) (%g) &emsp;&emsp; SA(1.0) (%g) &emsp;&emsp;'
                 + ' SA(3.0) (%g) &emsp;&emsp;'
       channelsVar = stations[i].properties.channels
