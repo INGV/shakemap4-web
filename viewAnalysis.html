@@ -22,12 +22,12 @@
   # Header
   ###############################################
    -->
-   <!-- <div style="width: 100%; margin: 0 auto;">
-        <img src="ingv_logo_colore.png"/>
-   </div> -->
-   <div id="header"></div/>
 
+  <div style="width: 100%; margin: 0 auto;">
+      <span id="logo"></span>
+  </div>
 
+  <div id="header"></div>
      <!--
      ###############################################
      # Main content
@@ -64,13 +64,12 @@
             </li> -->
           </ul>
         </div>
+      </div>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="intensity" role="tabpanel" aria-labelledby="intensity-tab">
-
-         </div>
+        </div>
         <div class="tab-pane fade" id="pga" role="tabpanel" aria-labelledby="pga-tab">
-
-         </div>
+        </div>
         <div class="tab-pane fade" id="pgv" role="tabpanel" aria-labelledby="pgv-tab">
         </div>
         <br/>
@@ -80,7 +79,7 @@
           <option value="soil">Soil</option>
         </select>
         &emsp; Show DYFI data: <input type="checkbox" id="dyfiCheck" onchange="changePlot()">
-    </div>
+      </div>
 
       <!--
       ###############################################
@@ -114,5 +113,9 @@
     <script src="./scripts/colors.js"></script>
     <script src="./softwareVersion.js"></script>
     <script src="./scripts/scriptAnalysis.js"></script>
+
+    <script src="./config.js"></script>
+    <script src="./elaborate_config.js"></script>
+
   </body>
 </html>

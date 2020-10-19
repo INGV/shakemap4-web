@@ -25,11 +25,12 @@
     # Header
     ###############################################
      -->
-     <!-- <div style="width: 100%; margin: 0 auto;">
-          <img src="ingv_logo_colore.png"/>
-     </div> -->
 
-     <div id="header"></div/>
+    <div style="width: 100%; margin: 0 auto;">
+        <span id="logo"></span>
+    </div>
+
+    <div id="header"></div>
 
 
 <!--
@@ -42,22 +43,17 @@
  </div>
 
 <div class="tab_menu squash_div">
-  <h2 class="page_title"> Download event data </h2>
-  <br/>
-  <button type="button" class="btn btn-outline-primary" id="leafletButton"  onclick="open_leaflet()">Leaflet View</button>
-  <button type="button" class="btn btn-outline-primary" id="staticButton" onclick="open_static()">Static View</button>
-  <br/>
-  <a href="http://usgs.github.io/shakemap/manual4_0/ug_products.html">More details about the products</a>
+    <h2 class="page_title"> Download event data </h2>
+    <br/>
+    <button type="button" class="btn btn-outline-primary" id="leafletButton"  onclick="open_leaflet()">Leaflet View</button>
+    <button type="button" class="btn btn-outline-primary" id="staticButton" onclick="open_static()">Static View</button>
+    <br/>
+    <a href="http://usgs.github.io/shakemap/manual4_0/ug_products.html">More details about the products</a>
+    <br/>
 
-  <br/>
-
-
-  <div id="products_table" class="table-responsive-md archive_table">
-
-
-
+    <div id="products_table" class="table-responsive-md archive_table">
+    </div>
 </div>
-
 
  <!--
  ###############################################
@@ -73,19 +69,22 @@
 
   <!-- Bootstrap core JavaScript
   ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-         <!-- Optional JavaScript -->
-         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-         <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-         <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
-         <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+     <!-- Placed at the end of the document so the pages load faster -->
+     <!-- Optional JavaScript -->
+     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+     <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
-         <!--  My scripts -->
-         <!-- <script src="./productsDownloadList.js"></script> -->
-         <script src="./header.js"></script>
-         <script src="./softwareVersion.js"></script>
-         <script src="./scripts/scriptDownload.js"></script>
+     <!--  My scripts -->
+     <!-- <script src="./productsDownloadList.js"></script> -->
+     <script src="./header.js"></script>
+     <script src="./softwareVersion.js"></script>
+     <script src="./scripts/scriptDownload.js"></script>
+
+    <script src="./config.js"></script>
+    <script src="./elaborate_config.js"></script>
 
   </body>
 </html>
