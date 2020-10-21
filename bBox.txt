@@ -1,1 +1,1 @@
-[{"minLat": -180.0, "maxLat": 180.0, "minLon": -180.0, "maxLon": 180.0}]
+[{"minLat": 35.0, "maxLat": 49.0, "minLon": 5.0, "maxLon": 20.0}]

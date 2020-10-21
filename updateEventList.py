@@ -173,8 +173,11 @@ def update_event_list(eventParameters, event_id):
     if os.path.isfile('events.js'):
         with open('events.js', 'r') as f:
             events_list = json.loads(f.readlines()[1])
-
-        events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
+        
+        if not any(d['id'] == event_id for d in events_list):
+            events_list.append(eventParameters)
+        else:
+            events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
     else:
         events_list = []
         events_list.append(eventParameters)
