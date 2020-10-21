@@ -5,6 +5,19 @@ $(document).ready(function() {
   });
 });
 
+function bBox_check(event_data) {
+  minLat = 30;
+  maxLat = 60;
+  minLon= 5;
+  maxLon = 20;
+
+  if ( event_data.longitude > minLon && event_data.longitude <maxLon && event_data.latitude > minLat && event_data.latitude < maxLat) {
+    return true
+  } else {
+    return false
+  };
+}
+
 function makeTable() {
   var objLength = events.length;
   var myvar =
@@ -23,7 +36,7 @@ function makeTable() {
     '</tr>' +
     '<tbody>';
 
-
+  console.log(events);
   if (objLength > 20) {
     for (var i = 0; i < 20; i++) {
       myvar +=
@@ -58,35 +71,44 @@ function makeTable() {
     }
   } else {
     for (var i = 0; i < objLength; i++) {
-      myvar +=
-        '<tr data-href="./viewLeaflet.html?eventid=' +
-        events[i].id +
-        '">' +
-        '<td>' +
-        events[i].id +
-        '</td>' +
-        '<td>' +
-        events[i].year +
-        '</td>' +
-        '<td>' +
-        events[i].month +
-        '</td>' +
-        '<td>' +
-        events[i].day +
-        '</td>' +
-        '<td>' +
-        ('0' + events[i].hour.toString()).slice(-2) + ':' + ('0' + events[i].minute.toString()).slice(-2) +
-        '</td>' +
-        '<td>' +
-        events[i].description +
-        '</td>' +
-        '<td>' +
-        events[i].depth +
-        '</td>' +
-        '<td>' +
-        (Math.round(events[i].magnitude * 10) / 10 + '.0').slice(0, 3) +
-        '</td>' +
-        '</tr>';
+      console.time('someFunction')
+
+      if (bBox_check(events[i]) == true) {
+        'Yes'
+      }; // Whatever is timed goes between the two "console.time"
+
+      console.timeEnd('someFunction')
+      if (bBox_check(events[i]) == true) {
+        myvar +=
+          '<tr data-href="./viewLeaflet.html?eventid=' +
+          events[i].id +
+          '">' +
+          '<td>' +
+          events[i].id +
+          '</td>' +
+          '<td>' +
+          events[i].year +
+          '</td>' +
+          '<td>' +
+          events[i].month +
+          '</td>' +
+          '<td>' +
+          events[i].day +
+          '</td>' +
+          '<td>' +
+          ('0' + events[i].hour.toString()).slice(-2) + ':' + ('0' + events[i].minute.toString()).slice(-2) +
+          '</td>' +
+          '<td>' +
+          events[i].description +
+          '</td>' +
+          '<td>' +
+          events[i].depth +
+          '</td>' +
+          '<td>' +
+          (Math.round(events[i].magnitude * 10) / 10 + '.0').slice(0, 3) +
+          '</td>' +
+          '</tr>';
+      };
     }
   }
 

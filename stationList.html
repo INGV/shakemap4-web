@@ -25,34 +25,12 @@
     # Header
     ###############################################
      -->
-     <!-- <div style="width: 100%; margin: 0 auto;">
-          <img src="ingv_logo_colore.png"/>
-     </div> -->
 
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-       <a class="navbar-brand" href="./index.html"><h3>ShakeMap <small class="text-muted">v4</small></h3></a>
-       <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavDropdown">
-         <ul class="navbar-nav">
-           <li class="nav-item active">
-             <a class="nav-link" href="./index.html">Home</a>
-           </li>
-           <li class="nav-item">
-             <a class="nav-link" href="./archive.html">Archive</a>
-           </li>
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Information
-             </a>
-             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-               <a class="dropdown-item" href="./disclaimer.html">Disclaimer</a>
-               <a class="dropdown-item" href="./links.html">Related Links</a>
-               <a class="dropdown-item" href="#">Something else here</a>
-             </div>
-           </li>
-         </ul>
-       </div>
-     </nav>
+    <div style="width: 100%; margin: 0 auto;">
+        <span id="logo"></span>
+    </div>
 
+    <div id="header"></div>
 
 <!--
 ###############################################
@@ -72,9 +50,8 @@
 
 
   <br/>
-
-<div id='stationTable'> </div>
-
+  <div id='stationTable'> </div>
+</div>
 
  <!--
  ###############################################
@@ -90,19 +67,24 @@
 
   <!-- Bootstrap core JavaScript
   ================================================== -->
-         <!-- Placed at the end of the document so the pages load faster -->
-         <!-- Optional JavaScript -->
-         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-         <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-         <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
-         <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+     <!-- Placed at the end of the document so the pages load faster -->
+     <!-- Optional JavaScript -->
+     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+     <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
-         <!--  My scripts -->
-         <!-- <script src="./productsDownloadList.js"></script> -->
-         <script src="./softwareVersion.js"></script>
-         <script src="./scripts/colors.js"></script>
-         <script src="./scripts/scriptStationList.js"></script>
+     <!--  My scripts -->
+     <!-- <script src="./productsDownloadList.js"></script> -->
+     <script src="./header.js"></script>
+     <script src="./softwareVersion.js"></script>
+     <script src="./scripts/colors.js"></script>
+     <script src="./scripts/scriptStationList.js"></script>
+
+    <script src="./config.js"></script>
+    <script src="./elaborate_config.js"></script>
+
 
   </body>
 </html>

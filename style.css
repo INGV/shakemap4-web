@@ -181,12 +181,12 @@ h3 {
    background-color: #eee;
    color: #444;
    cursor: pointer;
-   padding: 18px;
+   padding: 10px;
    width: 100%;
    border: none;
    text-align: left;
    outline: none;
-   font-size: 20px;
+   font-size: 15px;
  }
 
  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -196,10 +196,10 @@ h3 {
 
  /* Style the collapsible content. Note: hidden by default */
  .content {
-   padding: 0 18px;
+   padding: 0 10px;
    display: none;
    overflow: hidden;
    background-color: #f1f1f1;
    text-align: left;
-   font-size: 17px;
+   font-size: 13px;
  }

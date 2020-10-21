@@ -22,33 +22,12 @@
   # Header
   ###############################################
    -->
-   <!-- <div style="width: 100%; margin: 0 auto;">
-        <img src="ingv_logo_colore.png"/>
-   </div> -->
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-     <a class="navbar-brand" href="./index.html"><h3>ShakeMap <small class="text-muted">v4</small></h3></a>
-     <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavDropdown">
-       <ul class="navbar-nav">
-         <li class="nav-item">
-            <a class="nav-link" href="./index.html">Home</a>
-         </li>
-         <li class="nav-item">
-           <a class="nav-link" href="./archive.html">Archive</a>
-         </li>
-         <li class="nav-item dropdown">
-           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-             Information
-           </a>
-           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-             <a class="dropdown-item" href="./disclaimer.html">Disclaimer</a>
-             <a class="dropdown-item" href="./links.html">Related Links</a>
-           </div>
-         </li>
-       </ul>
-     </div>
-   </nav>
 
+  <div style="width: 100%; margin: 0 auto;">
+      <span id="logo"></span>
+  </div>
 
+  <div id="header"></div>
      <!--
      ###############################################
      # Main content
@@ -85,13 +64,12 @@
             </li> -->
           </ul>
         </div>
+      </div>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="intensity" role="tabpanel" aria-labelledby="intensity-tab">
-
-         </div>
+        </div>
         <div class="tab-pane fade" id="pga" role="tabpanel" aria-labelledby="pga-tab">
-
-         </div>
+        </div>
         <div class="tab-pane fade" id="pgv" role="tabpanel" aria-labelledby="pgv-tab">
         </div>
         <br/>
@@ -101,7 +79,7 @@
           <option value="soil">Soil</option>
         </select>
         &emsp; Show DYFI data: <input type="checkbox" id="dyfiCheck" onchange="changePlot()">
-    </div>
+      </div>
 
       <!--
       ###############################################
@@ -131,8 +109,13 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!--  My scripts -->
     <!-- <script src="./scripts/require.js"></script> -->
+    <script src="./header.js"></script>
     <script src="./scripts/colors.js"></script>
     <script src="./softwareVersion.js"></script>
     <script src="./scripts/scriptAnalysis.js"></script>
+
+    <script src="./config.js"></script>
+    <script src="./elaborate_config.js"></script>
+
   </body>
 </html>

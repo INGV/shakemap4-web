@@ -35,29 +35,8 @@ function initTableClick () {
 }
 
 //  #################################################################
-//  #  Find categories of available products for event
+//  #  Expand row when clicked
 //  ##################################################################
-function attr_div(attr_collection) {
-  var content = '';
-  try {
-    Object.keys(attr_collection).forEach(function(key) {
-      if (attr_collection[key].hasOwnProperty('module')) {
-        content +=
-          '<b>' +
-          key +
-          ' module:</b> ' +
-          attr_collection[key]['module'] +
-          '<br/>';
-
-      } else {
-        content += '<b>' + key + ':</b> ' + attr_collection[key] + '<br/>';
-      }
-    });
-    return content;
-  } catch (err) {
-    console.log(err)
-  }
-}
 
 function col_exp() {
   var col = document.getElementsByClassName("collapsible");
@@ -102,23 +81,20 @@ function list_meta(eventid) {
     json
   ) {
     var metaHTML = '';
-    console.log(json);
-    Object.keys(json).forEach(function(key,index) {
+
+    var order = [ 'input', 'output', 'processing', 'multigmpe', 'strec'];
+
+    for (var i=0; i<order.length; i++) {
+    key = order[i];
     subMeta = json[key];
     keyName = key.charAt(0).toUpperCase() + key.slice(1)
 
     metaHTML = metaHTML + '<button type="button" class="collapsible"> '
       + keyName + '</button><div class="content"><p>';
 
-    // Object.keys(subMeta).forEach(function(key2,index) {
-    //   // metaHTML = metaHTML + '<br/><b>' + key2 + '</b><br/>' + JSON.stringify(subMeta[key2], null, 4);
-    //   console.log(get_subs(subMeta[key2], metaHTML));
-    // });
-
     metaHTML = metaHTML + get_subs(subMeta, 0) + '</p></div>';
     document.getElementById('metaTable').innerHTML = metaHTML;
-
-  });
+  };
 
   col_exp();
 
