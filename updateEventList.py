@@ -140,8 +140,10 @@ def write_version_file():
 
 def do_for_all_events(bBox):
     event_list = []
-    for event in get_event_ids():
-        print('Processing event:' + event)
+    folders_list = get_event_ids()
+    events_num = len(folders_list)
+    for count, event in enumerate(folders_list, start=1):
+        print(str(count) + '/' + str(events_num) + ' - Processing event:' + event)
 
         ## Try to read the info.json file to put the events in a list for the website to read
         try:
@@ -173,7 +175,7 @@ def update_event_list(eventParameters, event_id):
     if os.path.isfile('events.js'):
         with open('events.js', 'r') as f:
             events_list = json.loads(f.readlines()[1])
-        
+
         if not any(d['id'] == event_id for d in events_list):
             events_list.append(eventParameters)
         else:
