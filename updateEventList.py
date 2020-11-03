@@ -134,8 +134,11 @@ def write_version_file():
     versionElement = versionElement.replace('software', 'Website ')
 
     with open('softwareVersion.js', 'w') as f:
-        print('var softwareVersion = "' + versionElement +
-        '";document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
+        print('var softwareVersion = "<span class=\'go_left\'>' + versionElement +
+        '</span>";softwareVersion = softwareVersion + ' +
+        '"<span class=\'go_right\'>Development led by INGV ' +
+        '<a href=\'https://github.com/INGV/shakemap4-web\' target=\'_blank\'>(GitHub) </a></span>";' +
+        'document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
 
     return
 
@@ -187,7 +190,7 @@ def update_event_list(eventParameters, event_id, eventAction='add'):
                 print('Event ' + event_id + ' deleted from event list.')
         else:
             events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
-            
+
     else:
         if eventAction=='del':
             print('The event list file does not exist.')
@@ -229,14 +232,14 @@ def delete_event(event_id):
     except Exception as e:
         print('Could not delete from list for event' + event_id + ':')
         print(e)
-        
+
     try:
         shutil.rmtree('./data/' + event_id)
         print('Event folder removed from data.')
     except Exception as e:
         print('Could not delete folder for event: ' + event_id + ':')
         print(e)
-        
+
 def main(event_id):
     bBox = get_bBox_dict()
     if event_id == False:
@@ -254,7 +257,7 @@ if __name__ == "__main__":
     parser.add_argument('--deleteid', help='Provide the event ID under the script argument --eventid of the event which you want to delete (from event list and data folder)"')
 
     args = parser.parse_args()
-    
+
     if len(sys.argv[:]) < 2:
         print('No event ID has been provided. The script will run for all the events')
         main(False)

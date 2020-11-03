@@ -1,1 +1,1 @@
-var softwareVersion = "Website Version: 1.10.0";document.getElementById("footer_text").innerHTML = softwareVersion;
+var softwareVersion = "<span class='go_left'>Website Version: 1.10.0</span>";softwareVersion = softwareVersion + "<span class='go_right'>Development led by INGV <a href='https://github.com/INGV/shakemap4-web' target='_blank'>(GitHub) </a></span>";document.getElementById("footer_text").innerHTML = softwareVersion;
