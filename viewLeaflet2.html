@@ -42,17 +42,19 @@
    <!-- <div style="width: 100%; margin: 0 auto;">
         <img src="ingv_logo_colore.png"/>
    </div> -->
-   <div id="header"></div/>
+
+   <div id="header"></div>
 
 
      <!--
      ###############################################
      # Main content
      ###############################################
-      -->
       <div style="width: 100%;">
            <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
       </div>
+    -->
+
         <button type="button" class="btn btn-outline-primary go_right" id="leafletButton"  onclick="open_single()">Single view</button>
 
 <div class="container-fluid row justify-content-md-center">
@@ -153,9 +155,13 @@
 
     <script src="scripts/LeafletPlugins/L.Map.Sync.js"></script>
     <!--  My scripts -->
-    <script src="./header.js"></script>
+    <!-- <script src="./header.js"></script> -->
     <script src="scripts/colors.js"></script>
     <script src="./softwareVersion.js"></script>
     <script src="scripts/scriptLeaflet2.js"></script>
+
+    <script src="./config.js"></script>
+    <script src="./elaborate_config.js"></script>
+
   </body>
 </html>

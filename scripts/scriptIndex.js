@@ -58,9 +58,9 @@ function makeTable() {
         '<td>' +
         ('0' + events[i].hour.toString()).slice(-2) + ':' + ('0' + events[i].minute.toString()).slice(-2) +
         '</td>' +
-        '<td>' +
+        '<td><p>' +
         events[i].description +
-        '</td>' +
+        '</p></td>' +
         '<td>' +
         events[i].depth +
         '</td>' +
