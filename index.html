@@ -9,7 +9,6 @@
 
     <link rel="stylesheet" href="./style.css">
 
-
     <!-- Material Design for Bootstrap fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
 
@@ -17,84 +16,73 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
   </head>
 
-
-
   <body>
+
+    <div id="header"></div>
+
     <!--
     ###############################################
-    # Header
+    # Main content
     ###############################################
-     -->
-     <div style="width: 100%; margin: 0 auto;">
-         <span id="logo"></span>
-     </div>
+    -->
 
-     <div id="header"></div>
-
-<!--
-###############################################
-# Main content
-###############################################
- -->
- <div style="width: 100%;">
+    <!--
+    <div style="width: 100%;">
       <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
- </div>
-<div class="tab_menu">
- Disclaimer
- English: The maps of ground shaking - ShakeMap - published in this web site have been determined
- only for research purposes and provide preliminary and incomplete estimates of the experienced shaking.
- They have been determined automatically from the instrumentally recorded data by the seismic stations and are updated as more data become available.
- The maps do not have any official value and INGV declines any responsibility from an improper use of the information therein represented.
+    </div>
+    -->
 
-<br/>
-<h4> Latest events </h4> <br/>
+    <div class="tab_menu">
+        Disclaimer
+        English: The maps of ground shaking - ShakeMap - published in this web site have been determined
+        only for research purposes and provide preliminary and incomplete estimates of the experienced shaking.
+        They have been determined automatically from the instrumentally recorded data by the seismic stations and are updated as more data become available.
+        The maps do not have any official value and INGV declines any responsibility from an improper use of the information therein represented.
 
- <div id="event_table" class="table-responsive-md archive_table">
+        <br/>
+        <h4> Latest events </h4> <br/>
 
- </div>
+        <!-- <div id="event_table" class="table-responsive-md archive_table"> -->
+        <div class="table-responsive" id="event_table">
 
- <div style="width: 100%; margin: 10px auto;">
-     <span id="contributorsLogo"></span>
- </div>
+        </div>
+      
+        <div style="width: 100%; margin: 10px auto;">
+            <span id="contributorsLogo"></span>
+        </div>
+    </div>
 
+    <!--
+    ###############################################
+    # Footer
+    ###############################################
+    -->
 
-</div>
-
-
- <!--
- ###############################################
- # Footer
- ###############################################
-  -->
-
-       <footer class="footer">
-             <div class="container">
-               <span id="footer_text" class="text-muted"></span>
-             </div>
-           </footer>
-
-
+    <footer class="footer">
+        <div class="container">
+            <span id="footer_text" class="text-muted"></span>
+        </div>
+    </footer>
 
 
-
-     <!-- Bootstrap core JavaScript
-       ================================================== -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+
     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
     <!--  My scripts -->
-    <script src="./header.js"></script>
-    <script src="./events.js"></script>
-    <script src="./softwareVersion.js"></script>
-    <script src="./scripts/scriptIndex.js"></script>
-
     <script src="./config.js"></script>
     <script src="./elaborate_config.js"></script>
 
+    <!--  <script src="./header.js"></script> -->
+    <script src="./events.js"></script>
+    <script src="./softwareVersion.js"></script>
+    <script src="./scripts/scriptIndex.js"></script>
   </body>
 </html>
