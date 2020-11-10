@@ -3,6 +3,7 @@ import os
 import json
 import dateutil.parser
 import argparse, sys
+import shutil
 
 def get_event_ids ():
     """
@@ -133,8 +134,11 @@ def write_version_file():
     versionElement = versionElement.replace('software', 'Website ')
 
     with open('softwareVersion.js', 'w') as f:
-        print('var softwareVersion = "' + versionElement +
-        '";document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
+        print('var softwareVersion = "<span class=\'go_left\'>' + versionElement +
+        '";softwareVersion = softwareVersion + ' +
+        '" </span><span class=\'go_right\'>Development led by INGV ' +
+        '<a href=\'https://github.com/INGV/shakemap4-web\' target=\'_blank\'>(GitHub) </a></span>";' +
+        'document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
 
     return
 
@@ -171,18 +175,29 @@ def do_for_all_events(bBox):
     write_list_to_file(event_list)
     write_version_file()
 
-def update_event_list(eventParameters, event_id):
+def update_event_list(eventParameters, event_id, eventAction='add'):
     if os.path.isfile('events.js'):
         with open('events.js', 'r') as f:
             events_list = json.loads(f.readlines()[1])
 
-        if not any(d['id'] == event_id for d in events_list):
+        if not any(d['id'] == event_id for d in events_list) and eventAction=='add':
             events_list.append(eventParameters)
+        elif eventAction == 'del':
+            if not any(d['id'] == event_id for d in events_list):
+                print('Event ' + event_id + ' does not exist in the event list.' )
+            else:
+                events_list = [x for x in events_list if x['id']!=str(event_id)]
+                print('Event ' + event_id + ' deleted from event list.')
         else:
             events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
+
     else:
+        if eventAction=='del':
+            print('The event list file does not exist.')
+            return
         events_list = []
         events_list.append(eventParameters)
+        print('Nešto ovdje')
     write_list_to_file(events_list)
 
 
@@ -210,6 +225,20 @@ def do_for_one_event(event_id, bBox):
         print('Product file list error for event ' + event_id + ':')
         print(e)
 
+def delete_event(event_id):
+    print('Deleting event: ' + event_id)
+    try:
+        update_event_list(None, event_id, eventAction='del')
+    except Exception as e:
+        print('Could not delete from list for event' + event_id + ':')
+        print(e)
+
+    try:
+        shutil.rmtree('./data/' + event_id)
+        print('Event folder removed from data.')
+    except Exception as e:
+        print('Could not delete folder for event: ' + event_id + ':')
+        print(e)
 
 def main(event_id):
     bBox = get_bBox_dict()
@@ -225,9 +254,14 @@ def main(event_id):
 if __name__ == "__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument('--eventid', help='Provide the event ID under the script argument --eventid of the event for which the parameters or files have been changed. To run the script for all events do not pass any arguments"')
+    parser.add_argument('--deleteid', help='Provide the event ID under the script argument --eventid of the event which you want to delete (from event list and data folder)"')
+
     args = parser.parse_args()
+
     if len(sys.argv[:]) < 2:
         print('No event ID has been provided. The script will run for all the events')
         main(False)
+    elif (args.deleteid != None):
+        delete_event(args.deleteid)
     else:
         main(args.eventid)

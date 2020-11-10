@@ -44,4 +44,10 @@ include_header(function(){
             document.getElementById("logo").innerHTML = html_logo;
         }
     }
+    if (config_data.contributorsLogo) {
+        if (config_data.contributorsLogo.show) {
+            html_ContrLogo = '<img src="' + config_data.contributorsLogo.image_file + '"/>'
+            document.getElementById("contributorsLogo").innerHTML = html_ContrLogo;
+        }
+    }
 });
