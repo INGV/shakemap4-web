@@ -136,8 +136,8 @@ def write_version_file():
     with open('softwareVersion.js', 'w') as f:
         print('var softwareVersion = "<span class=\'go_left\'>' + versionElement +
         '";softwareVersion = softwareVersion + ' +
-        '" </span><span class=\'go_right\'>Development led by INGV ' +
-        '<a href=\'https://github.com/INGV/shakemap4-web\' target=\'_blank\'>(GitHub) </a></span>";' +
+        '" </span><span class=\'go_right\'>Development of this portal has been made by INGV and it is publicly available at ' +
+        '<a href=\'https://github.com/INGV/shakemap4-web\' target=\'_blank\'>GitHub INGV/shakemap4-web  </a></span>";' +
         'document.getElementById("footer_text").innerHTML = softwareVersion;', file=f)
 
     return
