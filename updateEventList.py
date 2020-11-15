@@ -133,7 +133,7 @@ def write_version_file():
 
     versionElement = versionElement.replace('software', 'Website ')
 
-    with open('softwareVersion.js', 'w') as f:
+    with open('./scripts/softwareVersion.js', 'w') as f:
         print('var softwareVersion = "<span class=\'go_left\'>' + versionElement +
         '";softwareVersion = softwareVersion + ' +
         '" </span><span class=\'go_right\'>Development of this portal has been made by INGV and it is publicly available at ' +
