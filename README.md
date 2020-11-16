@@ -61,7 +61,7 @@ default is:
 If all works, you should see ShakeMap4-Web web page.
 
 ### Under the hood
-*ShakeMap4-Web* project runs 3 containers: 
+*ShakeMap4-Web* project runs 3 containers:
 - *nginx* and *php-fpm*: are used to implement web server
 - *workspace*: is used to implements managment script/tools like `wget`, `crontab`, etc...
 
@@ -114,15 +114,9 @@ $ docker-compose build --no-cache workspace
 ```
 $ docker-compose pull nginx
 ```
-### Add a banner above the menu bar
+### Changing the website images
 
-To add a banner above the menu bar (e.g. like the INGV banner that can be seen on the screenshots below), you can just uncomment the following code in all the `.html` files:
-```
- <!-- <div style="width: 100%; margin: 0 auto;">
-      <img src="ingv_logo_colore.png"/>
- </div> -->
-```
- and replace the `src` attribute value with the location of your banner image. The code can be uncommented by removing the `<!--` and `-->` from the code. The banner image can be of any size.
+To change the banners and logo images (e.g. the INGV banner that can be seen on the screenshots below), you can change the paths in the `config.js` file (banner above the menu bar and the image below the table on the homepage) and the `inc/header.html` file (image below the menu bar).
 
 ### Example screenshot
 ![alt text](images/screenshot_1.png)
