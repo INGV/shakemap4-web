@@ -6,16 +6,17 @@ $(document).ready(function() {
 });
 
 function bBox_check(event_data) {
-  minLat = 30;
-  maxLat = 60;
-  minLon= 5;
-  maxLon = 20;
-
-  if ( event_data.longitude > minLon && event_data.longitude <maxLon && event_data.latitude > minLat && event_data.latitude < maxLat) {
-    return true
-  } else {
-    return false
-  };
+  // minLat = 30;
+  // maxLat = 60;
+  // minLon= 5;
+  // maxLon = 20;
+  //
+  // if ( event_data.longitude > minLon && event_data.longitude <maxLon && event_data.latitude > minLat && event_data.latitude < maxLat) {
+  //   return true
+  // } else {
+  //   return false
+  // };
+  return true
 }
 
 function makeTable() {
@@ -37,8 +38,8 @@ function makeTable() {
     '<tbody>';
 
   console.log(events);
-  if (objLength > 20) {
-    for (var i = 0; i < 20; i++) {
+  if (objLength > 5) {
+    for (var i = 0; i < 5; i++) {
       myvar +=
         '<tr data-href="./viewLeaflet.html?eventid=' +
         events[i].id +
