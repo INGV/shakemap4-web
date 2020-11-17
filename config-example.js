@@ -5,12 +5,12 @@ var config_data = {
     },
     contributorsLogo: {
         show: true,
-        image_file: 'images/INGVcontributors.png'
+        image_file: 'images/INGVcontributors.png',
+        zoom: '60%'
     },
     banner2: {
-	show: true,
-	image_file: 'images/banner_lista_terremoti.jpg',
-	height: '100%',
-	width: '100%'
+	    show: true,
+	    image_file: 'images/banner_lista_terremoti.jpg',
+        zoom: '80%'
     }
 }
