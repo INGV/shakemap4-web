@@ -56,7 +56,7 @@ include_header(function(){
     }
     if (config_data.banner2) {
         if (config_data.banner2.show) {
-            html_banner2 = '<img src="' + config_data.banner2.image_file + '"/>'
+            html_banner2 = '<img src="' + config_data.banner2.image_file + '" style="height: ' + config_data.banner2.height + '; width: ' + config_data.banner2.width + '; object-fit: contain" />'
             banner2_container = document.getElementById("banner2")
             if (banner2_container !== null)
                 banner2_container.innerHTML = html_banner2;
