@@ -1,7 +1,8 @@
 var config_data = {
     logo: {
         show: true,
-        image_file: 'images/ingv_logo_colore.png'
+        image_file: 'images/ingv_logo_colore.png',
+        zoom: '70%'
     },
     contributorsLogo: {
         show: true,
