@@ -29,18 +29,16 @@ function toggle_menu_header() {
 include_header(function(){
     if (config_data.logo) {
         if (config_data.logo.show) {
-             if (config_data.logo.show) {
-                logo = document.getElementById("logo")
-                if (logo !== null) {
-                    logo.onload = function (self) {
-                           if (window.screen.width > self.target.width) {
-                                if (config_data.contributorsLogo.zoom) {
-                                    self.target.style.width = config_data.logo.zoom
-                                }
-                            }
+            logo = document.getElementById("logo")
+            if (logo !== null) {
+                logo.onload = function (self) {
+                    if (window.screen.width > self.target.width) {
+                        if (config_data.contributorsLogo.zoom) {
+                            self.target.style.width = config_data.logo.zoom
+                        }
                     }
-                    logo.src = config_data.logo.image_file
                 }
+                logo.src = config_data.logo.image_file
             }
         }
     }
