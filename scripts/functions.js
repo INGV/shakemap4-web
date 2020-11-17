@@ -54,4 +54,12 @@ include_header(function(){
                 contributorsLogo_container.innerHTML = html_ContrLogo;
         }
     }
+    if (config_data.banner2) {
+        if (config_data.banner2.show) {
+            html_banner2 = '<img src="' + config_data.banner2.image_file + '"/>'
+            banner2_container = document.getElementById("banner2")
+            if (banner2_container !== null)
+                banner2_container.innerHTML = html_banner2;
+        }
+    }
 });
