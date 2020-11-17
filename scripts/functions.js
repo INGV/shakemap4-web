@@ -54,12 +54,26 @@ include_header(function(){
                 contributorsLogo_container.innerHTML = html_ContrLogo;
         }
     }
+    /*
     if (config_data.banner2) {
         if (config_data.banner2.show) {
-            html_banner2 = '<img src="' + config_data.banner2.image_file + '" style="height: ' + config_data.banner2.height + '; width: ' + config_data.banner2.width + '; object-fit: contain" />'
+            //html_banner2 = '<img src="' + config_data.banner2.image_file + '" style="height: ' + config_data.banner2.height + '; width: ' + config_data.banner2.width + '; object-fit: contain" />'
+            html_banner2 = '<img src="' + config_data.banner2.image_file + '"/>'
             banner2_container = document.getElementById("banner2")
             if (banner2_container !== null)
-                banner2_container.innerHTML = html_banner2;
+                //banner2_container.innerHTML = html_banner2;
+        }
+    },*/
+    if (config_data.banner2) {
+        if (config_data.banner2.show) {
+            banner2_image = document.getElementById("banner2")
+            if (banner2_image !== null){
+                banner2_image.src = config_data.banner2.image_file
+                if (config_data.banner2.zoom) {
+                    banner2_image.style.width = config_data.banner2.zoom
+                }
+            }
         }
     }
+
 });
