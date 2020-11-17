@@ -1,0 +1,48 @@
+<!--
+    CONTAINS THE LOGO AND THE NAVIGATION BAR IT IS INCLUDED BY THE SCRIPT: scripts/functions.js
+    The file scripts/functions.js  is loaded by all pages
+-->
+
+
+<div style="width: 100%; margin: 0 auto;">
+    <span id="logo"></span>
+</div>
+
+<style>
+    .override_menu {
+        background: #333333;
+    }
+</style>
+
+<!--
+    Responsive navigation bar. Inspired by: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_topnav
+-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="topnav"  id="myTopnav">
+    <a class="navbar-brand" href="../index.html"><h6 style="font-size: 26px;">ShakeMap <small class="text-muted">v4</small></h6></a>
+        <a class="nav-link dropdown-toggle" href="#"
+           id="navbarDropdownMenuLink"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false"
+        >
+            Information
+        </a>
+        <div class="override_menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class=" dropdown-item" href="../disclaimer.html">DISCLAIMER</a>
+            <a class="dropdown-item" href="../scientificBackground.html">SCIENTIFIC BACKGROUND</a>
+        </div>
+
+        <a class="nav-link" href="../archive.html">Archive</a>
+
+        <a class="nav-link" href="../index.html">Home</a>
+
+        <a href="javascript:void(0);" class="icon" onclick="toggle_menu_header()">
+            <i class="fa fa-bars"></i>
+        </a>
+</div>
+
+<div style="width: 100%;">
+    <img src="images/banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
+</div>

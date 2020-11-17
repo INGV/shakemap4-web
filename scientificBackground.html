@@ -26,10 +26,6 @@
     ###############################################
      -->
 
-    <div style="width: 100%; margin: 0 auto;">
-        <span id="logo"></span>
-    </div>
-
     <div id="header"></div>
 
 
@@ -37,10 +33,11 @@
 ###############################################
 # Main content
 ###############################################
- -->
  <div style="width: 100%;">
       <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
  </div>
+-->
+
 <div class="tab_menu squash_div">
   <h5>
   Information on the shakemap procedure can be found at: <br/>
@@ -48,12 +45,14 @@
   </h5>
 
   <h5>Bibliography:</h5>
+<div style="text-align: left;">
 <i>
-  1) Michelini, A., Faenza, L., Lauciani, V., & Malagnini, L. (2008). ShakeMap implementation in Italy. Seismological Research Letters, 79(5), 688–697.
-  <br/> 2) Michelini, A., Faenza, L., Lanzano, G., Lauciani, V., Jozinović, D., Puglia, R., & Luzi, L. (2020). The New ShakeMap in Italy: Progress and Advances in the Last 10 Yr. Seismological Research Letters, 91(1), 317–333. http://doi.org/10.1785/0220190130
-  <br/> 3) Wald, D. J., Quitoriano, V., Heaton, T. H., & Kanamori, H. (1999). Relationships between Peak Ground Acceleration, Peak Ground Velopcity and Modified Mercalli Intensity in California. Earthquake Spectra, 15(3), 557–564.
-  <br/> 4) Wald, D. J., Quitoriano, V., Heaton, T. H., Kanamori, H., Scrivner, C. W., & Worden, C. B. (1999). TriNet “ShakeMaps”: Rapid Generation of Peak Ground Motion and Intensity Maps for Earthquakes in Southern Califiornia. Earthquake Spectra, 15(3), 537–555.
+   Michelini, A., Faenza, L., Lauciani, V., & Malagnini, L. (2008). ShakeMap implementation in Italy. Seismological Research Letters, 79(5), 688–697.
+  <br/><br/>  Michelini, A., Faenza, L., Lanzano, G., Lauciani, V., Jozinović, D., Puglia, R., & Luzi, L. (2020). The New ShakeMap in Italy: Progress and Advances in the Last 10 Yr. Seismological Research Letters, 91(1), 317–333. http://doi.org/10.1785/0220190130
+  <br/><br/>  Wald, D. J., Quitoriano, V., Heaton, T. H., & Kanamori, H. (1999). Relationships between Peak Ground Acceleration, Peak Ground Velopcity and Modified Mercalli Intensity in California. Earthquake Spectra, 15(3), 557–564.
+  <br/><br/>  Wald, D. J., Quitoriano, V., Heaton, T. H., Kanamori, H., Scrivner, C. W., & Worden, C. B. (1999). TriNet “ShakeMaps”: Rapid Generation of Peak Ground Motion and Intensity Maps for Earthquakes in Southern Califiornia. Earthquake Spectra, 15(3), 537–555.
 </i>
+</div>
 </div>
 
 
@@ -79,11 +78,10 @@
      <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
      <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
-     <script src="./header.js"></script>
-     <script src="./softwareVersion.js"></script>
+      <script src="./scripts/softwareVersion.js"></script>
 
     <script src="./config.js"></script>
-    <script src="./elaborate_config.js"></script>
+    <script src="./scripts/functions.js"></script>
 
   </body>
 </html>

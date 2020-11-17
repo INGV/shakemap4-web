@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
   </head>
 
-
-
   <body>
     <!--
     ###############################################
@@ -26,40 +24,35 @@
     ###############################################
      -->
 
-    <div style="width: 100%; margin: 0 auto;">
-        <span id="logo"></span>
-    </div>
-
      <div id="header"></div>
 
+    <!--
+    ###############################################
+    # Main content
+    ###############################################
+     <div style="width: 100%;">
+          <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
+     </div>
+    -->
 
-<!--
-###############################################
-# Main content
-###############################################
- -->
- <div style="width: 100%;">
-      <img src="banner_lista_terremoti.jpg" style='height: 100%; width: 100%; object-fit: contain'/>
- </div>
-
-<div class="tab_menu squash_div">
-    <h2 class="page_title"> Metadata </h2>
-    <br/>
-    <button type="button" class="btn btn-outline-primary" id="leafletButton"  onclick="open_leaflet()">Leaflet View</button>
-    <button type="button" class="btn btn-outline-primary" id="staticButton" onclick="open_static()">Static View</button>
-    <br/>
+    <div class="tab_menu squash_div">
+        <h2 class="page_title"> Metadata </h2>
+        <br/>
+        <button type="button" class="btn btn-outline-primary" id="leafletButton"  onclick="open_leaflet()">Leaflet View</button>
+        <button type="button" class="btn btn-outline-primary" id="staticButton" onclick="open_static()">Static View</button>
+        <br/>
 
 
-    <br/>
+        <br/>
 
-    <div id='metaTable'> </div>
-</div>
+        <div id='metaTable'> </div>
+    </div>
 
- <!--
- ###############################################
- # Footer
- ###############################################
-  -->
+     <!--
+     ###############################################
+     # Footer
+     ###############################################
+      -->
 
        <footer class="footer">
              <div class="container">
@@ -67,8 +60,8 @@
              </div>
            </footer>
 
-  <!-- Bootstrap core JavaScript
-  ================================================== -->
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
      <!-- Placed at the end of the document so the pages load faster -->
      <!-- Optional JavaScript -->
      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -79,12 +72,11 @@
 
      <!--  My scripts -->
      <!-- <script src="./productsDownloadList.js"></script> -->
-     <script src="./header.js"></script>
-     <script src="./softwareVersion.js"></script>
+     <script src="./scripts/softwareVersion.js"></script>
      <script src="./scripts/scriptMetaData.js"></script>
 
     <script src="./config.js"></script>
-    <script src="./elaborate_config.js"></script>
+    <script src="./scripts/functions.js"></script>
 
   </body>
 </html>

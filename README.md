@@ -19,7 +19,7 @@ $ git clone https://github.com/INGV/shakemap4-web
 $ cd shakemap4-web
 ```
 
-## Configure
+## Configure docker
 Copy docker environment file:
 ```
 $ cp ./Docker/env-example ./Docker/.env
@@ -34,6 +34,13 @@ Set `SHAKEMAP_DATA_PATH` with the absolute `data` path; ie: `/home/shake/shakema
 To run containers as *linux-user* (intead of `root`), set `WORKSPACE_PUID` and `WORKSPACE_PGID` in `./Docker/.env` file with:
 - `WORKSPACE_PUID` should be equal to the output of `id -u` command
 - `WORKSPACE_PGID` should be equal to the output of `id -g` command
+
+## Configure web page
+Copy `config-example.js` to `config.js`:
+```
+$ cp config-example.js config.js
+```
+and update params if you need.
 
 ## Start shakemap4-web
 First, build docker images:
