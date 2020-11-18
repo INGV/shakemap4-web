@@ -1,14 +1,3 @@
-/*  The name of this file is misleading ...
-    It uses indeed the config_data variable in order to load the logo image
-    but it also contains the functions shared by all pages, since all pages load this file ...
-*/
-
-function loadLogoImage(self){
-    logo_width_percentage = window.screen.width > self.width ? logo_width_percentage =  Math.floor((self.width / window.screen.width) * 100) : 100
-    self.style['width'] = logo_width_percentage + '%';
-    self.style['height'] = 'auto';
-}
-
 
 function include_header(calback) {
     fetch("./inc/header.html")
@@ -40,26 +29,46 @@ function toggle_menu_header() {
 include_header(function(){
     if (config_data.logo) {
         if (config_data.logo.show) {
-            html_logo = '<img onload="loadLogoImage(this)"  src="' + config_data.logo.image_file + '"/>'
-            logo_container = document.getElementById("logo")
-            if (logo_container !== null)
-                logo_container.innerHTML = html_logo;
+            logo = document.getElementById("logo")
+            if (logo !== null) {
+                logo.onload = function (self) {
+                    if (window.screen.width > self.target.width) {
+                        if (config_data.contributorsLogo.zoom) {
+                            self.target.style.width = config_data.logo.zoom
+                        }
+                    }
+                }
+                logo.src = config_data.logo.image_file
+            }
         }
     }
     if (config_data.contributorsLogo) {
         if (config_data.contributorsLogo.show) {
+            contributorsLogo = document.getElementById("contributorsLogo")
+            if (contributorsLogo !== null){
+                contributorsLogo.src = config_data.contributorsLogo.image_file
+                if (config_data.contributorsLogo.zoom) {
+                    contributorsLogo.style.width = config_data.contributorsLogo.zoom
+                }
+            }
+
+            /*
             html_ContrLogo = '<img src="' + config_data.contributorsLogo.image_file + '"/>'
             contributorsLogo_container = document.getElementById("contributorsLogo")
             if (contributorsLogo_container !== null)
-                contributorsLogo_container.innerHTML = html_ContrLogo;
+                contributorsLogo_container.innerHTML = html_ContrLogo; */
         }
     }
-    if (config_data.banner2) {
+     if (config_data.banner2) {
         if (config_data.banner2.show) {
-            html_banner2 = '<img src="' + config_data.banner2.image_file + '" style="height: ' + config_data.banner2.height + '; width: ' + config_data.banner2.width + '; object-fit: contain" />'
-            banner2_container = document.getElementById("banner2")
-            if (banner2_container !== null)
-                banner2_container.innerHTML = html_banner2;
+            banner2_image = document.getElementById("banner2")
+            if (banner2_image !== null){
+                banner2_image.src = config_data.banner2.image_file
+                if (config_data.banner2.zoom) {
+                    banner2_image.style.width = config_data.banner2.zoom
+                }
+            }
         }
     }
+
 });
