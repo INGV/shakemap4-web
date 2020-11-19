@@ -13,5 +13,8 @@ var config_data = {
         show: true,
 	image_file: 'images/banner_lista_terremoti.jpg',
         zoom: '100%'
+    },
+    tableNumEventsHome: {
+      numEvents: 5
     }
 }
