@@ -10,8 +10,8 @@ var config_data = {
         zoom: '60%'
     },
     banner2: {
-	    show: true,
-	    image_file: 'images/banner_lista_terremoti.jpg',
-        zoom: '80%'
+        show: true,
+	image_file: 'images/banner_lista_terremoti.jpg',
+        zoom: '100%'
     }
 }
