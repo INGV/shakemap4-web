@@ -119,10 +119,11 @@ def write_list_to_file(event_list):
     """
     ## This next line is written so the file is saved as a javascript variable
     ## so the ajax call in the website could be avoided
-    with open('events.js', 'w') as f:
+    with open('events.js.tmp', 'w') as f:
         print('var events =', file=f)
-    with open('events.js', 'a') as outfile:
+    with open('events.js.tmp', 'a') as outfile:
         json.dump(event_list, outfile)
+    shutil.copyfile('events.js.tmp', 'events.js')
 
 def write_version_file():
     yaml_file_path = 'publiccode.yml'
@@ -177,7 +178,8 @@ def do_for_all_events(bBox):
 
 def update_event_list(eventParameters, event_id, eventAction='add'):
     if os.path.isfile('events.js'):
-        with open('events.js', 'r') as f:
+        shutil.copyfile('events.js', 'events.js.tmp')
+        with open('events.js.tmp', 'r') as f:
             events_list = json.loads(f.readlines()[1])
 
         if not any(d['id'] == event_id for d in events_list) and eventAction=='add':

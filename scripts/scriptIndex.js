@@ -37,9 +37,9 @@ function makeTable() {
     '</tr>' +
     '<tbody>';
 
-  console.log(events);
-  if (objLength > 5) {
-    for (var i = 0; i < 5; i++) {
+  console.log(config_data.tableNumEventsHome.numEvents);
+  if (objLength > config_data.tableNumEventsHome.numEvents) {
+    for (var i = 0; i < config_data.tableNumEventsHome.numEvents; i++) {
       myvar +=
         '<tr data-href="./viewLeaflet.html?eventid=' +
         events[i].id +
