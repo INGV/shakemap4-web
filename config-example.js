@@ -16,5 +16,9 @@ var config_data = {
     },
     tableNumEventsHome: {
       numEvents: 5
+    },
+    disclaimer: {
+        show: true,
+        file: 'inc/disclaimer1.html',
     }
 }
