@@ -3,6 +3,8 @@ $(document).ready(function() {
     window.location = $(this).data('href');
     return false;
   });
+  // Note: the following function resides in teh file function.js
+  include_disclaimer()
 });
 
 function bBox_check(event_data) {
