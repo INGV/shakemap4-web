@@ -47,10 +47,13 @@ def overlay_to_json(event_id):
 
     return None
 
+config_file = 'config.json'
+#config_file = 'bBox.txt'
 def get_bBox_dict():
-    if (os.path.isfile('bBox.txt')):
-        with open('bBox.txt') as json_file:
-            bBox = json.load(json_file)[0]
+    if (os.path.isfile(config_file)):
+        with open(config_file) as json_file:
+            bBox = json.load(json_file)['bBox'][0]
+            #bBox = json.load(json_file)[0]
         return bBox
     else:
         return False

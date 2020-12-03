@@ -7,6 +7,7 @@ $(document).ready(function() {
   include_disclaimer()
 });
 
+
 function bBox_check(event_data) {
   // minLat = 30;
   // maxLat = 60;
@@ -42,7 +43,7 @@ function makeTable() {
   console.log(config_data.tableNumEventsHome.numEvents);
   if (objLength > config_data.tableNumEventsHome.numEvents) {
     for (var i = 0; i < config_data.tableNumEventsHome.numEvents; i++) {
-      myvar +=
+        myvar +=
         '<tr data-href="./viewLeaflet.html?eventid=' +
         events[i].id +
         '">' +
@@ -129,4 +130,13 @@ events.sort(function (a, b) {
   return b.date - a.date;
 });
 
-makeTable();
+waitForGlobal('config_data', makeTable);
+
+
+
+
+
+
+
+
+
