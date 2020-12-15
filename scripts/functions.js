@@ -23,6 +23,23 @@ function toggle_menu_header() {
     }
 }
 
+function include_disclaimer() {
+    if (config_data.disclaimer) {
+        if (config_data.disclaimer.show) {
+            disclaimer = document.getElementById("disclaimer")
+            if (disclaimer !== null) {
+                fetch(config_data.disclaimer.file)
+                    .then(response => {
+                        return response.text()
+                    })
+                    .then(data => {
+                        disclaimer.innerHTML = data;
+                    });
+            }
+        }
+    }
+}
+
 /*  call the function include_header that include the header.html
     Only After the function include_header has finished, the logo image can be, in case, loaded
  */
