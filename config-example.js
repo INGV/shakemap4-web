@@ -9,6 +9,11 @@ var config_data = {
         image_file: 'images/INGVcontributors.png',
         zoom: '60%'
     },
+    footerLogo: {
+        show: true,
+        image_file: 'images/footer_eu.jpg',
+        zoom: '300%'
+    },
     banner2: {
         show: true,
 	image_file: 'images/banner_lista_terremoti.jpg',
