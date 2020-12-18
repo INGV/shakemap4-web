@@ -48,7 +48,7 @@ if (header_element) {
                     if (logo) {
                         logo.onload = function (self) {
                             if (window.screen.width > self.target.width) {
-                                if (config_data.contributorsLogo.zoom) {
+                                if (config_data.logo.zoom) {
                                     self.target.style.width = config_data.logo.zoom
                                 }
                             }
@@ -58,17 +58,6 @@ if (header_element) {
                 }
             }
 
-            if (config_data.contributorsLogo) {
-                if (config_data.contributorsLogo.show) {
-                    contributorsLogo = document.getElementById("contributorsLogo")
-                    if (contributorsLogo){
-                        contributorsLogo.src = config_data.contributorsLogo.image_file
-                        if (config_data.contributorsLogo.zoom) {
-                            contributorsLogo.style.width = config_data.contributorsLogo.zoom
-                        }
-                    }
-                }
-            }
             if (config_data.banner2) {
                 if (config_data.banner2.show) {
                     banner2_image = document.getElementById("banner2")

@@ -4,11 +4,6 @@ var config_data = {
         image_file: 'images/ingv_logo_colore.png',
         zoom: '70%'
     },
-    contributorsLogo: {
-        show: true,
-        image_file: 'images/INGVcontributors.png',
-        zoom: '60%'
-    },
     footerLogo: {
         show: true,
         image_file: 'images/footer_eu.jpg',
