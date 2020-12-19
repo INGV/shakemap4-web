@@ -93,5 +93,13 @@ if (footer_element) {
                 }
             }
         }
+        fetch('VERSION')
+            .then(response => response.text())
+            .then(text => {
+                software_version = document.getElementById("software_version")
+                if (software_version) {
+                   software_version.textContent = text
+                }
+            })
     });
 }

@@ -125,6 +125,7 @@ def write_list_to_file(event_list):
         json.dump(event_list, outfile)
     shutil.copyfile('events.js.tmp', 'events.js')
 
+# not used anymore
 def write_version_file():
     yaml_file_path = 'publiccode.yml'
     with open(yaml_file_path, 'r') as yaml:
@@ -174,7 +175,7 @@ def do_for_all_events(bBox):
             print(e)
 
     write_list_to_file(event_list)
-    write_version_file()
+    #write_version_file() Sergio ... not used anymore
 
 def update_event_list(eventParameters, event_id, eventAction='add'):
     if os.path.isfile('events.js'):
