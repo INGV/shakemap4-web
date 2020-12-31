@@ -122,7 +122,8 @@ def write_list_to_file(event_list):
     with open('events.js.tmp', 'w') as f:
         print('var events =', file=f)
     with open('events.js.tmp', 'a') as outfile:
-        json.dump(event_list, outfile) + ';'
+        json.dump(event_list, outfile)
+        print(';', file=outfile)
     shutil.copyfile('events.js.tmp', 'events.js')
 
 # not used anymore
