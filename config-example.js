@@ -4,10 +4,10 @@ var config_data = {
         image_file: 'images/ingv_logo_colore.png',
         zoom: '70%'
     },
-    contributorsLogo: {
+    footerLogo: {
         show: true,
-        image_file: 'images/INGVcontributors.png',
-        zoom: '60%'
+        image_file: 'images/footer_eu.jpg',
+        zoom: '300%'
     },
     banner2: {
         show: true,
@@ -16,5 +16,9 @@ var config_data = {
     },
     tableNumEventsHome: {
       numEvents: 5
+    },
+    disclaimer: {
+        show: true,
+        file: 'inc/disclaimer1.html',
     }
 }

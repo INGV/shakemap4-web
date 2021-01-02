@@ -20,58 +20,18 @@
 
     <div id="header"></div>
 
-    <!--
-    ###############################################
-    # Main content
-    ###############################################
-    -->
-
     <div class="tab_menu">
-
-        <small>
-	<p>
-	Le mappe di scuotimento (shakemaps) pubblicate in questo sito sono determinate automaticamente e forniscono stime preliminari ed incomplete dello scuotimento causato dal
-        terremoto. Le mappe vengono aggiornate man mano che ulteriori  dati registrati dalle stazioni sismiche diventano  disponibili. Le mappe non hanno alcun valore ufficiale
-        e INGV declina qualsiasi responsabilità sull'utilizzo che viene fatto da un uso improprio dell'informazione in esse contenuta.
-        Questo sito utilizza la nuova configurazione per l'Italia del software ShakeMap descritta in <a href="scientificBackground.html">Scientific Background</a>.
-        Il sito della versione precedente e' raggiungibile al <a href="http://shakemap.ingv.it/shake">seguente link</a> e sara' aggiornato fino al 31/12/2020.<br/>
-	</p>
-
-	<p>
-        The maps of ground shaking - ShakeMap - published in this web site have been determined only for research purposes and provide preliminary and incomplete estimates of
-         the experienced shaking. They have been determined automatically from the instrumentally recorded data by the seismic stations and are updated as more data become
-         available. The maps do not have any official value and INGV declines any responsibility from an improper use of the information therein represented.
-         This site shows the shakemaps calculated using the configuration described in the <a href="scientificBackground.html">Scientific Background</a>. The previous version of the site is available at
-        at the <a href="http://shakemap.ingv.it/shake">following link</a> and it will be updated until 12/31/2020.
-	</p>
-      </small>
-
+        <div id="disclaimer"></div>
         <br/><br/>
         <h4> Latest events </h4>
 
         <!-- <div id="event_table" class="table-responsive-md archive_table"> -->
-        <div class="table-responsive" id="event_table">
-
-        </div>
-
-        <div style="width: 100%; height: auto; margin: 10px auto;">
-            <span>
-                <img id="contributorsLogo" style="width: 100%; height: auto;" />
-            </span>
+        <div class="table-responsive archive_table" id="event_table">
         </div>
     </div>
 
-    <!--
-    ###############################################
-    # Footer
-    ###############################################
-    -->
+     <div id="footer"></div>
 
-    <footer class="footer">
-        <div class="container">
-            <span id="footer_text" class="text-muted"></span>
-        </div>
-    </footer>
 
 
     <!-- Bootstrap core JavaScript
@@ -79,6 +39,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
@@ -86,11 +47,13 @@
     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
     <!--  My scripts -->
+
     <script src="./config.js"></script>
     <script src="./scripts/functions.js"></script>
 
+
     <script src="./events.js"></script>
-    <script src="./scripts/softwareVersion.js"></script>
+    <!-- <script src="./scripts/softwareVersion.js"></script> -->
     <script src="./scripts/scriptIndex.js"></script>
   </body>
 </html>
