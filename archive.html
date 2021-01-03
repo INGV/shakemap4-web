@@ -13,8 +13,10 @@
     <!-- Material Design for Bootstrap fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
 
+
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+
   </head>
 
 
@@ -48,16 +50,17 @@
       <button type="button" class="btn btn-outline-primary" id="staticButton" onclick="determine_viewer(1)">Static View</button>
 
       <div class="criteria_container">
-
           <small class="input_text">Select year &nbsp;</small>
           <select class="custom-select" id="selectYear" onchange="listEvents()">
           </select>
+
           <small class="input_text"> &nbsp;  &nbsp; Magnitude range  &nbsp;</small>
           <input type="text" class="mag_input" id="min_mag" placeholder="Minimum"></input>
-          &nbsp; <small class="input_text">-</small>&nbsp;
+          &nbsp;<small class="input_text">-</small>&nbsp;
           <input type="text" class="mag_input" id="max_mag" placeholder="Maximum"></input>
 
         &nbsp;&nbsp;<button type="button" class="btn btn-dark btn-raised" onclick="listEvents()">Sort</button>
+
       </div>
       <br/>
 
@@ -86,10 +89,9 @@
     <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
     <!--  My scripts -->
-    <script src="./events.js"></script>
+    <!-- <script src="./events.js"></script> -->
     <!-- <script src="./scripts/softwareVersion.js"></script> -->
     <script src="./scripts/scriptArchive.js"></script>
-
     <script src="./config.js"></script>
     <script src="./scripts/functions.js"></script>
 

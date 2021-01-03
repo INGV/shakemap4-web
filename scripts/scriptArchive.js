@@ -35,7 +35,8 @@ var Event = function (id, year, month, day, hour, minute, second, description, m
   list.push(this);
 };
 
-var orgLength = events.length;
+// var orgLength = events.length;
+var orgLength;
 
 // #################################################################
 // # Sorting by magnitude in table header
@@ -51,6 +52,7 @@ function magn_sort(num) {
 //# Getting list of years from which there are entries in archive,
 //# and putting them in selection boxes
 //##################################################################
+/*
 var yearsList = [];
 
 for (var i = 0; i < orgLength; i++) {
@@ -75,6 +77,9 @@ for (var i = 0; i < yearsLength; i++) {
 optionsYears += '<option value="5000">All</option>';
 
 document.getElementById('selectYear').innerHTML = optionsYears;
+*/
+
+
 
 //#################################################################
 //# Function to determine are events shown in Leaflet or
@@ -289,10 +294,50 @@ function listEvents () {
 // var events2 = getEventsList();
 // console.log(events2);
 
+var events
+fetch("./events.json")
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      events = data.map(function (o) {
+        o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);
+        return o;
+      });
+
+      orgLength = events.length;
+      var yearsList = [];
+
+      for (var i = 0; i < orgLength; i++) {
+        if (yearsList.indexOf(events[i].year) == -1) {
+          //indexOf returns -1 if value never occurs in an array
+          yearsList.push(events[i].year);
+        }
+      }
+
+      yearsList.sort(function(a, b) {
+        return b - a;
+      });
+
+      var yearsLength = yearsList.length;
+
+      var optionsYears;
+      for (var i = 0; i < yearsLength; i++) {
+        optionsYears +=
+            '<option value="' + yearsList[i] + '">' + yearsList[i] + '</option>';
+      }
+
+      optionsYears += '<option value="5000">All</option>';
+
+      document.getElementById('selectYear').innerHTML = optionsYears;
+
+      listEvents();
+    });
+
+/*
 var events = events.map(function (o) {
   o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);
   return o;
 });
-
-
 listEvents();
+*/
