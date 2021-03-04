@@ -120,6 +120,23 @@ function makeTable() {
   document.getElementById('event_table').innerHTML = myvar;
 }
 
+var events
+fetch("./events.json")
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      events = data.map(function (o) {
+        o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);
+        return o;
+      });
+      events.sort(function (a, b) {
+        return b.date - a.date;
+      });
+      makeTable();
+    });
+
+/*
 var events = events.map(function (o) {
   o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);
   return o;
@@ -130,3 +147,5 @@ events.sort(function (a, b) {
 });
 
 makeTable();
+*/
+
