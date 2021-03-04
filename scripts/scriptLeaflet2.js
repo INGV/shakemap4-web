@@ -191,11 +191,10 @@ function event_info() {
     epi_lon = info_input.longitude;
     magnitude = info_input.magnitude;
 
-    attr_div(info_input, 'input_content');
-    attr_div(json.output.uncertainty, 'motions_content');
-    attr_div(json.processing.ground_motion_modules, 'processing_content');
-
-    console.log(json);
+    // attr_div(info_input, 'input_content');
+    // attr_div(json.output.uncertainty, 'motions_content');
+    // attr_div(json.processing.ground_motion_modules, 'processing_content');
+    //
 
     show_epi(epi_lat, epi_lon, magnitude);
   });
@@ -459,4 +458,4 @@ stationList(map2, control2, false);
 dyfiList(control2);
 faultSurface(control2);
 
-var sidebar = L.control.sidebar('sidebar').addTo(map1);
+// var sidebar = L.control.sidebar('sidebar').addTo(map1);

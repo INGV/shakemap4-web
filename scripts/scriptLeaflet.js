@@ -110,7 +110,6 @@ function stationList() {
   );
 
   function show_stations (stations) {
-    console.log(stations);
     var stations_layer = L.geoJSON (stations, {
       pointToLayer: function (feature, latlng) {
         if (feature.properties.station_type == 'seismic') {
@@ -238,9 +237,9 @@ function event_info() {
     desc = info_input.event_description;
     or_time = info_input.origin_time;
 
-    attr_div(info_input, 'input_content');
-    attr_div(json.output.uncertainty, 'motions_content');
-    attr_div(json.processing.ground_motion_modules, 'processing_content');
+    // attr_div(info_input, 'input_content');
+    // attr_div(json.output.uncertainty, 'motions_content');
+    // attr_div(json.processing.ground_motion_modules, 'processing_content');
 
     ev_title(desc, or_time, magnitude, epi_lat, epi_lon, depth);
 
@@ -467,4 +466,4 @@ intensityOverlay();
 legend_box();
 
 
-var sidebar = L.control.sidebar('sidebar').addTo(mymap);
+// var sidebar = L.control.sidebar('sidebar').addTo(mymap);
