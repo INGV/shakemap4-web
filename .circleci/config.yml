@@ -30,11 +30,13 @@ jobs:
           name: Test dockers are up and running
           command: |
             cd Docker
+            docker ps
             docker-compose ps 
       - run:
           name: Test to process one event
           command: |
             cd Docker
+            docker-compose exec -T --user=laradock workspace bash -c 'ls -l /var/www' 
             docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
       - run:
           name: Test web request
