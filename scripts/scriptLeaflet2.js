@@ -209,7 +209,7 @@ function event_info() {
 
     var pulsingIcon = L.icon.pulse({
       iconSize: [10, 10],
-      color: 'red',
+      color: 'black',
       heartbeat: 3
     });
 

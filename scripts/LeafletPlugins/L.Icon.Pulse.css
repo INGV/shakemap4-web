@@ -7,10 +7,10 @@
     content: "";
     -webkit-border-radius: 100%;
     border-radius: 100%;
-    height: 300%;
-    width: 300%;
+    height: 600%;
+    width: 600%;
     position: absolute;
-    margin: -100% 0 0 -100%;
+    margin: -250% 0 0 -250%;
 
 }
 

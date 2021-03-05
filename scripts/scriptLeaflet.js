@@ -250,18 +250,32 @@ function event_info() {
     mymap.setView(new L.LatLng(latitude, longitude), 8);
 
     var pulsingIcon = L.icon.pulse({
-      iconSize: [10, 10],
-      color: 'red',
-      heartbeat: 3
+      iconSize: [4, 4],
+      color: 'black',
+      heartbeat: 3,
     });
 
     L.marker([latitude, longitude], {
       icon: pulsingIcon
     })
+      .addTo(mymap);
+
+    var thisIcon = new L.Icon({
+        iconUrl: '../images/epicenterIconStar.png',
+        iconSize: [16, 16], // [x, y] in pixels
+        iconAnchor: [8, 8]
+    });
+
+    L.marker([latitude, longitude], {
+      icon: thisIcon
+    })
       .addTo(mymap)
       .bindPopup('Latitude:' + latitude + '° <br/>Longitude: ' + longitude +
         '° <br/>Magnitude: ' + magnitude + '<br/>Depth: ' + depth + ' km');
-  }
+
+  };
+
+
 }
 
 // ##################################################
