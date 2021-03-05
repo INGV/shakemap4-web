@@ -1,6 +1,12 @@
-version: 2
+version: 2.1
+executors:
+  docker-publisher:
+    #environment:
+    #  IMAGE_NAME: ingv/shakemap4-web
+    docker:
+      - image: circleci/buildpack-deps:stretch
 jobs:
-  build_and_test:
+  build-and-test:
     machine:
       image: ubuntu-1604:201903-01
     steps:
@@ -19,9 +25,10 @@ jobs:
             cd Docker 
             docker-compose up -d
       - run:
-          name: Test dockers are up and running
+          name: Test that dockers are up and running
           command: |
             cd Docker
+            docker ps
             docker-compose ps 
       - run:
           name: Test to process one event
@@ -34,41 +41,46 @@ jobs:
             NGINX_HOST_HTTP_PORT=$(grep "NGINX_HOST_HTTP_PORT" Docker/.env | awk -F"=" '{print $2}' )
             wget -O /tmp/test.html "http://127.0.0.1:${NGINX_HOST_HTTP_PORT}"
 
-  test_version_match:
-    docker:
-      - image: docker:18.06.0-ce
-    steps:
-      - checkout
-      - run:
-          command: |
-            VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
-            VERSION_JS_FILE=$( grep "softwareVersion" ./scripts/softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
-            echo "VERSION_PUBLICCODE=${VERSION_PUBLICCODE}"
-            echo "VERSION_JS_FILE=${VERSION_JS_FILE}"
-            if [[ ${VERSION_PUBLICCODE} != ${VERSION_JS_FILE} ]]; then exit 1; fi;
-            
-  test_publiccode:
-    docker:
-      - image: docker:18.06.0-ce 
+  test-version-match:
+    executor: docker-publisher
+    #docker:
+    #  - image: docker:18.06.0-ce
     steps:
       - checkout
       - setup_remote_docker
-      - run: 
+      - run:
+          command: |
+            VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            VERSION_JS_FILE=$( grep "var softwareVersion" ./scripts/softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            echo "VERSION_PUBLICCODE=${VERSION_PUBLICCODE}"
+            echo "VERSION_JS_FILE=${VERSION_JS_FILE}"
+            if [[ "${VERSION_PUBLICCODE}" != "${VERSION_JS_FILE}" ]]; then exit 1; fi;
+            
+  test-publiccode:
+    executor: docker-publisher
+    #docker:
+    #  - image: docker:18.06.0-ce
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
           # https://github.com/italia/publiccode-parser-go
           name: Validate publiccode file
           command: |
+            echo "CIRCLE_PROJECT_USERNAME=$CIRCLE_PROJECT_USERNAME"
+            echo "CIRCLE_PROJECT_REPONAME=$CIRCLE_PROJECT_REPONAME"
             ### CircleCI cannot mount folder: https://circleci.com/docs/2.0/building-docker-images/#mounting-folders
             # create a dummy container which will hold a volume with config
             docker create -v /publiccode_folder --name myfolder alpine:3.4 /bin/true
             # copy a config file into this volume
             docker cp publiccode.yml myfolder:/publiccode_folder
             # start an application container using this volume
-            docker run --rm --volumes-from myfolder italia/publiccode-parser-go publiccode_folder/publiccode.yml 
-      
+            docker run --rm --volumes-from myfolder italia/publiccode-parser-go --remote-base-url "https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/master" publiccode_folder/publiccode.yml
+
 workflows:
-  version: 2
-  shakemap4-web-workflow:
+  version: 2.1
+  myWorkflow:
     jobs:
-      - build_and_test
-      - test_version_match
-      - test_publiccode
+      - build-and-test
+      - test-version-match
+      - test-publiccode
