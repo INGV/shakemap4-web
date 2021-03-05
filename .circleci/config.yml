@@ -93,8 +93,8 @@ jobs:
 #            docker run --rm --volumes-from myfolder italia/publiccode-parser-go publiccode_folder/publiccode.yml 
       
 workflows:
-  version: 2
-  shakemap4-web-workflow:
+  version: 2.1
+  myWorkflow:
     jobs:
       - build_and_test
       - test_version_match
