@@ -51,10 +51,10 @@ jobs:
       - run:
           command: |
             VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
-            VERSION_JS_FILE=$( grep "softwareVersion" ./scripts/softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            VERSION_JS_FILE=$( grep "var softwareVersion" ./scripts/softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
             echo "VERSION_PUBLICCODE=${VERSION_PUBLICCODE}"
             echo "VERSION_JS_FILE=${VERSION_JS_FILE}"
-            if [[ ${VERSION_PUBLICCODE} != ${VERSION_JS_FILE} ]]; then exit 1; fi;
+            if [[ "${VERSION_PUBLICCODE}" != "${VERSION_JS_FILE}" ]]; then exit 1; fi;
             
   test-publiccode:
     executor: docker-publisher
@@ -77,24 +77,6 @@ jobs:
             # start an application container using this volume
             docker run --rm --volumes-from myfolder italia/publiccode-parser-go --remote-base-url "https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/master" publiccode_folder/publiccode.yml
 
-#  test_publiccode:
-#    docker:
-#      - image: docker:18.06.0-ce 
-#    steps:
-#      - checkout
-#      - setup_remote_docker
-#      - run: 
-#          # https://github.com/italia/publiccode-parser-go
-#          name: Validate publiccode file
-#          command: |
-#            ### CircleCI cannot mount folder: https://circleci.com/docs/2.0/building-docker-images/#mounting-folders
-#            # create a dummy container which will hold a volume with config
-#            docker create -v /publiccode_folder --name myfolder alpine:3.4 /bin/true
-#            # copy a config file into this volume
-#            docker cp publiccode.yml myfolder:/publiccode_folder
-#            # start an application container using this volume
-#            docker run --rm --volumes-from myfolder italia/publiccode-parser-go publiccode_folder/publiccode.yml 
-      
 workflows:
   version: 2.1
   myWorkflow:
