@@ -98,4 +98,4 @@ workflows:
     jobs:
       - build_and_test
       - test_version_match
-      - test_publiccode
+      - test-publiccode
