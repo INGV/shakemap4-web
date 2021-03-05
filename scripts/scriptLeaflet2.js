@@ -190,16 +190,17 @@ function event_info() {
     epi_lat = info_input.latitude;
     epi_lon = info_input.longitude;
     magnitude = info_input.magnitude;
+    depth = info_input.depth;
 
     // attr_div(info_input, 'input_content');
     // attr_div(json.output.uncertainty, 'motions_content');
     // attr_div(json.processing.ground_motion_modules, 'processing_content');
     //
 
-    show_epi(epi_lat, epi_lon, magnitude);
+    show_epi(epi_lat, epi_lon, magnitude, depth);
   });
 
-  function show_epi(latitude, longitude, magnitude) {
+  function show_epi(latitude, longitude, magnitude, depth) {
     map1.setView(new L.LatLng(latitude, longitude), 8);
     map2.setView(new L.LatLng(latitude, longitude), 8);
 
@@ -208,7 +209,7 @@ function event_info() {
     map2.sync(map1);
 
     var pulsingIcon = L.icon.pulse({
-      iconSize: [10, 10],
+      iconSize: [4, 4],
       color: 'black',
       heartbeat: 3
     });
@@ -216,14 +217,34 @@ function event_info() {
     L.marker([latitude, longitude], {
         icon: pulsingIcon
       })
-      .addTo(map1)
-      .bindPopup('Latitude:' + latitude + ' <br/>Longitude: ' + longitude + '<br/>Magnitude:' + magnitude);
+      .addTo(map1);
 
     L.marker([latitude, longitude], {
         icon: pulsingIcon
       })
+      .addTo(map2);
+
+    var starIcon = new L.Icon({
+          iconUrl: '../images/epicenterIconStar.png',
+          iconSize: [16, 16], // [x, y] in pixels
+          iconAnchor: [8, 8]
+      });
+
+    L.marker([latitude, longitude], {
+        icon: starIcon
+      })
+        .addTo(map1)
+        .bindPopup('Latitude:' + latitude + '° <br/>Longitude: ' + longitude +
+          '° <br/>Magnitude: ' + magnitude + '<br/>Depth: ' + depth + ' km');
+
+
+    L.marker([latitude, longitude], {
+      icon: starIcon
+    })
       .addTo(map2)
-      .bindPopup('Latitude:' + latitude + ' <br/>Longitude: ' + longitude + '<br/>Magnitude:' + magnitude);
+      .bindPopup('Latitude:' + latitude + '° <br/>Longitude: ' + longitude +
+        '° <br/>Magnitude: ' + magnitude + '<br/>Depth: ' + depth + ' km');
+
   }
 }
 

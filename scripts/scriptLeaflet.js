@@ -273,6 +273,7 @@ function event_info() {
       .bindPopup('Latitude:' + latitude + '° <br/>Longitude: ' + longitude +
         '° <br/>Magnitude: ' + magnitude + '<br/>Depth: ' + depth + ' km');
 
+
   };
 
 
