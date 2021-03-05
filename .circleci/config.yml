@@ -6,9 +6,10 @@ executors:
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
-  build_and_test:
-    machine:
-      image: ubuntu-1604:201903-01
+  build-and-test:
+    executor: docker-publisher
+    #machine:
+    #  image: ubuntu-1604:201903-01
     steps:
       - checkout
       - run:
@@ -96,6 +97,6 @@ workflows:
   version: 2.1
   myWorkflow:
     jobs:
-      - build_and_test
+      - build-and-test
       - test_version_match
       - test-publiccode
