@@ -1,15 +1,14 @@
 version: 2.1
 executors:
   docker-publisher:
-    environment:
-      IMAGE_NAME: ingv/shakemap4-web
+    #environment:
+    #  IMAGE_NAME: ingv/shakemap4-web
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
   build-and-test:
-    executor: docker-publisher
-    #machine:
-    #  image: ubuntu-1604:201903-01
+    machine:
+      image: ubuntu-1604:201903-01
     steps:
       - checkout
       - setup_remote_docker
@@ -27,7 +26,7 @@ jobs:
             cd Docker 
             docker-compose up -d
       - run:
-          name: Test dockers are up and running
+          name: Test that dockers are up and running
           command: |
             cd Docker
             docker ps
@@ -36,7 +35,6 @@ jobs:
           name: Test to process one event
           command: |
             cd Docker
-            docker-compose exec -T --user=laradock workspace bash -c 'ls -l /var/www' 
             docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
       - run:
           name: Test web request
@@ -44,9 +42,10 @@ jobs:
             NGINX_HOST_HTTP_PORT=$(grep "NGINX_HOST_HTTP_PORT" Docker/.env | awk -F"=" '{print $2}' )
             wget -O /tmp/test.html "http://127.0.0.1:${NGINX_HOST_HTTP_PORT}"
 
-  test_version_match:
-    docker:
-      - image: docker:18.06.0-ce
+  test-version-match:
+    executor: docker-publisher
+    #docker:
+    #  - image: docker:18.06.0-ce
     steps:
       - checkout
       - run:
@@ -101,5 +100,5 @@ workflows:
   myWorkflow:
     jobs:
       - build-and-test
-      - test_version_match
+      - test-version-match
       - test-publiccode
