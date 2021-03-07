@@ -1,11 +1,23 @@
-$(document).ready(function() {
-  $('table tbody tr').click(function() {
-    window.location = $(this).data('href');
-    return false;
-  });
+
+function initTableClick() {
+  $(document).ready(function() {
+    $('table tbody tr').click(function() {
+      window.location = $(this).data('href');
+      return false;
+    });
   // Note: the following function resides in teh file function.js
   include_disclaimer()
-});
+  });
+}
+
+// $(document).ready(function() {
+//   $('table tbody tr').click(function() {
+//     window.location = $(this).data('href');
+//     return false;
+//   });
+//   // Note: the following function resides in teh file function.js
+//   include_disclaimer()
+// });
 
 function bBox_check(event_data) {
   // minLat = 30;
@@ -118,6 +130,8 @@ function makeTable() {
   myvar += '</tbody>' + '</table>';
 
   document.getElementById('event_table').innerHTML = myvar;
+
+  initTableClick()
 }
 
 var events
@@ -148,4 +162,3 @@ events.sort(function (a, b) {
 
 makeTable();
 */
-
