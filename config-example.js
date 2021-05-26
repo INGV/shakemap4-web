@@ -20,5 +20,8 @@ var config_data = {
     disclaimer: {
         show: true,
         file: 'inc/disclaimer1.html',
+    },
+    vs30gridFile: {
+        file: 'additional_files/Italy_vs30.zip',
     }
 }
