@@ -139,7 +139,25 @@ function listEvents () {
           events[i].date,
           showEvents
         );
-      }
+      };
+      if (selectedYear == 4000) {
+          if (events[i].year < 1972) {
+          new Event(
+            events[i].id,
+            events[i].year,
+            events[i].month,
+            events[i].day,
+            events[i].hour,
+            events[i].minute,
+            events[i].second,
+            events[i].description,
+            events[i].magnitude,
+            events[i].depth,
+            events[i].date,
+            showEvents
+          );
+        };
+      };
     }
   } else {
     showEvents = events;
@@ -323,11 +341,15 @@ fetch("./events.json")
 
       var optionsYears;
       for (var i = 0; i < yearsLength; i++) {
-        optionsYears +=
-            '<option value="' + yearsList[i] + '">' + yearsList[i] + '</option>';
+        if (yearsList[i] > 1971) {
+          optionsYears +=
+              '<option value="' + yearsList[i] + '">' + yearsList[i] + '</option>';
+          };
       }
 
+      optionsYears += '<option value="4000">Historic events</option>';
       optionsYears += '<option value="5000">All</option>';
+
 
       document.getElementById('selectYear').innerHTML = optionsYears;
 
