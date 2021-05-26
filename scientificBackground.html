@@ -56,6 +56,11 @@
                 href="https://ingvterremoti.com/2021/05/25/il-nuovo-sito-delle-mappe-dello-scuotimento-sismico-shakemaps/">here</a> (in Italian).
         </p>
         <br />
+        <p>
+            The Vs30 grid is available for download as a zip file <a
+                href="#" id="Vs30fileLink">here</a>.
+        </p>
+        <br />
         <div style="text-align: left;">
             <h6>Bibliography:</h6>
             <i>
@@ -72,7 +77,10 @@
                 in Southern Califiornia. Earthquake Spectra, 15(3), 537–555.
             </i>
         </div>
+
+
     </div>
+
 
 
     <div id="footer"></div>
@@ -94,6 +102,12 @@
     <!-- <script src="./scripts/softwareVersion.js"></script> -->
 
     <script src="./config.js"></script>
+    <script>
+      window.addEventListener('load', function() {
+          document.getElementById('Vs30fileLink').href = config_data.vs30gridFile.file;
+        });
+    </script>
+
     <script src="./scripts/functions.js"></script>
 
 </body>
