@@ -8,7 +8,7 @@ releaseDate: '2021-06-24'
 url: 'https://github.com/INGV/shakemap4-web'
 logo: images/ingv_logo_text_two_lines.png
 landingURL: 'https://github.com/INGV/shakemap4-web'
-softwareVersion: 1.16.0
+softwareVersion: v1.16.0
 developmentStatus: stable
 softwareType: standalone/other
 platforms:
