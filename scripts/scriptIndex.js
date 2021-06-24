@@ -1,11 +1,23 @@
-$(document).ready(function() {
-  $('table tbody tr').click(function() {
-    window.location = $(this).data('href');
-    return false;
-  });
+
+function initTableClick() {
+  $(document).ready(function() {
+    $('table tbody tr').click(function() {
+      window.location = $(this).data('href');
+      return false;
+    });
   // Note: the following function resides in teh file function.js
   include_disclaimer()
-});
+  });
+}
+
+// $(document).ready(function() {
+//   $('table tbody tr').click(function() {
+//     window.location = $(this).data('href');
+//     return false;
+//   });
+//   // Note: the following function resides in teh file function.js
+//   include_disclaimer()
+// });
 
 function bBox_check(event_data) {
   // minLat = 30;
@@ -118,8 +130,27 @@ function makeTable() {
   myvar += '</tbody>' + '</table>';
 
   document.getElementById('event_table').innerHTML = myvar;
+
+  initTableClick()
 }
 
+var events
+fetch("./events.json")
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      events = data.map(function (o) {
+        o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);
+        return o;
+      });
+      events.sort(function (a, b) {
+        return b.date - a.date;
+      });
+      makeTable();
+    });
+
+/*
 var events = events.map(function (o) {
   o.date = new Date(o.year, Number(o.month-1), o.day, o.hour, o.minute, o.second, 0);
   return o;
@@ -130,3 +161,4 @@ events.sort(function (a, b) {
 });
 
 makeTable();
+*/

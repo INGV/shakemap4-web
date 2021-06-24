@@ -64,7 +64,7 @@ def run_server():
 #        httpd.serve_forever()
 
 def main():
-    events_to_json()
+    #events_to_json()
     run_server()
     
 if __name__ == "__main__":

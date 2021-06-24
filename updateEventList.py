@@ -119,12 +119,16 @@ def write_list_to_file(event_list):
     """
     ## This next line is written so the file is saved as a javascript variable
     ## so the ajax call in the website could be avoided
-    with open('events.js.tmp', 'w') as f:
-        print('var events =', file=f)
-    with open('events.js.tmp', 'a') as outfile:
-        json.dump(event_list, outfile)
-        print(';', file=outfile)
-    shutil.copyfile('events.js.tmp', 'events.js')
+    # with open('events.js.tmp', 'w') as f:
+    #     print('var events =', file=f)
+    # with open('events.js.tmp', 'a') as outfile:
+    #     json.dump(event_list, outfile)
+    # shutil.copyfile('events.js.tmp', 'events.js')
+    with open('events.json', 'w') as f:
+        json.dump(event_list, f, indent = 4)
+
+
+
 
 # not used anymore
 def write_version_file():
@@ -178,32 +182,48 @@ def do_for_all_events(bBox):
     write_list_to_file(event_list)
     #write_version_file() Sergio ... not used anymore
 
-def update_event_list(eventParameters, event_id, eventAction='add'):
-    if os.path.isfile('events.js'):
-        shutil.copyfile('events.js', 'events.js.tmp')
-        with open('events.js.tmp', 'r') as f:
-            events_list = json.loads(f.readlines()[1])
+# def update_event_list(eventParameters, event_id, eventAction='add'):
+#
+#     if os.path.isfile('events.json'):
+#         with open('events.json') as json_file:
+#             events_list = json.load(json_file)
+#         if not any(d['id'] == event_id for d in events_list) and eventAction=='add':
+#             events_list.append(eventParameters)
+#         elif eventAction == 'del':
+#             if not any(d['id'] == event_id for d in events_list):
+#                 print('Event ' + event_id + ' does not exist in the event list.' )
+#             else:
+#                 events_list = [x for x in events_list if x['id']!=str(event_id)]
+#                 print('Event ' + event_id + ' deleted from event list.')
+#         else:
+#             events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
+#     else:
+#         if eventAction=='del':
+#             print('The event list file does not exist.')
+#             return
+#         events_list = []
+#         events_list.append(eventParameters)
+#         print('Nešto ovdje')
+#     write_list_to_file(events_list)
 
-        if not any(d['id'] == event_id for d in events_list) and eventAction=='add':
+def update_event_list(eventParameters, event_id, eventAction='add_or_update'):
+    events_list = []
+    if os.path.isfile('events.json'):
+        with open('events.json') as json_file:
+            events_list = json.load(json_file)
+    event_index = next((i for i, n in enumerate(events_list) if n['id'] == event_id), None)
+    if eventAction=='add_or_update':
+        if event_index == None:
             events_list.append(eventParameters)
-        elif eventAction == 'del':
-            if not any(d['id'] == event_id for d in events_list):
-                print('Event ' + event_id + ' does not exist in the event list.' )
-            else:
-                events_list = [x for x in events_list if x['id']!=str(event_id)]
-                print('Event ' + event_id + ' deleted from event list.')
         else:
-            events_list = [eventParameters if x['id']==str(event_id) else x for x in events_list]
-
-    else:
-        if eventAction=='del':
-            print('The event list file does not exist.')
-            return
-        events_list = []
-        events_list.append(eventParameters)
-        print('Nešto ovdje')
+            events_list[event_index] = eventParameters
+    elif eventAction == 'del':
+        if event_index == None:
+            print('Event ' + event_id + ' does not exist in the event list.' )
+        else:
+            events_list.pop(event_index)
+            print('Event ' + event_id + ' deleted from event list.')
     write_list_to_file(events_list)
-
 
 def do_for_one_event(event_id, bBox):
     print('Processing event: ' + event_id)
