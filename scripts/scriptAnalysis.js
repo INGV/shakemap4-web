@@ -413,10 +413,18 @@ function changePlot() {
   var selType = document.getElementById('selectRegrType');
   var selectedType = selType.options[selType.selectedIndex].value;
 
-  var showDYFI = document.getElementById('dyfiCheck').checked;
+  showDYFI = document.getElementById('dyfiCheck').checked;
 
   stationList(true, selectedType, showDYFI);
 };
-var eventid = getURLParameter('eventid');
 
-stationList(false, 'rock');
+// #######################
+var eventid = getURLParameter('eventid');
+var eventYear = parseInt(getURLParameter('eventyear'));
+
+if (eventYear < 1972) {
+  document.getElementById("dyfiCheck").checked = true;
+}
+var showDYFI = document.getElementById('dyfiCheck').checked;
+
+stationList(false, 'rock', showDYFI);
