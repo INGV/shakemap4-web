@@ -37,7 +37,7 @@ function open_download() {
 // Open the Analysis page for event
 //
 function open_analysis() {
-  window.location = './viewAnalysis.html?eventid=' + eventid;
+  window.location = './viewAnalysis.html?eventid=' + eventid + '&eventyear=' + eventYear;
 }
 
 // #####################################################
@@ -51,7 +51,7 @@ function open_meta() {
 // Open the StationList page for event
 //
 function open_stations() {
-  window.location = './stationList.html?eventid=' + eventid;
+  window.location = './stationList.html?eventid=' + eventid + '&eventyear=' + eventYear;
 }
 
 // #####################################################
@@ -236,7 +236,7 @@ function event_info() {
     depth = info_input.depth;
     desc = info_input.event_description;
     or_time = info_input.origin_time;
-
+    eventYear = info_input.origin_time.substring(0,4);
     // attr_div(info_input, 'input_content');
     // attr_div(json.output.uncertainty, 'motions_content');
     // attr_div(json.processing.ground_motion_modules, 'processing_content');
@@ -466,8 +466,9 @@ var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
 }).addTo(mymap);
 
-
+var eventYear = 3000;
 event_info();
+
 show_intensity();
 show_contours('cont_pga.json', 'PGA');
 show_contours('cont_pgv.json', 'PGV');

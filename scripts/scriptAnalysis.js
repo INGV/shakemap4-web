@@ -95,14 +95,12 @@ function plot_data (data, regrArr, comp_id, newPlot) {
     var y = d3.scaleLog().range([height, 0]);
     var tickNumber = 4;
   };
-
-
 // Define axes domains
   var distance_max = Math.max(...data.map(o => o.distance), 0)
   var distance_minData = Math.min(...data.map(o => o.distance), distance_max)
 
   var distance_min = 1;
-  if (distance_minData < 1) {
+  if (distance_minData < 2.05) {
     distance_min = 1;
   } else if (distance_minData < 10){
     distance_min = distance_minData-1;
@@ -127,7 +125,6 @@ function plot_data (data, regrArr, comp_id, newPlot) {
 
   x.domain([Math.round(distance_min), distance_max]);
   y.domain([yMin-0.1*yMin, yMax+0.1*yMax]);
-
 
 // Regression plot
 if (sizeRegr > 0) {
@@ -416,10 +413,18 @@ function changePlot() {
   var selType = document.getElementById('selectRegrType');
   var selectedType = selType.options[selType.selectedIndex].value;
 
-  var showDYFI = document.getElementById('dyfiCheck').checked;
+  showDYFI = document.getElementById('dyfiCheck').checked;
 
   stationList(true, selectedType, showDYFI);
 };
-var eventid = getURLParameter('eventid');
 
-stationList(false, 'rock');
+// #######################
+var eventid = getURLParameter('eventid');
+var eventYear = parseInt(getURLParameter('eventyear'));
+
+if (eventYear < 1972) {
+  document.getElementById("dyfiCheck").checked = true;
+}
+var showDYFI = document.getElementById('dyfiCheck').checked;
+
+stationList(false, 'rock', showDYFI);
