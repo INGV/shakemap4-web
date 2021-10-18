@@ -29,15 +29,15 @@ $ cp ./Docker/env-example ./Docker/.env
 Set `NGINX_HOST_HTTP_PORT` in `./Docker/.env` file (default port is `8091`).
 
 ### Set 'data' path
-Set `SHAKEMAP_DATA_PATH` with the absolute `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
+Set `SHAKEMAP_DATA_PATH` in `./Docker/.env` with the absolute `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
 
-### !!! On Linux machine and no 'root' user !!!
-To run containers as *linux-user* (intead of `root`), set `WORKSPACE_PUID` and `WORKSPACE_PGID` in `./Docker/.env` file with:
-- `WORKSPACE_PUID` should be equal to the output of `id -u` command
-- `WORKSPACE_PGID` should be equal to the output of `id -g` command
+### Set `uid` and `gid`
+To run containers as *linux-user* (intead of `root`), set `ENV_UID` and `ENV_GID` in `./Docker/.env` file with:
+- `ENV_UID` should be equal to the output of `id -u` command
+- `ENV_GID` should be equal to the output of `id -g` command
 
 ## Configure web page
-Copy `config-example.js` to `config.js`:
+Copy `./config-example.js` to `./config.js`:
 ```
 $ cp config-example.js config.js
 ```
@@ -45,6 +45,14 @@ and update params if you need.
 
 ## Start shakemap4-web
 First, build docker images:
+
+```
+$ cd Docker
+$ docker-compose build --no-cache
+$ cd ..
+```
+
+then, starts docker containers:
 
 ```
 $ cd Docker
