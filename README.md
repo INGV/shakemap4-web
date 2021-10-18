@@ -70,28 +70,21 @@ default is:
 If all works, you should see ShakeMap4-Web web page.
 
 ### Under the hood
-*ShakeMap4-Web* project runs 3 containers:
-- *nginx* and *php-fpm*: are used to implement web server
+*ShakeMap4-Web* project runs 2 containers:
+- *nginx*: is used to implement web server
 - *workspace*: is used to implements managment script/tools like `wget`, `crontab`, etc...
 
 The *workspace* container, implements a crontab file to run every minute the script `crontabScriptToUpdateEvents.sh`; this script checks the `SHAKEMAP_DATA_PATH` path (set previously) to find all `<eventid>` to process, modified in the last 2 days. The crontab runs every minute.
 
 You can also runs the update process by hand with command:
-#### !!! On Linux machine and no 'root' user !!!
 ```
 $ cd Docker
-$ docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
-$ cd ..
-```
-#### !!! Others !!!
-```
-$ cd Docker
-$ docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
+$ docker-compose exec -T --user=shakeweb workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
 $ cd ..
 ```
 
 ## Restart containers at boot
-To restart the containers automatically at boot, insert into `crontab` the lines:
+To restart the containers automatically at boot, insert into `crontab` of your server, the lines:
 ```
 # Restart shakemap4-web
 @reboot (sleep 30s ; cd <absolute_path>/shakemap4-web/Docker ; /usr/local/bin/docker-compose up -d )&
@@ -138,15 +131,15 @@ To change the banners and logo images (e.g. the INGV banner that can be seen on 
 ![alt text](images/screenshot_2.png)
 
 ## Thanks to
-This project uses the [Laradock](https://github.com/laradock/laradock) idea to start docker containers.   
-This  work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
+This work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
 
 ## Contribute
 Please, feel free to contribute.
 
 ## Author
-(c) 2019 Dario Jozinović dario.jozinovic[at]ingv.it \
-(c) 2019 Valentino Lauciani valentino.lauciani[at]ingv.it
+(c) 2021 Dario Jozinović dario.jozinovic[at]ingv.it \
+(c) 2021 Valentino Lauciani valentino.lauciani[at]ingv.it
+(c) 2021 Sergio Bruni sergio.bruni[at]ingv.it
 
 
 Istituto Nazionale di Geofisica e Vulcanologia, Italia
