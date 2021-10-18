@@ -34,7 +34,7 @@ jobs:
           name: Test to process one event
           command: |
             cd Docker
-            docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
+            docker-compose exec -T --user=shakeweb workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=39481424' 
       - run:
           name: Test web request
           command: |
