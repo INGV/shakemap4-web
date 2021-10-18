@@ -13,6 +13,7 @@ services:
       context: ./nginx
     volumes:
       - ../:/var/www:cached
+      - ${SHAKEMAP_DATA_PATH}:/var/www/data:cached
       - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
       - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
     ports:
