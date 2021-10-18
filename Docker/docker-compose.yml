@@ -14,7 +14,7 @@ services:
     volumes:
       - ../:/var/www:cached
       - ${SHAKEMAP_DATA_PATH}:/var/www/data:cached
-      - ./logs/nginx/:/var/log/nginx
+      - ./log/nginx/:/var/log/nginx
       - ./nginx/sites/:/etc/nginx/sites-available
     ports:
       - "${NGINX_HOST_HTTP_PORT}:80"
@@ -30,7 +30,7 @@ services:
       context: ./workspace
     volumes:
       - ../:/var/www:cached
-      - ./logs/workspace/:/var/log/nginx
+      - ./log/workspace/:/var/log/workspace
       - ${SHAKEMAP_DATA_PATH}:/var/www/data:cached
     tty: true
     env_file:

@@ -10,7 +10,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Set User and Group variabls
 ENV GROUP_NAME=shakemweb
 ENV USER_NAME=shakeweb
-ENV HOMEDIR_USER=/home/${USER_NAME}
+#ENV HOMEDIR_USER=/home/${USER_NAME}
+ENV HOMEDIR_USER=/var/www
 
 # Set bash as shell
 SHELL ["/bin/bash", "-c"]
@@ -97,10 +98,16 @@ RUN \
 # adduser -S -h ${HOMEDIR_USER} -G ${GROUP_NAME} -s /bin/bash ${USER_NAME}; \
 # adduser --uid ${ENV_UID} --home ${HOMEDIR_USER} --gid ${ENV_GID} --shell /bin/bash ${USER_NAME}; \
 
-RUN mkdir ${HOMEDIR_USER}
+# Copy 'logrotate' config file
+COPY logrotate/workspace /etc/logrotate.d/
+
+# Set user log
+#RUN mkdir /var/log/workspace \
+#    && chown -R shakeweb:shakeweb /var/log/workspace
 
 
 # Set default work directory
+USER shakeweb
 WORKDIR /var/www
 
 
