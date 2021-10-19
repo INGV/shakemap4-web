@@ -8,10 +8,10 @@ ENV FAKE_CHROOT 1
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Set User and Group variabls
-ENV GROUP_NAME=shakemweb
+ENV GROUP_NAME=shakeweb
 ENV USER_NAME=shakeweb
-#ENV HOMEDIR_USER=/home/${USER_NAME}
-ENV HOMEDIR_USER=/var/www
+ENV HOMEDIR_USER=/home/${USER_NAME}
+#ENV HOMEDIR_USER=/var/www
 
 # Set bash as shell
 SHELL ["/bin/bash", "-c"]
@@ -29,6 +29,8 @@ RUN apt-get clean \
     apt-utils \
     vim \
     git \
+    cron \
+    procps \
     && apt-get clean
 
 # Install python
@@ -42,15 +44,10 @@ ARG TZ=UTC
 ENV TZ ${TZ}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Copy crontab
+# Copy and run crontab
 COPY ./crontab /etc/cron.d
-
-# Set .bashrc for root user
-RUN echo "" >> /root/.bashrc \
-    && echo "##################################" >> /root/.bashrc \
-    && echo "alias ll='ls -l --color'" >> /root/.bashrc \
-    && echo "" >> /root/.bashrc \
-    && echo "export LC_ALL=\"C\"" >> /root/.bashrc 
+RUN chmod -R 644 /etc/cron.d
+RUN crontab /etc/cron.d/shakeweb
 
 # Set default User and Group id from arguments
 # If UID and/or GID are equal to zero then new user and/or group are created
@@ -98,8 +95,28 @@ RUN \
 # adduser -S -h ${HOMEDIR_USER} -G ${GROUP_NAME} -s /bin/bash ${USER_NAME}; \
 # adduser --uid ${ENV_UID} --home ${HOMEDIR_USER} --gid ${ENV_GID} --shell /bin/bash ${USER_NAME}; \
 
-# Copy 'logrotate' config file
+# Create user home dir
+RUN mkdir ${HOMEDIR_USER}
+
+# Copy logrotate
 COPY logrotate/workspace /etc/logrotate.d/
+
+# Set .bashrc for root user
+RUN echo "" >> /root/.bashrc \
+    && echo "##################################" >> /root/.bashrc \
+    && echo "alias ll='ls -l --color'" >> /root/.bashrc \
+    && echo "" >> /root/.bashrc \
+    && echo "export LC_ALL=\"C\"" >> /root/.bashrc
+
+# Copy .bashrc to user
+RUN cp /root/.bashrc ${HOMEDIR_USER} \
+    && chown -R ${USER_NAME}:${GROUP_NAME} ${HOMEDIR_USER}/.bashrc 
+
+# Change user
+#USER shakeweb
+
+# Set 'crontab' 
+#RUN crontab -l | { cat; echo "* * * * * (cd /var/www && echo "-----START-----" && time /usr/bin/flock --verbose -n /tmp/crontabScriptToUpdateEvents.sh.lock /var/www/crontabScriptToUpdateEvents.sh ; echo "-----END-----") >> /var/log/workspace/crontabScriptToUpdateEvents.sh.log 2>&1"; } | crontab -
 
 # Set user log
 #RUN mkdir /var/log/workspace \
@@ -107,12 +124,11 @@ COPY logrotate/workspace /etc/logrotate.d/
 
 
 # Set default work directory
-USER shakeweb
 WORKDIR /var/www
 
 
 
 
 
-
-#CMD [ "/usr/sbin/crond", "-f", "-d8" ]
+#CMD ["cron", "-f"]
+#CMD [ "/usr/sbin/cron", "-f", "-l 2" ]

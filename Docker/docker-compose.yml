@@ -28,6 +28,8 @@ services:
     image: shakemap4-web_image_workspace
     build:
       context: ./workspace
+    command: >
+      bash -c "/usr/sbin/cron -f -l 2"
     volumes:
       - ../:/var/www:cached
       - ./log/workspace/:/var/log/workspace
