@@ -36,7 +36,7 @@ services:
         ENV_GID: ${ENV_GID}
     volumes:
       - ../:/var/www:cached
-      - ./log/workspace/:/var/log/workspace
+      #- ./log/workspace/:/var/log/workspace
       - ${SHAKEMAP_DATA_PATH}:/var/www/data:cached
     tty: false
     env_file:

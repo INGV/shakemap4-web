@@ -1,4 +1,4 @@
-/var/log/workspace/*.log {
+/var/www/Docker/log/workspace/*.log {
         daily
         missingok
         rotate 32
