@@ -26,11 +26,12 @@ RUN echo root:toor | chpasswd
 RUN apt-get clean \
     && apt-get update -yqq \
     && apt-get install -yqq \
-    apt-utils \
-    vim \
-    git \
-    cron \
-    procps \
+      apt-utils \
+      vim \
+      git \
+      cron \
+      procps \
+      sudo \
     && apt-get clean
 
 # Install python
@@ -112,8 +113,20 @@ RUN echo "" >> /root/.bashrc \
 RUN cp /root/.bashrc ${HOMEDIR_USER} \
     && chown -R ${USER_NAME}:${GROUP_NAME} ${HOMEDIR_USER}/.bashrc 
 
+#  Add new user shakeweb to sudo group
+RUN adduser shakeweb sudo
+
+# Ensure sudo group users are not 
+# asked for a password when using 
+# sudo command by ammending sudoers file
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Copy entrypoint
+COPY entrypoint.sh /opt/
+RUN chmod 755 /opt/entrypoint.sh
+
 # Change user
-#USER shakeweb
+USER shakeweb
 
 # Set 'crontab' 
 #RUN crontab -l | { cat; echo "* * * * * (cd /var/www && echo "-----START-----" && time /usr/bin/flock --verbose -n /tmp/crontabScriptToUpdateEvents.sh.lock /var/www/crontabScriptToUpdateEvents.sh ; echo "-----END-----") >> /var/log/workspace/crontabScriptToUpdateEvents.sh.log 2>&1"; } | crontab -
@@ -126,9 +139,4 @@ RUN cp /root/.bashrc ${HOMEDIR_USER} \
 # Set default work directory
 WORKDIR /var/www
 
-
-
-
-
-#CMD ["cron", "-f"]
-#CMD [ "/usr/sbin/cron", "-f", "-l 2" ]
+ENTRYPOINT [ "/opt/entrypoint.sh" ]

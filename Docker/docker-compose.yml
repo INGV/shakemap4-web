@@ -26,15 +26,19 @@ services:
   workspace:
     container_name: shakemap4-web_workspace
     image: shakemap4-web_image_workspace
+    #user: "${ENV_UID}:${ENV_GID}"
+    #command: >
+    #  bash -c "service cron start ; su shakeweb ; whoami ; sleep 10"
     build:
       context: ./workspace
-    command: >
-      bash -c "/usr/sbin/cron -f -l 2"
+      args:
+        ENV_UID: ${ENV_UID}
+        ENV_GID: ${ENV_GID}
     volumes:
       - ../:/var/www:cached
       - ./log/workspace/:/var/log/workspace
       - ${SHAKEMAP_DATA_PATH}:/var/www/data:cached
-    tty: true
+    tty: false
     env_file:
       - .env
     networks:
