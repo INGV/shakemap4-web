@@ -31,10 +31,10 @@ Set `NGINX_HOST_HTTP_PORT` in `./Docker/.env` file (default port is `8091`).
 ### Set 'data' path
 Set `SHAKEMAP_DATA_PATH` with the absolute `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
 
-### !!! On Linux machine and no 'root' user !!!
-To run containers as *linux-user* (intead of `root`), set `WORKSPACE_PUID` and `WORKSPACE_PGID` in `./Docker/.env` file with:
-- `WORKSPACE_PUID` should be equal to the output of `id -u` command
-- `WORKSPACE_PGID` should be equal to the output of `id -g` command
+### Set 'User ID' and 'Group ID'
+Set `ENV_UID` and `ENV_GID` in `./Docker/.env` file with:
+- `ENV_UID` should be equal to the output of `id -u` command
+- `ENV_GID` should be equal to the output of `id -g` command
 
 ## Configure web page
 Copy `config-example.js` to `config.js`:
@@ -62,20 +62,13 @@ default is:
 If all works, you should see ShakeMap4-Web web page.
 
 ### Under the hood
-*ShakeMap4-Web* project runs 3 containers:
-- *nginx* and *php-fpm*: are used to implement web server
+*ShakeMap4-Web* project runs 2 containers:
+- *nginx*: is used to implement web server
 - *workspace*: is used to implements managment script/tools like `wget`, `crontab`, etc...
 
-The *workspace* container, implements a crontab file to run every minute the script `crontabScriptToUpdateEvents.sh`; this script checks the `SHAKEMAP_DATA_PATH` path (set previously) to find all `<eventid>` to process, modified in the last 2 days. The crontab runs every minute.
+The *workspace* container, implements a crontab file to run every minute the script `crontabScriptToUpdateEvents.sh`; this script checks the `SHAKEMAP_DATA_PATH` path (set previously) to find all `<eventid>` to process, modified in the last 2 days.
 
 You can also runs the update process by hand with command:
-#### !!! On Linux machine and no 'root' user !!!
-```
-$ cd Docker
-$ docker-compose exec -T --user=laradock workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
-$ cd ..
-```
-#### !!! Others !!!
 ```
 $ cd Docker
 $ docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
