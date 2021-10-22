@@ -15,7 +15,7 @@ echo "Current pid = $$" | tee -a ${FILELOG}
 # ISGTERM handler
 term_handler () {
         echo "Run 'service cron stop':" | tee -a ${FILELOG}
-        sudo service cron stop >  | tee -a ${FILELOG} 2>&1 &
+        sudo service cron stop > ${FILELOG} 2>&1 &
         echo "Waiting cron stop ..." | tee -a ${FILELOG}
         wait "$pid"
         echo "Done" | tee -a ${FILELOG}
