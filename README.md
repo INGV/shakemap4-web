@@ -29,15 +29,15 @@ $ cp ./Docker/env-example ./Docker/.env
 Set `NGINX_HOST_HTTP_PORT` in `./Docker/.env` file (default port is `8091`).
 
 ### Set 'data' path
-Set `SHAKEMAP_DATA_PATH` with the absolute `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
+Set `SHAKEMAP_DATA_PATH` in `./Docker/.env` with the absolute `data` path; ie: `/home/shake/shakemap4/shakemap_profiles/world/data`
 
-### Set 'User ID' and 'Group ID'
-Set `ENV_UID` and `ENV_GID` in `./Docker/.env` file with:
+### Set `uid` and `gid`
+To run containers as *linux-user* (intead of `root`), set `ENV_UID` and `ENV_GID` in `./Docker/.env` file with:
 - `ENV_UID` should be equal to the output of `id -u` command
 - `ENV_GID` should be equal to the output of `id -g` command
 
 ## Configure web page
-Copy `config-example.js` to `config.js`:
+Copy `./config-example.js` to `./config.js`:
 ```
 $ cp config-example.js config.js
 ```
@@ -45,6 +45,14 @@ and update params if you need.
 
 ## Start shakemap4-web
 First, build docker images:
+
+```
+$ cd Docker
+$ docker-compose build --no-cache
+$ cd ..
+```
+
+then, starts docker containers:
 
 ```
 $ cd Docker
@@ -73,13 +81,6 @@ You can also runs the update process by hand with command:
 $ cd Docker
 $ docker-compose exec -T workspace bash -c '/usr/bin/python3 /var/www/updateEventList.py --eventid=<eventid>'
 $ cd ..
-```
-
-## Restart containers at boot
-To restart the containers automatically at boot, insert into `crontab` the lines:
-```
-# Restart shakemap4-web
-@reboot (sleep 30s ; cd <absolute_path>/shakemap4-web/Docker ; /usr/local/bin/docker-compose up -d )&
 ```
 
 ## Tips and tricks
@@ -123,15 +124,15 @@ To change the banners and logo images (e.g. the INGV banner that can be seen on 
 ![alt text](images/screenshot_2.png)
 
 ## Thanks to
-This project uses the [Laradock](https://github.com/laradock/laradock) idea to start docker containers.   
-This  work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
+This work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
 
 ## Contribute
 Please, feel free to contribute.
 
 ## Author
-(c) 2019 Dario Jozinović dario.jozinovic[at]ingv.it \
-(c) 2019 Valentino Lauciani valentino.lauciani[at]ingv.it
+(c) 2021 Dario Jozinović dario.jozinovic[at]ingv.it \
+(c) 2021 Valentino Lauciani valentino.lauciani[at]ingv.it
+(c) 2021 Sergio Bruni sergio.bruni[at]ingv.it
 
 
 Istituto Nazionale di Geofisica e Vulcanologia, Italia

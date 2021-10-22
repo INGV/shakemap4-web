@@ -1,0 +1,12 @@
+/var/www/Docker/log/workspace/*.log {
+        daily
+        missingok
+        rotate 32
+        compress
+        delaycompress
+        nodateext
+        notifempty
+        create 644 shakeweb shakeweb
+        sharedscripts
+        endscript
+}

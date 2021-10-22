@@ -76,16 +76,19 @@ function col_exp() {
 //  #################################################################
 //  #  Writing the table
 //  ##################################################################
-function list_meta(eventid) {
+function list_meta(eventid, historic) {
   $.getJSON('./data/' + eventid + '/current/products/stationlist.json', function(
     json
   ) {
     var stations = json.features;
     stationsSorted = stations.sort((a, b) => (a.properties.distance > b.properties.distance) ? 1 : -1);
-    return_data(stationsSorted);
+    return_data(stationsSorted, historic);
   });
-function return_data(stations) {
+function return_data(stations, historic) {
   var dontUseStationType = 'macroseismic';
+  if (historic == true) {
+    dontUseStationType = ''
+  };
   var htmlCode = '<button type="button" class="collapsible"><b>ID</b>&emsp;&emsp;'
    + ' MMI &emsp;&emsp; PGA &emsp;&emsp; PGV &emsp;&emsp; Distance <br/>'
    + ' &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp; (%g)&emsp;&emsp;(cm/s)  &emsp;&emsp; (km)</button><br/>';
@@ -147,5 +150,10 @@ function return_data(stations) {
 //  ##################################################################
 
 var eventid = getURLParameter('eventid');
+var eventYear = parseInt(getURLParameter('eventyear'));
 
-list_meta(eventid);
+var historic = false;
+if (eventYear < 1972) {
+  historic = true
+}
+list_meta(eventid, historic);
