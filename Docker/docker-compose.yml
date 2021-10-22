@@ -16,8 +16,11 @@ services:
       - ${SHAKEMAP_DATA_PATH}:/var/www/data:cached
       - ./log/nginx/:/var/log/nginx
       - ./nginx/sites/:/etc/nginx/sites-available
+    restart: unless-stopped
     ports:
       - "${NGINX_HOST_HTTP_PORT}:80"
+    depends_on:
+      - workspace
     env_file:
       - .env
     networks:
@@ -39,6 +42,7 @@ services:
       #- ./log/workspace/:/var/log/workspace
       - ${SHAKEMAP_DATA_PATH}:/var/www/data:cached
     tty: false
+    restart: unless-stopped
     env_file:
       - .env
     networks:
