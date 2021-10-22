@@ -1,6 +1,5 @@
 .idea
 /data
-/log
 .env*
 /.project
 .docker-sync
