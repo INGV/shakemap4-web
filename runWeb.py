@@ -24,7 +24,7 @@ except ImportError:
 #        try:
 #            file = ET.parse('data/' + ID + '/current/event.xml')
 #            input_data = file.getroot()
-#            
+#
 #            depth = input_data.find('depth').attrib.get('value')
 #            lat = input_data.find('latitude').attrib.get('value')
 #            lon = input_data.find('longitude').attrib.get('value')
@@ -37,25 +37,12 @@ except ImportError:
 #
 
 
-def events_to_json():
-    """ Use the names of the directories in data folder as event list """
-    events = [x for x in os.listdir('./data/') if os.path.isdir('data/' + x)]
-    
-#    event_table = add_event_infos(events)
-    
-    filename = 'events.json'
-    if os.path.exists(filename):
-        os.remove(filename)
-        
-    with open(filename, 'w') as outfile:
-        json.dump(events, outfile)
-
 def run_server():
     PORT = 7600
     webbrowser.open('http://localhost:7600/')
-    
+
     Handler = http.server.SimpleHTTPRequestHandler
-    
+
     httpd = socketserver.TCPServer(('', PORT), Handler)
     print('serving at port', PORT)
     httpd.serve_forever()
@@ -66,8 +53,6 @@ def run_server():
 def main():
     #events_to_json()
     run_server()
-    
+
 if __name__ == "__main__":
     main()
-    
-    

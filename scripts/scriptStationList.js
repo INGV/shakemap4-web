@@ -77,7 +77,7 @@ function col_exp() {
 //  #  Writing the table
 //  ##################################################################
 function list_meta(eventid, historic) {
-  $.getJSON('./data/' + eventid + '/current/products/stationlist.json', function(
+  $.getJSON(config_data.dataFolder.path + eventid + '/current/products/stationlist.json', function(
     json
   ) {
     var stations = json.features;
