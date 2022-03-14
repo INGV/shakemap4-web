@@ -14,6 +14,8 @@ jobs:
       - run:
           name: Clean docker containers and images
           command: |
+            docker ps
+            docker ps -a -q
             docker rm -vf $(docker ps -a -q)
             docker rmi -f $(docker images -a -q)
       - run:
