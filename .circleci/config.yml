@@ -4,7 +4,8 @@ executors:
     #environment:
     #  IMAGE_NAME: ingv/shakemap4-web
     docker:
-      - image: circleci/buildpack-deps:bullseye
+      - image: circleci/buildpack-deps:stretch
+      #- image: circleci/buildpack-deps:bullseye
 jobs:
   build-and-test:
     machine:
@@ -22,7 +23,6 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            cat /etc/debian_version
             cd Docker 
             docker-compose build --no-cache --pull
             docker-compose up -d
