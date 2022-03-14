@@ -12,6 +12,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Clean docker containers and images
+          command: |
+            docker rm -vf $(docker ps -a -q)
+            docker rmi -f $(docker images -a -q)
+      - run:
           name: Configure project
           command: |
             sed \
