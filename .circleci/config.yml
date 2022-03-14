@@ -22,6 +22,7 @@ jobs:
       - run:
           name: Build docker image
           command: |
+            cat /etc/debian_version
             cd Docker 
             docker-compose build --no-cache --pull
             docker-compose up -d
