@@ -12,10 +12,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Clean docker containers and images
+          name: Fix apt-get update “the following signatures couldn’t be verified because the public key is not available”
           command: |
-            docker ps -a 
-            docker images -a 
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9
       - run:
           name: Configure project
           command: |
