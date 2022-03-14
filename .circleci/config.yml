@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Fix apt-get update “the following signatures couldn’t be verified because the public key is not available”
           command: |
-             echo "test"
+             apt-key --keyring /etc/apt/trusted.gpg list
       - run:
           name: Configure project
           command: |
