@@ -14,8 +14,7 @@ jobs:
       - run:
           name: Fix apt-get update “the following signatures couldn’t be verified because the public key is not available”
           command: |
-            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
-            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9
+             echo "test"
       - run:
           name: Configure project
           command: |
@@ -28,6 +27,7 @@ jobs:
           name: Build docker image
           command: |
             cd Docker 
+            docker-compose build --no-cache --pull
             docker-compose up -d
       - run:
           name: Test that dockers are up and running
