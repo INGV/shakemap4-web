@@ -4,17 +4,13 @@ executors:
     #environment:
     #  IMAGE_NAME: ingv/shakemap4-web
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: circleci/buildpack-deps:bullseye
 jobs:
   build-and-test:
     machine:
       image: ubuntu-2004:202010-01
     steps:
       - checkout
-      - run:
-          name: Fix apt-get update “the following signatures couldn’t be verified because the public key is not available”
-          command: |
-             apt-key --keyring /etc/apt/trusted.gpg list
       - run:
           name: Configure project
           command: |
