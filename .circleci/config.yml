@@ -15,17 +15,11 @@ jobs:
       - run:
           name: Configure project
           command: |
-            id -u
-            id -g
-            export MYUID=$(id -u)
-            export MYGID=$(id -g)
-            echo "MYUID=${MYUID}"
-            echo "MYGID=${MYGID}"
             cp config-example.js config.js
             sed \
               -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/home/circleci/project/data|" \
-              -e "s|WORKSPACE_PUID=.*|WORKSPACE_PUID=${MYUID}|" \
-              -e "s|WORKSPACE_PGID=.*|WORKSPACE_PGID=${MYGID}|" \
+              -e "s|ENV_UID=.*|ENV_UID=$(id -u)|" \
+              -e "s|ENV_GID=.*|ENV_GID=$(id -g)|" \
               ./Docker/env-example > ./Docker/.env
             cat ./Docker/.env
       - run:
