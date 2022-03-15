@@ -77,7 +77,7 @@ function get_subs(subObj, depth) {
 //  #  Writing the table
 //  ##################################################################
 function list_meta(eventid) {
-  $.getJSON('./data/' + eventid + '/current/products/info.json', function(
+  $.getJSON(config_data.dataFolder.path + eventid + '/current/products/info.json', function(
     json
   ) {
     var metaHTML = '';

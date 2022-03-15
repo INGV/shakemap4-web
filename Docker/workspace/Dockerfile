@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:bullseye-slim
 
 LABEL maintainer="Valentino Lauciani <valentino.lauciani@ingv.it>"
 

@@ -62,7 +62,7 @@ function listProducts (eventid, productList) {
   var catList = ['Peak Ground Motion Maps', 'Contours and shape files', 'Rasters and grid',
     'Regressions', 'Other files'];
 
-  var baseLink = 'data/' + eventid + '/current/products/';
+  var baseLink = config_data.dataFolder.path + eventid + '/current/products/';
   var myvar =
     '<table class="table table-hover table-sm archive_table">' +
     '<thead>' +
@@ -115,7 +115,7 @@ function listProducts (eventid, productList) {
 var eventid = getURLParameter('eventid');
 
 var productsList;
-$.getJSON('data/' + eventid + '/current/products/productList.json', function (data) {
+$.getJSON(config_data.dataFolder.path + eventid + '/current/products/productList.json', function (data) {
   productsList = data;
   listProducts(eventid, productsList);
 });

@@ -306,7 +306,7 @@ function fileExists(url)
 //
 function getRegression (obsArr, newPlot, regrType) {
   $.getJSON(
-    './data/' + eventid + '/current/products/attenuation_curves.json',
+    config_data.dataFolder.path + eventid + '/current/products/attenuation_curves.json',
     function(json) {
       var regrPoints = json;
       return_data(regrPoints, obsArr);
@@ -362,7 +362,7 @@ function getPredictedValue(component, predictions) {
 //
 function stationList(newPlot, regrType, showDYFI) {
   $.getJSON(
-    './data/' + eventid + '/current/products/stationlist.json',
+    config_data.dataFolder.path + eventid + '/current/products/stationlist.json',
     function(json) {
       var stations = json.features;
       return_data(stations);
@@ -396,7 +396,7 @@ function stationList(newPlot, regrType, showDYFI) {
         };
       };
 
-      if(fileExists('./data/' + eventid + '/current/products/attenuation_curves.json')) {
+      if(fileExists(config_data.dataFolder.path + eventid + '/current/products/attenuation_curves.json')) {
         getRegression(objArr, newPlot, regrType);
       } else {
         var regrArr = [];

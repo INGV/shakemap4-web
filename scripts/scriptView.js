@@ -17,17 +17,17 @@ function getURLParameter(name) {
 var eventid = getURLParameter('eventid');
 
 document.getElementById('imgint').src =
-  './data/' + eventid + '/current/products/intensity.jpg';
+  config_data.dataFolder.path + eventid + '/current/products/intensity.jpg';
 document.getElementById('pgaint').src =
-  './data/' + eventid + '/current/products/pga.jpg';
+  config_data.dataFolder.path + eventid + '/current/products/pga.jpg';
 document.getElementById('pgvint').src =
-  './data/' + eventid + '/current/products/pgv.jpg';
+  config_data.dataFolder.path + eventid + '/current/products/pgv.jpg';
 document.getElementById('imgsa03').src =
-  './data/' + eventid + '/current/products/psa0p3.jpg';
+  config_data.dataFolder.path + eventid + '/current/products/psa0p3.jpg';
 document.getElementById('imgsa1').src =
-  './data/' + eventid + '/current/products/psa1p0.jpg';
+  config_data.dataFolder.path + eventid + '/current/products/psa1p0.jpg';
 document.getElementById('imgsa3').src =
-  './data/' + eventid + '/current/products/psa3p0.jpg';
+  config_data.dataFolder.path + eventid + '/current/products/psa3p0.jpg';
 
 // #####################################################
 // Open the download page for event

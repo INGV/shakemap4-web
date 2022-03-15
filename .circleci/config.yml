@@ -4,25 +4,29 @@ executors:
     #environment:
     #  IMAGE_NAME: ingv/shakemap4-web
     docker:
-      - image: circleci/buildpack-deps:stretch
+      #- image: circleci/buildpack-deps:stretch
+      - image: cimg/base:stable-20.04
 jobs:
   build-and-test:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
           name: Configure project
           command: |
+            cp config-example.js config.js
             sed \
               -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/home/circleci/project/data|" \
-              -e "s|WORKSPACE_PUID=.*|WORKSPACE_PUID=$(id -u)|" \
-              -e "s|WORKSPACE_PGID=.*|WORKSPACE_PGID=$(id -g)|" \
+              -e "s|ENV_UID=.*|ENV_UID=$(id -u)|" \
+              -e "s|ENV_GID=.*|ENV_GID=$(id -g)|" \
               ./Docker/env-example > ./Docker/.env
+            cat ./Docker/.env
       - run:
           name: Build docker image
           command: |
             cd Docker 
+            docker-compose build --no-cache --pull
             docker-compose up -d
       - run:
           name: Test that dockers are up and running
@@ -75,7 +79,8 @@ jobs:
             # copy a config file into this volume
             docker cp publiccode.yml myfolder:/publiccode_folder
             # start an application container using this volume
-            docker run --rm --volumes-from myfolder italia/publiccode-parser-go --remote-base-url "https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/master" publiccode_folder/publiccode.yml
+            #docker run --rm --volumes-from myfolder italia/publiccode-parser-go --remote-base-url "https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/master" publiccode_folder/publiccode.yml
+            docker run --rm --volumes-from myfolder italia/publiccode-parser-go publiccode_folder/publiccode.yml
 
 workflows:
   version: 2.1

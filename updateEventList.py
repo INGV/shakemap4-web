@@ -5,12 +5,11 @@ import dateutil.parser
 import argparse, sys
 import shutil
 
-def get_event_ids ():
+def get_event_ids (data_path):
     """
         Get event IDs from the list of folders in data folder
     """
-    root='./data'
-    dirlist = [ item for item in os.listdir(root) if os.path.isdir(os.path.join(root, item)) ]
+    dirlist = [ item for item in os.listdir(data_path) if os.path.isdir(os.path.join(data_path, item)) ]
     return dirlist
 
 def separate_time_date(time):
@@ -27,8 +26,8 @@ def separate_time_date(time):
 
     return (year, month, day, hour, minute, second)
 
-def overlay_to_json(event_id):
-    info_file_path = './data/' + event_id + '/current/products/intensity_overlay.pngw'
+def overlay_to_json(event_id, data_path):
+    info_file_path = data_path + event_id + '/current/products/intensity_overlay.pngw'
     with open(info_file_path, 'r') as overlay:
         overlay_file = overlay.readlines()
 
@@ -42,7 +41,7 @@ def overlay_to_json(event_id):
             'upper_left_y': overlay_file[5]
         }
 
-    with open('./data/' + event_id + '/current/products/overlay.json', 'w') as outfile:
+    with open(data_path + event_id + '/current/products/overlay.json', 'w') as outfile:
             json.dump(js_file, outfile)
 
     return None
@@ -55,14 +54,14 @@ def get_bBox_dict():
     else:
         return False
 
-def get_products_list(event_id):
+def get_products_list(event_id, data_path):
     """
         Get the list of products generated for an event and write them to file
     """
     with open('productsDownloadList.json') as json_file:
         productMeta = json.load(json_file)
 
-    products_path = './data/' + event_id + '/current/products/'
+    products_path = data_path + event_id + '/current/products/'
 
     fileList = [ item for item in os.listdir(products_path) if os.path.isfile(os.path.join(products_path, item)) ]
 
@@ -78,11 +77,11 @@ def get_products_list(event_id):
 
     return None
 
-def get_parameters (event_id, bBox):
+def get_parameters (event_id, bBox, data_path):
     """
         Get the event parameters from the info.json file of an event
     """
-    info_file_path = './data/' + event_id + '/current/products/info.json'
+    info_file_path = data_path + event_id + '/current/products/info.json'
     with open(info_file_path) as f:
         info_file = json.load(f)
 
@@ -149,16 +148,16 @@ def write_version_file():
 
     return
 
-def do_for_all_events(bBox):
+def do_for_all_events(bBox, data_path):
     event_list = []
-    folders_list = get_event_ids()
+    folders_list = get_event_ids(data_path)
     events_num = len(folders_list)
     for count, event in enumerate(folders_list, start=1):
         print(str(count) + '/' + str(events_num) + ' - Processing event:' + event)
 
         ## Try to read the info.json file to put the events in a list for the website to read
         try:
-            eventParameters = get_parameters(event, bBox)
+            eventParameters = get_parameters(event, bBox, data_path)
             if (eventParameters != False):
                 event_list.append(eventParameters)
         except Exception as e:
@@ -167,14 +166,14 @@ def do_for_all_events(bBox):
 
         ## Try to extract overlay parameters and put them into a json file, so the website can read it
         try:
-            overlay_to_json(event)
+            overlay_to_json(event, data_path)
         except Exception as e:
             print('No intensity overlay file for event:' + event)
             print(e)
 
         ## Try to get products list and put them into a json file, so the website can read it
         try:
-            get_products_list(event)
+            get_products_list(event, data_path)
         except Exception as e:
             print('Product file list error for event ' + event + ':')
             print(e)
@@ -229,7 +228,7 @@ def do_for_one_event(event_id, bBox):
     print('Processing event: ' + event_id)
             ## Try to read the info.json file to put the events in a list for the website to read
     try:
-        eventParameters = get_parameters(event_id, bBox)
+        eventParameters = get_parameters(event_id, bBox, data_path)
         if (eventParameters != False):
             update_event_list(eventParameters, event_id)
     except Exception as e:
@@ -238,18 +237,18 @@ def do_for_one_event(event_id, bBox):
 
     ## Try to extract overlay parameters and put them into a json file, so the website can read it
     try:
-        overlay_to_json(event_id)
+        overlay_to_json(event_id, data_path)
     except Exception as e:
         print('No intensity overlay file for event:' + event_id)
         print(e)
 
     try:
-        get_products_list(event_id)
+        get_products_list(event_id, data_path)
     except Exception as e:
         print('Product file list error for event ' + event_id + ':')
         print(e)
 
-def delete_event(event_id):
+def delete_event(event_id, data_path):
     print('Deleting event: ' + event_id)
     try:
         update_event_list(None, event_id, eventAction='del')
@@ -258,22 +257,34 @@ def delete_event(event_id):
         print(e)
 
     try:
-        shutil.rmtree('./data/' + event_id)
+        shutil.rmtree(data_path + event_id)
         print('Event folder removed from data.')
     except Exception as e:
         print('Could not delete folder for event: ' + event_id + ':')
         print(e)
 
-def main(event_id):
+def get_data_path():
+    
+    with open('config.js') as configFile:
+        configData = configFile.read()
+        
+    dataPath = configData[configData.find('path:'): configData.rfind('\'')]
+    dataPath = dataPath[dataPath.find('\'')+1:]
+
+    return dataPath
+
+
+def main(event_id, data_path):
     bBox = get_bBox_dict()
     if event_id == False:
-        do_for_all_events(bBox)
+        do_for_all_events(bBox, data_path)
     else:
-        if os.path.isdir('./data/' + event_id):
+        if os.path.isdir(data_path + event_id):
             do_for_one_event(event_id, bBox)
         else:
             print('Error: event ' + event_id + ' does not exist')
             sys.exit(1)
+
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser()
@@ -282,10 +293,13 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    data_path = get_data_path()
+
     if len(sys.argv[:]) < 2:
         print('No event ID has been provided. The script will run for all the events')
-        main(False)
+        main(False, data_path)
     elif (args.deleteid != None):
-        delete_event(args.deleteid)
+        delete_event(args.deleteid, data_path)
     else:
-        main(args.eventid)
+        main(args.eventid, data_path)
