@@ -5,7 +5,7 @@ executors:
     #  IMAGE_NAME: ingv/shakemap4-web
     docker:
       #- image: circleci/buildpack-deps:stretch
-      - image: cimg/base
+      - image: cimg/base:stable-20.04
 jobs:
   build-and-test:
     machine:
