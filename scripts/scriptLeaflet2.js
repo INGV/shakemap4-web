@@ -225,7 +225,7 @@ function event_info() {
       .addTo(map2);
 
     var starIcon = new L.Icon({
-          iconUrl: '../images/epicenterIconStar.png',
+          iconUrl: './images/epicenterIconStar.png',
           iconSize: [16, 16], // [x, y] in pixels
           iconAnchor: [8, 8]
       });
