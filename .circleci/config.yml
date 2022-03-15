@@ -54,11 +54,14 @@ jobs:
       - setup_remote_docker
       - run:
           command: |
-            VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            VERSION_PUBLICCODE_FILE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
             VERSION_JS_FILE=$( grep "var softwareVersion" ./scripts/softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
-            echo "VERSION_PUBLICCODE=${VERSION_PUBLICCODE}"
+            VERSION_VERSION_FILE=$( head -1 VERSION )
+            echo "VERSION_PUBLICCODE_FILE=${VERSION_PUBLICCODE_FILE}"
             echo "VERSION_JS_FILE=${VERSION_JS_FILE}"
-            if [[ "${VERSION_PUBLICCODE}" != "${VERSION_JS_FILE}" ]]; then exit 1; fi;
+            echo "VERSION_VERSION_FILE=${VERSION_VERSION_FILE}"
+            if [[ "${VERSION_PUBLICCODE_FILE}" != "${VERSION_JS_FILE}" ]]; then exit 1; fi;
+            if [[ "${VERSION_JS_FILE}" != "${VERSION_VERSION_FILE}" ]]; then exit 1; fi;
             
   test-publiccode:
     executor: docker-publisher
