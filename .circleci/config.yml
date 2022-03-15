@@ -21,7 +21,7 @@ jobs:
               -e "s|WORKSPACE_PUID=.*|WORKSPACE_PUID=$(id -u)|" \
               -e "s|WORKSPACE_PGID=.*|WORKSPACE_PGID=$(id -g)|" \
               ./Docker/env-example > ./Docker/.env
-            cat .env
+            cat ./Docker/.env
       - run:
           name: Build docker image
           command: |
