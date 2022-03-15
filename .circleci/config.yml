@@ -4,8 +4,8 @@ executors:
     #environment:
     #  IMAGE_NAME: ingv/shakemap4-web
     docker:
-      - image: circleci/buildpack-deps:stretch
-      #- image: circleci/buildpack-deps:bullseye
+      #- image: circleci/buildpack-deps:stretch
+      - image: cimg/base
 jobs:
   build-and-test:
     machine:
