@@ -82,7 +82,7 @@ function attr_div(attr_collection, div_id) {
 // ##################################################
 // Show fault
 function faultSurface() {
-  $.getJSON('./data/' + eventid + '/current/products/rupture.json', function(
+  $.getJSON(config_data.dataFolder.path + eventid + '/current/products/rupture.json', function(
     json
   ) {
     var fault = json.features;
@@ -102,7 +102,7 @@ function faultSurface() {
 // Show stations
 function stationList() {
   $.getJSON(
-    './data/' + eventid + '/current/products/stationlist.json',
+    config_data.dataFolder.path + eventid + '/current/products/stationlist.json',
     function(json) {
       var stations = json.features;
       show_stations(stations);
@@ -167,7 +167,7 @@ function stationList() {
 // Show DYFI observations
 function dyfiList() {
   $.getJSON(
-    './data/' + eventid + '/current/products/stationlist.json',
+    config_data.dataFolder.path + eventid + '/current/products/stationlist.json',
     function(json) {
       var stations = json.features;
       show_dyfi(stations);
@@ -225,7 +225,7 @@ function ev_title(desc, or_time, magnitude, lat, lon, depth) {
 // ##################################################
 // Show epicenter and write info in sidebar
 function event_info() {
-  $.getJSON('./data/' + eventid + '/current/products/info.json', function(
+  $.getJSON(config_data.dataFolder.path + eventid + '/current/products/info.json', function(
     json
   ) {
     var info_input = json.input.event_information;
@@ -261,7 +261,7 @@ function event_info() {
       .addTo(mymap);
 
     var thisIcon = new L.Icon({
-        iconUrl: '../images/epicenterIconStar.png',
+        iconUrl: './images/epicenterIconStar.png',
         iconSize: [16, 16], // [x, y] in pixels
         iconAnchor: [8, 8]
     });
@@ -284,7 +284,7 @@ function event_info() {
 
 function show_contours(fileName, layerName) {
   $.getJSON(
-    './data/' + eventid + '/current/products/' + fileName,
+    config_data.dataFolder.path + eventid + '/current/products/' + fileName,
     function(json) {
       var contours = json.features;
       plot_contours(contours);
@@ -343,7 +343,7 @@ function show_contours(fileName, layerName) {
 // Function call to show Intensity contours on the map
 function show_intensity() {
   $.getJSON(
-    './data/' + eventid + '/current/products/cont_mmi.json',
+    config_data.dataFolder.path + eventid + '/current/products/cont_mmi.json',
     function(json) {
       var intensity = json.features;
       plot_int(intensity);
@@ -378,10 +378,10 @@ function intensityOverlay() {
   var height = 0;
   var width = 0;
 
-  var imagePath = './data/' + eventid + '/current/products/intensity_overlay.png';
-  // var fileIntensity = './data/' + eventid + '/current/products/intensity_overlay.pngw'
+  var imagePath = config_data.dataFolder.path + eventid + '/current/products/intensity_overlay.png';
+  // var fileIntensity = config_data.dataFolder.path + eventid + '/current/products/intensity_overlay.pngw'
 
-  $.getJSON('./data/' + eventid + '/current/products/overlay.json',
+  $.getJSON(config_data.dataFolder.path + eventid + '/current/products/overlay.json',
     function(json) {
       imgIntHelper.onload = function() {
         height = imgIntHelper.height;
@@ -413,7 +413,7 @@ function legend_box() {
     onAdd: function(map) {
       var img = L.DomUtil.create('img');
 
-      img.src = './data/' + eventid + '/current/products/mmi_legend.png';
+      img.src = config_data.dataFolder.path + eventid + '/current/products/mmi_legend.png';
       // img.style.width = '70%';
       var widthSize = 0.375 * $(window).width();
       img.style.width =  widthSize.toString() + 'px';

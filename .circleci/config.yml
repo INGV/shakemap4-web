@@ -4,25 +4,29 @@ executors:
     #environment:
     #  IMAGE_NAME: ingv/shakemap4-web
     docker:
-      - image: circleci/buildpack-deps:stretch
+      #- image: circleci/buildpack-deps:stretch
+      - image: cimg/base:stable-20.04
 jobs:
   build-and-test:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
           name: Configure project
           command: |
+            cp config-example.js config.js
             sed \
               -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/home/circleci/project/data|" \
-              -e "s|WORKSPACE_PUID=.*|WORKSPACE_PUID=$(id -u)|" \
-              -e "s|WORKSPACE_PGID=.*|WORKSPACE_PGID=$(id -g)|" \
+              -e "s|ENV_UID=.*|ENV_UID=$(id -u)|" \
+              -e "s|ENV_GID=.*|ENV_GID=$(id -g)|" \
               ./Docker/env-example > ./Docker/.env
+            cat ./Docker/.env
       - run:
           name: Build docker image
           command: |
             cd Docker 
+            docker-compose build --no-cache --pull
             docker-compose up -d
       - run:
           name: Test that dockers are up and running
@@ -50,11 +54,14 @@ jobs:
       - setup_remote_docker
       - run:
           command: |
-            VERSION_PUBLICCODE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
+            VERSION_PUBLICCODE_FILE=$( grep "softwareVersion:" publiccode.yml | awk '{print $2}' | sed -e 's/^[[:space:]]*//' )
             VERSION_JS_FILE=$( grep "var softwareVersion" ./scripts/softwareVersion.js | awk -F"\"" '{print $2}' | awk -F":" '{print $2}' | sed -e 's/^[[:space:]]*//' )
-            echo "VERSION_PUBLICCODE=${VERSION_PUBLICCODE}"
+            VERSION_VERSION_FILE=$( head -1 VERSION )
+            echo "VERSION_PUBLICCODE_FILE=${VERSION_PUBLICCODE_FILE}"
             echo "VERSION_JS_FILE=${VERSION_JS_FILE}"
-            if [[ "${VERSION_PUBLICCODE}" != "${VERSION_JS_FILE}" ]]; then exit 1; fi;
+            echo "VERSION_VERSION_FILE=${VERSION_VERSION_FILE}"
+            if [[ "${VERSION_PUBLICCODE_FILE}" != "${VERSION_JS_FILE}" ]]; then exit 1; fi;
+            if [[ "${VERSION_JS_FILE}" != "${VERSION_VERSION_FILE}" ]]; then exit 1; fi;
             
   test-publiccode:
     executor: docker-publisher
@@ -75,7 +82,8 @@ jobs:
             # copy a config file into this volume
             docker cp publiccode.yml myfolder:/publiccode_folder
             # start an application container using this volume
-            docker run --rm --volumes-from myfolder italia/publiccode-parser-go --remote-base-url "https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/master" publiccode_folder/publiccode.yml
+            #docker run --rm --volumes-from myfolder italia/publiccode-parser-go --remote-base-url "https://raw.githubusercontent.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/master" publiccode_folder/publiccode.yml
+            docker run --rm --volumes-from myfolder italia/publiccode-parser-go publiccode_folder/publiccode.yml
 
 workflows:
   version: 2.1
