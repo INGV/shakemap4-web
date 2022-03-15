@@ -48,7 +48,7 @@ First, build docker images:
 
 ```
 $ cd Docker
-$ docker-compose build --no-cache
+$ docker-compose build --pull --no-cache
 $ cd ..
 ```
 
