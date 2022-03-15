@@ -17,15 +17,15 @@ jobs:
           command: |
             id -u
             id -g
-            UID=$(id -u)
-            GID=$(id -g)
-            echo "UID=${UID}"
-            echo "GID=${GID}"
+            MYUID=$(id -u)
+            MYGID=$(id -g)
+            echo "MYUID=${MYUID}"
+            echo "MYGID=${MYGID}"
             cp config-example.js config.js
             sed \
               -e "s|SHAKEMAP_DATA_PATH=.*|SHAKEMAP_DATA_PATH=/home/circleci/project/data|" \
-              -e "s|WORKSPACE_PUID=.*|WORKSPACE_PUID=$UID|" \
-              -e "s|WORKSPACE_PGID=.*|WORKSPACE_PGID=$GID|" \
+              -e "s|WORKSPACE_PUID=.*|WORKSPACE_PUID=1001|" \
+              -e "s|WORKSPACE_PGID=.*|WORKSPACE_PGID=1002|" \
               ./Docker/env-example > ./Docker/.env
             cat ./Docker/.env
       - run:
