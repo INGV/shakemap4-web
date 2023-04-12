@@ -7,7 +7,9 @@ executors:
       - image: circleci/buildpack-deps:stretch
 jobs:
   build-and-test:
-    executor: docker-publisher
+    machine:
+      image: ubuntu-2004:202010-01
+    #executor: docker-publisher
     steps:
       - checkout
       - setup_remote_docker
