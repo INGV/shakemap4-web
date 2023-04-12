@@ -9,7 +9,7 @@ jobs:
   build-and-test:
     executor: docker-publisher
     steps:
-      - checkoout
+      - checkout
       - setup_remote_docker
       - run:
           name: Configure project
