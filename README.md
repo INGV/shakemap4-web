@@ -88,3 +88,19 @@ Then open `http://localhost:8000` in your browser.
 ## Customization
 - **Map Layers**: configured in `js/app.js` (`initMap` function).
 - **Styles**: `css/style.css`.
+
+## Thanks to
+This work has been partially funded by the Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project (European Union’s Horizon 2020 research and innovation program Grant Agreement Number 730900) and by the Italian Civil Protection (2019–2021) B2 ShakeMap adjournment project.
+
+## Contribute
+Thanks to your contributions!
+
+Here is a list of users who already contributed to this repository: \
+<a href="https://github.com/ingv/shakemap4-web/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ingv/shakemap4-web" />
+</a>
+
+## Author
+(c) 2025 Valentino Lauciani valentino.lauciani[at]ingv.it
+
+Istituto Nazionale di Geofisica e Vulcanologia, Italia
