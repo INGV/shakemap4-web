@@ -219,7 +219,7 @@ if [ -n "$SINGLE_EVENT_ID" ]; then
            .[$year][$month] |= map(select(.id != $id)) + [$new_event]
            ' "$EVENTS_JSON" > "$tmp_json" && mv "$tmp_json" "$EVENTS_JSON"
            
-        echo_date "Event $SINGLE_EVENT_ID processed."
+        echo "Event $SINGLE_EVENT_ID processed."
     fi
 elif [ -n "$LAST_EVENTS" ]; then
     echo_date "Processing last $LAST_EVENTS events (ordered by modification date)..."
@@ -286,7 +286,7 @@ elif [ -n "$LAST_EVENTS" ]; then
     }) | from_entries' all_events_flat.json > "$EVENTS_JSON"
     
     rm all_events_flat.json
-    echo_date "Last $LAST_EVENTS events processed."
+    echo "Last $LAST_EVENTS events processed."
 else
     echo_date "Processing all events..."
     # Iterate over all directories in data/
@@ -335,7 +335,7 @@ else
     }) | from_entries' all_events_flat.json > "$EVENTS_JSON"
     
     rm all_events_flat.json
-    echo_date "All events processed."
+    echo "All events processed."
 fi
 
 # Calculate and display execution time
