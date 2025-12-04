@@ -1,5 +1,5 @@
 const config = {
-    version: "v1.28.0",
+    version: "v2.0.0",
     githubLink: "https://github.com/INGV/shakemap4-web",
     logosPath: "images/shakemapit_partners.jpg",
     bannerImage: './images/shakemapeu_banner.png',
