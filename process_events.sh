@@ -6,6 +6,7 @@
 # Lock directory to prevent concurrent executions (cross-platform)
 LOCKDIR="/tmp/process_events.lock"
 PIDFILE="$LOCKDIR/pid"
+WORKDIR=$(cd "$(dirname "$0")" && pwd)
 
 # Function to echo timestamped messages
 echo_date() {
@@ -112,7 +113,7 @@ for CMD in "${REQUIRED_COMMANDS[@]}"; do
 done
 
 DATA_DIR=""
-EVENTS_JSON="events.json"
+EVENTS_JSON=""  # Will be set after DATA_DIR is parsed
 SINGLE_EVENT_ID=""
 LAST_EVENTS=""
 # Array to track events with time parsing issues
