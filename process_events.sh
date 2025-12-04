@@ -21,6 +21,8 @@ acquire_lock() {
     if mkdir "$LOCKDIR" 2>/dev/null; then
         # Successfully acquired lock, write PID
         echo $$ > "$PIDFILE"
+        # Set trap to release lock on exit - only after acquiring lock!
+        trap release_lock EXIT INT TERM
         return 0
     else
         # Lock directory exists, check if process is still running
@@ -37,6 +39,8 @@ acquire_lock() {
                 # Try to acquire lock again
                 if mkdir "$LOCKDIR" 2>/dev/null; then
                     echo $$ > "$PIDFILE"
+                    # Set trap to release lock on exit - only after acquiring lock!
+                    trap release_lock EXIT INT TERM
                     return 0
                 else
                     echo "[ERROR] Failed to acquire lock after removing stale lock." >&2
@@ -49,6 +53,8 @@ acquire_lock() {
             rm -rf "$LOCKDIR"
             if mkdir "$LOCKDIR" 2>/dev/null; then
                 echo $$ > "$PIDFILE"
+                # Set trap to release lock on exit - only after acquiring lock!
+                trap release_lock EXIT INT TERM
                 return 0
             else
                 echo "[ERROR] Failed to acquire lock." >&2
@@ -62,9 +68,6 @@ acquire_lock() {
 release_lock() {
     rm -rf "$LOCKDIR"
 }
-
-# Set trap to release lock on exit
-trap release_lock EXIT INT TERM
 
 # Acquire the lock before proceeding
 acquire_lock
