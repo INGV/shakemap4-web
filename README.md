@@ -26,31 +26,11 @@ This project provides a static web portal to visualize ShakeMap data. It consist
 
 ## Setup & Usage
 
-### 1. Prerequisites
-- `bash`
-- `jq` (for JSON processing)
-- `xmllint` (libxml2, for XML processing)
-- Web Server (Nginx, Apache, or simple Python server)
+### Option A: Docker (Recommended)
 
-### 2. Data Processing
-The `process_events.sh` script scans the `data/` directory and generates `events.json`.
+Docker provides a self-contained environment with all dependencies included.
 
-**Process all events:**
-```bash
-./process_events.sh
-```
-
-**Process a single event:**
-```bash
-./process_events.sh -e <eventid>
-```
-Example: `./process_events.sh -e 44683062`
-
-### 3. Running the Portal
-
-#### Option A: Docker (Recommended)
-
-##### Preferred: Pull from Docker Hub
+#### Preferred: Pull from Docker Hub
 **Run with data directory as volume:**
 ```bash
 docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data --name shakemap4-web__container ingv/shakemap4-web
@@ -65,7 +45,11 @@ docker run -d -p 8080:80 \
   ingv/shakemap4-web
 ```
 
-##### Alternative: Build locally
+When `ENABLE_CRONTAB=true` is set, the container will automatically:
+- Process the last 5 events every 2 minutes (logs: `/tmp/process_events_incremental.log`)
+- Reprocess all events daily at 00:10 UTC (logs: `/tmp/process_events_full.log`)
+
+#### Alternative: Build Docker image locally
 **Build the Docker image:**
 ```bash
 docker build -t shakemap4-web .
@@ -85,16 +69,36 @@ docker run -d -p 8080:80 \
   shakemap4-web
 ```
 
-When `ENABLE_CRONTAB=true` is set, the container will automatically:
-- Process the last 5 events every 2 minutes (logs: `/tmp/process_events_incremental.log`)
-- Reprocess all events daily at 00:10 UTC (logs: `/tmp/process_events_full.log`)
-
 Then open `http://localhost:8080` in your browser.
 
-#### Option B: Python Server
-Serve the directory using a web server.
+---
 
-**Example with Python:**
+### Option B: Manual Setup with Web Server
+
+If you prefer to run without Docker, you'll need to manually set up the environment.
+
+#### 1. Prerequisites
+- `bash`
+- `jq` (for JSON processing)
+- `xmllint` (libxml2, for XML processing)
+- Web Server (Nginx, Apache, or Python HTTP server)
+
+#### 2. Data Processing
+The `process_events.sh` script scans the `data/` directory and generates `events.json`.
+
+**Process all events:**
+```bash
+./process_events.sh
+```
+
+**Process a single event:**
+```bash
+./process_events.sh -e <eventid>
+```
+Example: `./process_events.sh -e 44683062`
+
+#### 3. Serve the Portal
+**Example with Python HTTP server:**
 ```bash
 python3 -m http.server 8000
 ```
