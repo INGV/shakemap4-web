@@ -1,0 +1,96 @@
+{
+  "2014": {
+    "10": [
+      {
+        "id": "4311681",
+        "description": "Tirreno Meridionale (MARE)",
+        "day": 13,
+        "month": 10,
+        "year": 2014,
+        "h": 11,
+        "m": 32,
+        "s": 47,
+        "lat": 38.9307,
+        "lon": 14.8418,
+        "mag": 3.04,
+        "depth": 346.7
+      }
+    ]
+  },
+  "2025": {
+    "11": [
+      {
+        "id": "44746812",
+        "description": "West of Macquarie Island [Sea]",
+        "day": 29,
+        "month": 11,
+        "year": 2025,
+        "h": 22,
+        "m": 47,
+        "s": 53,
+        "lat": -56.3977,
+        "lon": 147.28,
+        "mag": 5.84047,
+        "depth": 14.8438
+      },
+      {
+        "id": "44744232",
+        "description": "West of Macquarie Island [Sea]",
+        "day": 29,
+        "month": 11,
+        "year": 2025,
+        "h": 8,
+        "m": 3,
+        "s": 54,
+        "lat": -52.2738,
+        "lon": 151.552,
+        "mag": 5.9219,
+        "depth": 12.1094
+      },
+      {
+        "id": "44742932",
+        "description": "Guatemala [Land]",
+        "day": 28,
+        "month": 11,
+        "year": 2025,
+        "h": 20,
+        "m": 6,
+        "s": 9,
+        "lat": 15.409,
+        "lon": -92.0801,
+        "mag": 5.80067,
+        "depth": 158.984
+      },
+      {
+        "id": "44738362",
+        "description": "Southern Alaska, United States [Land: United States]",
+        "day": 27,
+        "month": 11,
+        "year": 2025,
+        "h": 17,
+        "m": 11,
+        "s": 27,
+        "lat": 61.5586,
+        "lon": -150.879,
+        "mag": 5.85225,
+        "depth": 58.5938
+      }
+    ],
+    "12": [
+      {
+        "id": "44757362",
+        "description": "7 km N Itala (ME)",
+        "day": 2,
+        "month": 12,
+        "year": 2025,
+        "h": 22,
+        "m": 16,
+        "s": 21,
+        "lat": 38.1153,
+        "lon": 15.454,
+        "mag": 3.63,
+        "depth": 48.9
+      }
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis View - INGV ShakeMap Portal</title>
+    <!-- Shared Components - loads common stylesheets and elements -->
+    <script src="js/shared-components.js"></script>
+</head>
+
+<body>
+
+    <!-- Banner injected by shared-components.js -->
+    <div class="banner"></div>
+
+    <!-- Header injected by shared-components.js -->
+    <header></header>
+
+    <main class="container">
+        <div class="event-header">
+            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back to Event</button>
+            <h2 id="event-title">Analysis View</h2>
+        </div>
+
+        <div class="event-meta" id="event-meta">
+            <!-- Metadata populated by JS -->
+        </div>
+
+        <!-- Tabs for Intensity, PGA, PGV -->
+        <div class="analysis-tabs">
+            <button class="tab-btn active" data-tab="intensity">INTENSITY</button>
+            <button class="tab-btn" data-tab="pga">PGA</button>
+            <button class="tab-btn" data-tab="pgv">PGV</button>
+        </div>
+
+        <!-- Plot containers -->
+        <div class="plot-container">
+            <div id="intensity" class="plot-area active"></div>
+            <div id="pga" class="plot-area"></div>
+            <div id="pgv" class="plot-area"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="control-group">
+                <label for="selectRegrType">Select Site Class &nbsp;</label>
+                <select id="selectRegrType" class="custom-select">
+                    <option value="rock">Rock</option>
+                    <option value="soil">Soil</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="dyfiCheck">
+                    <input type="checkbox" id="dyfiCheck">
+                    Show macroseismic data
+                </label>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <!-- Footer populated by JS -->
+        </div>
+    </footer>
+
+    <!-- D3.js v7 -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/colors.js"></script>
+    <script src="js/analysis.js"></script>
+
+</body>
+
+</html>

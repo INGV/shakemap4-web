@@ -1,69 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>ShakeMap - Home</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INGV ShakeMap Portal</title>
+    <!-- Shared Components - loads common stylesheets and elements -->
+    <script src="js/shared-components.js"></script>
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+</head>
 
-    <link rel="stylesheet" href="./style.css">
+<body>
 
-    <!-- Material Design for Bootstrap fonts and icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <!-- Banner injected by shared-components.js -->
+    <div class="banner"></div>
 
-    <!-- Material Design for Bootstrap CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+    <!-- Header injected by shared-components.js -->
+    <header></header>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5VTDB42LR7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-5VTDB42LR7');
-    </script>
-  </head>
-
-  <body>
-
-    <div id="header"></div>
-
-    <div class="tab_menu">
-        <div id="disclaimer"></div>
-        <br/><br/>
-        <h4> Latest events </h4>
-
-        <!-- <div id="event_table" class="table-responsive-md archive_table"> -->
-        <div class="table-responsive archive_table" id="event_table">
+    <main class="container">
+        <!-- Home View -->
+        <div id="view-home">
+            <div class="section-header">
+                <h2>Latest events</h2>
+            </div>
+            <div id="latest-events-cards" class="events-grid">
+                <!-- Populated by JS -->
+            </div>
         </div>
-    </div>
 
-     <div id="footer"></div>
+        <!-- Archive View -->
+        <div id="view-archive" class="hidden">
+            <div class="section-header">
+                <h2>Events list</h2>
+            </div>
 
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Select year</label>
+                    <select id="year-filter">
+                        <option value="">All</option>
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Min Magnitude</label>
+                    <select id="mag-filter">
+                        <option value="">All</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Region</label>
+                    <select id="region-filter">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+            </div>
 
+            <div id="archive-events-cards" class="events-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <!-- Event Details View -->
+        <div id="view-details" class="hidden">
+            <div class="event-header">
+                <button class="back-btn" onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 id="event-title">Event Details</h2>
+            </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+            <div class="event-meta" id="event-meta">
+                <!-- Metadata populated by JS -->
+            </div>
 
-    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+            <div class="action-bar tabs">
+                <button id="tab-map" class="btn tab-btn active" onclick="switchTab('map')">Map</button>
+                <button id="tab-metadata" class="btn tab-btn" onclick="switchTab('metadata')">Metadata</button>
+                <button id="tab-products" class="btn tab-btn" onclick="switchTab('products')">Download Products</button>
+                <button id="tab-analysis" class="btn tab-btn" onclick="switchTab('analysis')">Analysis View</button>
+                <button id="tab-static" class="btn tab-btn" onclick="switchTab('static')">Static View</button>
+            </div>
 
-    <!--  My scripts -->
+            <div id="content-map" class="tab-content">
+                <div id="map-container">
+                    <div id="shakemap"></div>
+                    <div id="map-controls">
+                        <h3>Layers</h3>
+                        <div id="layer-list">
+                            <!-- Layers checkboxes -->
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <script src="./config.js"></script>
-    <script src="./scripts/functions.js"></script>
+            <div id="content-metadata" class="tab-content hidden">
+                <div id="metadata-content">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
 
+            <div id="content-products" class="tab-content hidden">
+                <div id="products-list">
+                    <!-- Product list populated by JS -->
+                </div>
+            </div>
 
-    <!-- <script src="./events.js"></script> -->
-    <!-- <script src="./scripts/softwareVersion.js"></script> -->
-    <script src="./scripts/scriptIndex.js"></script>
-  </body>
+            <div id="content-analysis" class="tab-content hidden">
+                <!-- Analysis header with radio buttons and controls -->
+                <div class="analysis-header">
+                    <div class="analysis-radio-group">
+                        <label class="analysis-radio-label">
+                            <input type="radio" name="analysis-type" value="intensity" checked>
+                            <span>INTENSITY</span>
+                        </label>
+                        <label class="analysis-radio-label">
+                            <input type="radio" name="analysis-type" value="pga">
+                            <span>PGA</span>
+                        </label>
+                        <label class="analysis-radio-label">
+                            <input type="radio" name="analysis-type" value="pgv">
+                            <span>PGV</span>
+                        </label>
+                    </div>
+
+                    <!-- Controls moved to same row -->
+                    <div class="analysis-controls-inline">
+                        <div class="control-group">
+                            <label for="selectRegrType">Select Site Class</label>
+                            <select id="selectRegrType" class="custom-select">
+                                <option value="rock">Rock</option>
+                                <option value="soil">Soil</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="dyfiCheck">
+                                <input type="checkbox" id="dyfiCheck">
+                                Show macroseismic data
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plot containers -->
+                <div class="plot-container">
+                    <div id="intensity" class="plot-area active"></div>
+                    <div id="pga" class="plot-area"></div>
+                    <div id="pgv" class="plot-area"></div>
+                </div>
+            </div>
+
+            <div id="content-static" class="tab-content hidden">
+                <!-- Static View header with image selector -->
+                <div class="static-view-header">
+                    <div class="static-view-selector">
+                        <button class="static-view-btn active" data-image="intensity">INTENSITY</button>
+                        <button class="static-view-btn" data-image="pga">PGA</button>
+                        <button class="static-view-btn" data-image="pgv">PGV</button>
+                        <div class="static-view-dropdown">
+                            <button class="static-view-btn dropdown-toggle" id="sa-dropdown">SA <i
+                                    class="fas fa-chevron-down"></i></button>
+                            <div class="dropdown-menu" id="sa-menu">
+                                <button class="dropdown-item" data-image="psa0p3">SA 0.3s</button>
+                                <button class="dropdown-item" data-image="psa1p0">SA 1s</button>
+                                <button class="dropdown-item" data-image="psa3p0">SA 3s</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image viewer -->
+                <div class="static-image-container">
+                    <img id="static-view-image" src="" alt="ShakeMap Static View" />
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div id="disclaimer-container">
+                <!-- Populated by JS -->
+            </div>
+            <div id="logos-container">
+                <!-- Populated by JS -->
+            </div>
+            <div class="footer-info">
+                <span id="footer-version"></span>
+                <span id="footer-github"></span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- D3.js v7 for Analysis View -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/colors.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/analysis.js"></script>
+</body>
+
 </html>

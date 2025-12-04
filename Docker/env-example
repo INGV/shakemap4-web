@@ -1,4 +1,0 @@
-NGINX_HOST_HTTP_PORT=8091
-ENV_UID=1000
-ENV_GID=1000
-SHAKEMAP_DATA_PATH=/Users/valentino/gitwork/gitlab/_shakemap/shakemap4/data/shakemap_profiles/world/data
