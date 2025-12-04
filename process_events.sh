@@ -15,62 +15,92 @@ echo_date() {
 }
 
 
-# Function to acquire lock
-acquire_lock() {
-    # Try to create lock directory atomically
-    if mkdir "$LOCKDIR" 2>/dev/null; then
-        # Successfully acquired lock, write PID
-        echo $$ > "$PIDFILE"
-        # Set trap to release lock on exit - only after acquiring lock!
-        trap release_lock EXIT INT TERM
+# Function to check if a lock is stale and clean it up if needed
+# Returns: 0 if no lock or stale lock removed, 1 if valid lock exists
+cleanup_stale_lock() {
+    # No lock directory - nothing to clean up
+    if [ ! -d "$LOCKDIR" ]; then
         return 0
+    fi
+
+    # Lock directory exists but no PID file - incomplete/corrupt lock
+    if [ ! -f "$PIDFILE" ]; then
+        echo "[WARN] Removing incomplete lock directory (no PID file)" >&2
+        rm -rf "$LOCKDIR"
+        return 0
+    fi
+
+    # Read the PID from the lock file
+    local old_pid=$(cat "$PIDFILE" 2>/dev/null)
+
+    # Empty or corrupt PID file
+    if [ -z "$old_pid" ]; then
+        echo "[WARN] Removing corrupt lock (empty PID file)" >&2
+        rm -rf "$LOCKDIR"
+        return 0
+    fi
+
+    # Check if the process is still running (kill -0 doesn't send signal, just checks)
+    if kill -0 "$old_pid" 2>/dev/null; then
+        # Process is alive - valid lock
+        echo "[INFO] Another instance of process_events.sh (PID: $old_pid) is already running. Exiting." >&2
+        return 1
     else
-        # Lock directory exists, check if process is still running
-        if [ -f "$PIDFILE" ]; then
-            local old_pid=$(cat "$PIDFILE" 2>/dev/null)
-            # Check if process is still running
-            if [ -n "$old_pid" ] && kill -0 "$old_pid" 2>/dev/null; then
-                echo "[INFO] Another instance of process_events.sh (PID: $old_pid) is already running. Exiting." >&2
-                exit 0
-            else
-                # Stale lock detected, remove it
-                echo "[WARN] Removing stale lock from PID: $old_pid" >&2
-                rm -rf "$LOCKDIR"
-                # Try to acquire lock again
-                if mkdir "$LOCKDIR" 2>/dev/null; then
-                    echo $$ > "$PIDFILE"
-                    # Set trap to release lock on exit - only after acquiring lock!
-                    trap release_lock EXIT INT TERM
-                    return 0
-                else
-                    echo "[ERROR] Failed to acquire lock after removing stale lock." >&2
-                    exit 1
-                fi
-            fi
-        else
-            # Lock directory exists but no PID file, clean up and retry
-            echo "[WARN] Lock directory exists without PID file, cleaning up..." >&2
+        # Process is dead - stale lock
+        echo "[WARN] Removing stale lock from dead process (PID: $old_pid)" >&2
+        rm -rf "$LOCKDIR"
+        return 0
+    fi
+}
+
+# Function to acquire lock using atomic mkdir (cross-platform: works on Linux and macOS)
+# Returns: 0 on success, 1 on failure
+acquire_lock() {
+    local max_attempts=2
+    local attempt=1
+
+    while [ $attempt -le $max_attempts ]; do
+        # Try to create lock directory atomically
+        # mkdir is atomic on both Linux and macOS (better than touch for locking)
+        if mkdir "$LOCKDIR" 2>/dev/null; then
+            # Successfully acquired lock - write our PID
+            echo $$ > "$PIDFILE"
+            return 0
+        fi
+
+        # Lock directory already exists - check if it's stale
+        if ! cleanup_stale_lock; then
+            # Valid lock exists (another process is running)
+            return 1
+        fi
+
+        # Stale lock was removed, try again
+        attempt=$((attempt + 1))
+    done
+
+    # Failed to acquire lock after all attempts
+    echo "[ERROR] Failed to acquire lock after $max_attempts attempts" >&2
+    return 1
+}
+
+# Function to release lock (with ownership verification)
+release_lock() {
+    # Only remove lock if we own it (safety check)
+    if [ -f "$PIDFILE" ]; then
+        local lock_pid=$(cat "$PIDFILE" 2>/dev/null)
+        if [ "$lock_pid" = "$$" ]; then
             rm -rf "$LOCKDIR"
-            if mkdir "$LOCKDIR" 2>/dev/null; then
-                echo $$ > "$PIDFILE"
-                # Set trap to release lock on exit - only after acquiring lock!
-                trap release_lock EXIT INT TERM
-                return 0
-            else
-                echo "[ERROR] Failed to acquire lock." >&2
-                exit 1
-            fi
         fi
     fi
 }
 
-# Function to release lock
-release_lock() {
-    rm -rf "$LOCKDIR"
-}
+# Try to acquire the lock - exit gracefully if another instance is running
+if ! acquire_lock; then
+    exit 0
+fi
 
-# Acquire the lock before proceeding
-acquire_lock
+# Set trap to release lock on exit - only set after successfully acquiring lock
+trap release_lock EXIT INT TERM
 
 # Check for required commands
 REQUIRED_COMMANDS=("xmllint" "jq")
