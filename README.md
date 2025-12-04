@@ -35,13 +35,13 @@ Docker provides a self-contained environment with all dependencies included.
 #### Preferred: Pull from Docker Hub
 **Run with data directory as volume:**
 ```bash
-docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data --name shakemap4-web__container ingv/shakemap4-web
+docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data:ro --name shakemap4-web__container ingv/shakemap4-web
 ```
 
 **Run with automated processing enabled:**
 ```bash
 docker run -d -p 8080:80 \
-  -v $(pwd)/data:/usr/share/nginx/html/data \
+  -v $(pwd)/data:/usr/share/nginx/html/data:ro \
   --name shakemap4-web__container \
   -e ENABLE_CRONTAB=true \
   ingv/shakemap4-web
@@ -59,13 +59,13 @@ docker build -t ingv/shakemap4-web .
 
 **Run with data directory as volume:**
 ```bash
-docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data --name shakemap4-web__container ingv/shakemap4-web
+docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data:ro --name shakemap4-web__container ingv/shakemap4-web
 ```
 
 **Run with automated processing enabled:**
 ```bash
 docker run -d -p 8080:80 \
-  -v $(pwd)/data:/usr/share/nginx/html/data \
+  -v $(pwd)/data:/usr/share/nginx/html/data:ro \
   --name shakemap4-web__container \
   -e ENABLE_CRONTAB=true \
   ingv/shakemap4-web
