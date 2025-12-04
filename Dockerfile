@@ -39,5 +39,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Expose port 80
 EXPOSE 80
 
+# Set Working Directory: /usr/share/nginx/html/
+WORKDIR /usr/share/nginx/html/
+
 # Use custom entrypoint
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
