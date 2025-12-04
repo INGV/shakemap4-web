@@ -52,12 +52,12 @@ When `ENABLE_CRONTAB=true` is set, the container will automatically:
 #### Alternative: Build Docker image locally
 **Build the Docker image:**
 ```bash
-docker build -t shakemap4-web .
+docker build -t ingv/shakemap4-web .
 ```
 
 **Run with data directory as volume:**
 ```bash
-docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data --name shakemap4-web__container shakemap4-web
+docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data --name shakemap4-web__container ingv/shakemap4-web
 ```
 
 **Run with automated processing enabled:**
@@ -66,7 +66,7 @@ docker run -d -p 8080:80 \
   -v $(pwd)/data:/usr/share/nginx/html/data \
   --name shakemap4-web__container \
   -e ENABLE_CRONTAB=true \
-  shakemap4-web
+  ingv/shakemap4-web
 ```
 
 Then open `http://localhost:8080` in your browser.
