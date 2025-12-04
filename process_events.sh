@@ -188,6 +188,9 @@ if [ ! -f "$EVENTS_JSON" ]; then
     echo "{}" > "$EVENTS_JSON"
 fi
 
+# Capture start time
+START_TIME=$(date +%s)
+
 # Main logic
 if [ -n "$SINGLE_EVENT_ID" ]; then
     echo_date "Processing single event: $SINGLE_EVENT_ID"
@@ -216,7 +219,7 @@ if [ -n "$SINGLE_EVENT_ID" ]; then
            .[$year][$month] |= map(select(.id != $id)) + [$new_event]
            ' "$EVENTS_JSON" > "$tmp_json" && mv "$tmp_json" "$EVENTS_JSON"
            
-        echo "Event $SINGLE_EVENT_ID processed."
+        echo_date "Event $SINGLE_EVENT_ID processed."
     fi
 elif [ -n "$LAST_EVENTS" ]; then
     echo_date "Processing last $LAST_EVENTS events (ordered by modification date)..."
@@ -283,7 +286,7 @@ elif [ -n "$LAST_EVENTS" ]; then
     }) | from_entries' all_events_flat.json > "$EVENTS_JSON"
     
     rm all_events_flat.json
-    echo "Last $LAST_EVENTS events processed."
+    echo_date "Last $LAST_EVENTS events processed."
 else
     echo_date "Processing all events..."
     # Iterate over all directories in data/
@@ -334,3 +337,10 @@ else
     rm all_events_flat.json
     echo_date "All events processed."
 fi
+
+# Calculate and display execution time
+END_TIME=$(date +%s)
+EXECUTION_TIME=$((END_TIME - START_TIME))
+MINUTES=$((EXECUTION_TIME / 60))
+SECONDS=$((EXECUTION_TIME % 60))
+echo_date "Execution time: ${MINUTES} minute(s) and ${SECONDS} second(s)"
