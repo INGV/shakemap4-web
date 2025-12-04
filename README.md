@@ -49,14 +49,26 @@ Example: `./process_events.sh -e 44683062`
 ### 3. Running the Portal
 
 #### Option A: Docker (Recommended)
+
+##### Preferred: Pull from Docker Hub
+**Run with data directory as volume:**
+```bash
+docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data --name shakemap4-web__container ingv/shakemap4-web
+```
+
+**Run with automated processing enabled:**
+```bash
+docker run -d -p 8080:80 \
+  -v $(pwd)/data:/usr/share/nginx/html/data \
+  --name shakemap4-web__container \
+  -e ENABLE_CRONTAB=true \
+  ingv/shakemap4-web
+```
+
+##### Alternative: Build locally
 **Build the Docker image:**
 ```bash
 docker build -t shakemap4-web .
-```
-
-**Run without volume (data included in image):**
-```bash
-docker run -d -p 8080:80 --name shakemap4-web__container shakemap4-web
 ```
 
 **Run with data directory as volume:**
