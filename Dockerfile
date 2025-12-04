@@ -4,6 +4,7 @@ FROM nginx:1.29.3
 RUN apt-get update && \
     apt-get install -y \
     jq \
+    vim \
     cron \
     libxml2-utils \
     && rm -rf /var/lib/apt/lists/*
