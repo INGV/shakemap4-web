@@ -8,6 +8,9 @@ RUN apt-get update && \
     libxml2-utils \
     && rm -rf /var/lib/apt/lists/*
 
+# Add alias ll=ls -la to root's .bashrc
+RUN echo "alias ll='ls -la'" >> /root/.bashrc
+
 # Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
