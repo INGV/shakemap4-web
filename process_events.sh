@@ -115,6 +115,8 @@ DATA_DIR=""
 EVENTS_JSON="events.json"
 SINGLE_EVENT_ID=""
 LAST_EVENTS=""
+# Array to track events with time parsing issues
+EVENTS_WITH_TIME_PARSING=()
 
 # Parse arguments
 while getopts "d:e:l:" opt; do
@@ -184,6 +186,27 @@ process_event() {
     local lon=$(get_attr "lon")
     local mag=$(get_attr "mag")
     local depth=$(get_attr "depth")
+
+    # Check if date/time fields are missing and parse from "time" attribute if needed
+    if [ -z "$year" ] || [ -z "$month" ] || [ -z "$day" ]; then
+        local time_attr=$(get_attr "time")
+        if [ -n "$time_attr" ]; then
+            # Parse ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
+            year="${time_attr:0:4}"
+            month="${time_attr:5:2}"
+            day="${time_attr:8:2}"
+            h="${time_attr:11:2}"
+            m="${time_attr:14:2}"
+            s="${time_attr:17:2}"
+
+            # Log warning and track this event
+            echo "Warning: Event $id uses 'time' attribute instead of individual date/time fields. Parsed: $year-$month-$day $h:$m:$s" >&2
+            EVENTS_WITH_TIME_PARSING+=("$id")
+        else
+            echo "Error: Event $id has no valid date/time information" >&2
+            return 1
+        fi
+    fi
 
     # Construct JSON object for this event
     # We use jq to ensure proper escaping and formatting
@@ -369,6 +392,16 @@ else
     
     rm all_events_flat.json
     echo "All events processed."
+fi
+
+# Report events with time parsing issues
+if [ ${#EVENTS_WITH_TIME_PARSING[@]} -gt 0 ]; then
+    echo ""
+    echo_date "=== Events with 'time' attribute parsing (${#EVENTS_WITH_TIME_PARSING[@]} events) ==="
+    for event_id in "${EVENTS_WITH_TIME_PARSING[@]}"; do
+        echo "  - $event_id"
+    done
+    echo ""
 fi
 
 # Calculate and display execution time
