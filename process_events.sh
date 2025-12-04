@@ -113,7 +113,7 @@ for CMD in "${REQUIRED_COMMANDS[@]}"; do
 done
 
 DATA_DIR=""
-EVENTS_JSON=""  # Will be set after DATA_DIR is parsed
+EVENTS_JSON=${WORKDIR}/events.json
 SINGLE_EVENT_ID=""
 LAST_EVENTS=""
 # Array to track events with time parsing issues
