@@ -7,6 +7,14 @@
 LOCKDIR="/tmp/process_events.lock"
 PIDFILE="$LOCKDIR/pid"
 
+# Function to echo timestamped messages
+echo_date() {
+    local DATE_NOW
+    DATE_NOW=$(date "+%Y-%m-%d %H:%M:%S")
+    echo "[${DATE_NOW}] - ${1}"
+}
+
+
 # Function to acquire lock
 acquire_lock() {
     # Try to create lock directory atomically
@@ -182,7 +190,7 @@ fi
 
 # Main logic
 if [ -n "$SINGLE_EVENT_ID" ]; then
-    echo "Processing single event: $SINGLE_EVENT_ID"
+    echo_date "Processing single event: $SINGLE_EVENT_ID"
     event_json=$(process_event "$SINGLE_EVENT_ID")
     
     if [ -n "$event_json" ]; then
@@ -211,7 +219,7 @@ if [ -n "$SINGLE_EVENT_ID" ]; then
         echo "Event $SINGLE_EVENT_ID processed."
     fi
 elif [ -n "$LAST_EVENTS" ]; then
-    echo "Processing last $LAST_EVENTS events (ordered by modification date)..."
+    echo_date "Processing last $LAST_EVENTS events (ordered by modification date)..."
     
     # Find all event directories that have current/event.xml
     # Sort by modification time (newest first) and take the last N
@@ -277,7 +285,7 @@ elif [ -n "$LAST_EVENTS" ]; then
     rm all_events_flat.json
     echo "Last $LAST_EVENTS events processed."
 else
-    echo "Processing all events..."
+    echo_date "Processing all events..."
     # Iterate over all directories in data/
     # We will build a large list of objects first or update incrementally?
     # Updating incrementally is safer but slower. Given 7000+ folders, let's try to be efficient.
@@ -324,5 +332,5 @@ else
     }) | from_entries' all_events_flat.json > "$EVENTS_JSON"
     
     rm all_events_flat.json
-    echo "All events processed."
+    echo_date "All events processed."
 fi
