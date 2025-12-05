@@ -404,26 +404,28 @@ async function initMap(event) {
                     // Create triangle marker using divIcon
                     const triangleIcon = L.divIcon({
                         className: 'triangle-marker',
-                        html: `<div style="
-                            width: 0;
-                            height: 0;
-                            border-left: 7px solid transparent;
-                            border-right: 7px solid transparent;
-                            border-bottom: 12px solid #000;
-                            position: relative;
-                            left: -7px;
-                            top: -12px;
-                        ">
+                        html: `<div style="width: 14px; height: 12px; position: relative; background-color: rgba(255, 255, 255, 0.01);">
                             <div style="
                                 width: 0;
                                 height: 0;
-                                border-left: 6px solid transparent;
-                                border-right: 6px solid transparent;
-                                border-bottom: 10px solid #fff;
+                                border-left: 7px solid transparent;
+                                border-right: 7px solid transparent;
+                                border-bottom: 12px solid #000;
                                 position: absolute;
-                                left: -6px;
-                                top: 2px;
-                            "></div>
+                                left: 0;
+                                top: 0;
+                            ">
+                                <div style="
+                                    width: 0;
+                                    height: 0;
+                                    border-left: 6px solid transparent;
+                                    border-right: 6px solid transparent;
+                                    border-bottom: 10px solid #fff;
+                                    position: absolute;
+                                    left: -6px;
+                                    top: 2px;
+                                "></div>
+                            </div>
                         </div>`,
                         iconSize: [14, 12],
                         iconAnchor: [7, 12]
