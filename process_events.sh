@@ -340,7 +340,7 @@ elif [ -n "$LAST_EVENTS" ]; then
     current=0
 
     # Process each event and update events.json incrementally
-    echo "$event_dirs" | while read xml_file; do
+    while read xml_file; do
         # Extract event_id from path
         event_id=$(basename $(dirname $(dirname "$xml_file")))
 
@@ -354,7 +354,7 @@ elif [ -n "$LAST_EVENTS" ]; then
         if [ -n "$event_json" ]; then
             update_event_in_json "$event_json" "$event_id"
         fi
-    done
+    done < <(echo "$event_dirs")
 
     echo "Last $LAST_EVENTS events processed."
 else
@@ -373,24 +373,29 @@ else
     current=0
     
     # Find all event.xml files
-    find "$DATA_DIR" -maxdepth 3 -path "*/current/event.xml" | while read xml_file; do
+    # Use process substitution to avoid subshell and preserve EVENTS_WITH_TIME_PARSING array
+    # Create temporary file for raw JSON output
+    EVENTS_JSON_RAW="${WORKDIR}/events_raw.json.tmp"
+
+    # Step 1: Process all events and write to temporary file
+    while read xml_file; do
         # Extract event_id from path
         event_id=$(basename $(dirname $(dirname "$xml_file")))
-        
+
         # Increment counter
         current=$((current + 1))
         echo "$current/$total_events - Processing $event_id" >&2
-        
+
         # Process event
-        # We call the function but we need to handle the file path inside the function or pass it
-        # Let's redefine process_event slightly or just set DATA_DIR logic
-        # Actually, process_event takes ID.
-        
         json_str=$(process_event "$event_id")
         if [ -n "$json_str" ]; then
              echo "$json_str"
         fi
-    done | jq -s '.' > "${EVENTS_JSON_TMP}"
+    done < <(find "$DATA_DIR" -maxdepth 3 -path "*/current/event.xml") > "${EVENTS_JSON_RAW}"
+
+    # Step 2: Convert to JSON array
+    jq -s '.' "${EVENTS_JSON_RAW}" > "${EVENTS_JSON_TMP}"
+    rm "${EVENTS_JSON_RAW}"
 
     # Now restructure flat list into Year -> Month -> List
     restructure_events_json
@@ -408,6 +413,9 @@ if [ ${#EVENTS_WITH_TIME_PARSING[@]} -gt 0 ]; then
     done
     echo ""
 fi
+
+# Update file permissions to be readable
+chmod 644 "$EVENTS_JSON"
 
 # Calculate and display execution time
 END_TIME=$(date +%s)
