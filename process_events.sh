@@ -157,6 +157,20 @@ if [ -n "$LAST_EVENTS" ]; then
     fi
 fi
 
+# Function to restructure flat event list into Year -> Month -> List structure
+restructure_events_json() {
+    echo "Restructuring data..."
+    jq 'group_by(.year) | map({
+        key: (.[0].year | tostring),
+        value: (
+            group_by(.month) | map({
+                key: (.[0].month | tostring | if length == 1 then "0" + . else . end),
+                value: .
+            }) | from_entries
+        )
+    }) | from_entries' "${EVENTS_JSON_TMP}" > "$EVENTS_JSON"
+}
+
 # Function to process a single event
 process_event() {
     local event_id=$1
@@ -169,7 +183,7 @@ process_event() {
 
     # Extract fields using xmllint (XPath)
     # Note: xmllint --xpath returns result like 'content', we need to clean it up if attributes are quoted
-    
+
     # Helper to extract attribute
     get_attr() {
         local attr=$1
@@ -330,19 +344,10 @@ elif [ -n "$LAST_EVENTS" ]; then
              echo "$json_str"
         fi
     done | jq -s '.' > "${EVENTS_JSON_TMP}"
-    
+
     # Now restructure flat list into Year -> Month -> List
-    echo "Restructuring data..."
-    jq 'group_by(.year) | map({
-        key: (.[0].year | tostring),
-        value: (
-            group_by(.month) | map({
-                key: (.[0].month | tostring | if length == 1 then "0" + . else . end),
-                value: .
-            }) | from_entries
-        )
-    }) | from_entries' "${EVENTS_JSON_TMP}" > "$EVENTS_JSON"
-    
+    restructure_events_json
+
     rm "${EVENTS_JSON_TMP}"
     echo "Last $LAST_EVENTS events processed."
 else
@@ -379,19 +384,10 @@ else
              echo "$json_str"
         fi
     done | jq -s '.' > "${EVENTS_JSON_TMP}"
-    
+
     # Now restructure flat list into Year -> Month -> List
-    echo "Restructuring data..."
-    jq 'group_by(.year) | map({
-        key: (.[0].year | tostring),
-        value: (
-            group_by(.month) | map({
-                key: (.[0].month | tostring | if length == 1 then "0" + . else . end),
-                value: .
-            }) | from_entries
-        )
-    }) | from_entries' "${EVENTS_JSON_TMP}" > "$EVENTS_JSON"
-    
+    restructure_events_json
+
     rm "${EVENTS_JSON_TMP}"
     echo "All events processed."
 fi
