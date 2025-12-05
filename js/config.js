@@ -16,7 +16,7 @@ const config = {
         { name: "Mediterranean", minlat: 27, maxlat: 48, minlon: -7, maxlon: 37.5 }
     ],
     bBox: [
-        { minlat: 42, maxlat: 43, minlon: 12, maxlon: 13 }
+        { minlat: 35, maxlat: 49, minlon: 15, maxlon: 20 }
     ]
 };
 
