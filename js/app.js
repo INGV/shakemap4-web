@@ -24,9 +24,12 @@ async function init() {
     });
 
     // Filter Listeners
+    document.getElementById('period-filter').addEventListener('change', () => {
+        populateYearFilter();
+        applyArchiveFilters();
+    });
     document.getElementById('year-filter').addEventListener('change', applyArchiveFilters);
     document.getElementById('mag-filter').addEventListener('change', applyArchiveFilters);
-    document.getElementById('region-filter').addEventListener('change', applyArchiveFilters);
 
     // Handle routing
     window.addEventListener('hashchange', handleRoute);
@@ -80,8 +83,7 @@ async function loadEvents() {
         // Populate Year Filter
         populateYearFilter();
 
-        // Populate Region Filter
-        populateRegionFilter();
+
 
     } catch (error) {
         console.error(error);
@@ -90,8 +92,35 @@ async function loadEvents() {
 }
 
 function populateYearFilter() {
-    const years = [...new Set(allEvents.map(e => e.year))].sort().reverse();
     const select = document.getElementById('year-filter');
+    const period = document.getElementById('period-filter').value;
+
+    // Clear existing options except "All"
+    select.innerHTML = '<option value="">All</option>';
+
+    if (period === 'historical') {
+        // If historical, we only show "All" (which is already there)
+        return;
+    }
+
+    // Modern events: Filter valid years
+    let relevantEvents = allEvents;
+    if (typeof config !== 'undefined' && config.historycalCutOff) {
+        const parts = config.historycalCutOff.split('-'); // e.g. "2000-01-01"
+        if (parts.length === 3) {
+            const cutOffYear = parseInt(parts[0]);
+            const cutOffMonth = parseInt(parts[1]) - 1;
+            const cutOffDay = parseInt(parts[2]);
+            const cutOffDate = new Date(cutOffYear, cutOffMonth, cutOffDay);
+
+            relevantEvents = allEvents.filter(e => {
+                const eventDate = new Date(e.year, e.month - 1, e.day, e.h, e.m, e.s);
+                return eventDate >= cutOffDate;
+            });
+        }
+    }
+
+    const years = [...new Set(relevantEvents.map(e => e.year))].sort().reverse();
     years.forEach(year => {
         const option = document.createElement('option');
         option.value = year;
@@ -100,16 +129,7 @@ function populateYearFilter() {
     });
 }
 
-function populateRegionFilter() {
-    if (typeof config === 'undefined' || !config.regions) return;
-    const select = document.getElementById('region-filter');
-    config.regions.forEach((region, index) => {
-        const option = document.createElement('option');
-        option.value = index; // Use index to reference config.regions array
-        option.textContent = region.name;
-        select.appendChild(option);
-    });
-}
+
 
 function handleRoute() {
     const hash = window.location.hash;
@@ -235,7 +255,6 @@ function showArchive() {
 function applyArchiveFilters() {
     const year = document.getElementById('year-filter').value;
     const minMag = parseFloat(document.getElementById('mag-filter').value);
-    const regionIndex = document.getElementById('region-filter').value;
 
     let filtered = allEvents;
 
@@ -247,12 +266,29 @@ function applyArchiveFilters() {
         filtered = filtered.filter(e => e.mag >= minMag);
     }
 
-    if (regionIndex !== "" && typeof config !== 'undefined' && config.regions[regionIndex]) {
-        const region = config.regions[regionIndex];
-        filtered = filtered.filter(e =>
-            e.lat >= region.minlat && e.lat <= region.maxlat &&
-            e.lon >= region.minlon && e.lon <= region.maxlon
-        );
+
+
+    // Apply Historical/Modern Filter
+    if (typeof config !== 'undefined' && config.historycalCutOff) {
+        const period = document.getElementById('period-filter').value;
+
+        // Parse cutoff date
+        const parts = config.historycalCutOff.split('-');
+        if (parts.length === 3) {
+            const cutOffYear = parseInt(parts[0]);
+            const cutOffMonth = parseInt(parts[1]) - 1; // Months are 0-indexed
+            const cutOffDay = parseInt(parts[2]);
+            const cutOffDate = new Date(cutOffYear, cutOffMonth, cutOffDay);
+
+            filtered = filtered.filter(e => {
+                const eventDate = new Date(e.year, e.month - 1, e.day, e.h, e.m, e.s);
+                if (period === 'modern') {
+                    return eventDate >= cutOffDate;
+                } else {
+                    return eventDate < cutOffDate;
+                }
+            });
+        }
     }
 
     renderCards(filtered, 'archive-events-cards');
@@ -365,7 +401,18 @@ async function initMap(event) {
     separator.style.borderTop = '1px solid var(--border-color)';
     layerList.appendChild(separator);
 
-    const addLayer = async (name, filename, color, checked = false) => {
+    // Data Layers Group Name
+    const DATA_LAYER_GROUP = 'datalayer';
+    const dataLayers = [
+        { name: 'Intensity (MMI)', file: 'cont_mi.json', color: '#ff0000' },
+        { name: 'PGA', file: 'cont_pga.json', color: '#0000ff' },
+        { name: 'PGV', file: 'cont_pgv.json', color: '#008000' },
+        { name: 'PSA 0.3s', file: 'cont_psa0p3.json', color: '#ffa500' },
+        { name: 'PSA 1.0s', file: 'cont_psa1p0.json', color: '#800080' },
+        { name: 'PSA 3.0s', file: 'cont_psa3p0.json', color: '#a52a2a' }
+    ];
+
+    const addLayer = async (name, filename, color, inputType = 'checkbox', groupName = null, checked = false) => {
         try {
             const res = await fetch(`${DATA_DIR}/${event.id}/current/products/${filename}`);
             if (!res.ok) return;
@@ -390,9 +437,17 @@ async function initMap(event) {
             currentLayers[name] = layer;
 
             const div = document.createElement('div');
+            // If radio, use onchange="switchDataLayer(...)", if checkbox calculate toggle
+            let onChangeCall = '';
+            if (inputType === 'radio') {
+                onChangeCall = `switchDataLayer('${name}')`;
+            } else {
+                onChangeCall = `toggleLayer('${name}')`;
+            }
+
             div.innerHTML = `
                 <label>
-                    <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleLayer('${name}')">
+                    <input type="${inputType}" ${groupName ? `name="${groupName}"` : ''} ${checked ? 'checked' : ''} onchange="${onChangeCall}">
                     ${name}
                 </label>
             `;
@@ -403,12 +458,20 @@ async function initMap(event) {
         }
     };
 
-    await addLayer('Intensity (MMI)', 'cont_mi.json', '#ff0000', true);
-    await addLayer('PGA', 'cont_pga.json', '#0000ff');
-    await addLayer('PGV', 'cont_pgv.json', '#008000');
-    await addLayer('PSA 0.3s', 'cont_psa0p3.json', '#ffa500');
-    await addLayer('PSA 1.0s', 'cont_psa1p0.json', '#800080');
-    await addLayer('PSA 3.0s', 'cont_psa3p0.json', '#a52a2a');
+    // Load all data layers
+    // The first one is checked by default
+    for (let i = 0; i < dataLayers.length; i++) {
+        const item = dataLayers[i];
+        const isFirst = (i === 0);
+        await addLayer(item.name, item.file, item.color, 'radio', DATA_LAYER_GROUP, isFirst);
+    }
+
+    // Add separator line after data layers
+    const separator2 = document.createElement('hr');
+    separator2.style.margin = '15px 0';
+    separator2.style.border = '0';
+    separator2.style.borderTop = '1px solid var(--border-color)';
+    layerList.appendChild(separator2);
 
     try {
         const res = await fetch(`${DATA_DIR}/${event.id}/current/products/stationlist.json`);
@@ -416,6 +479,15 @@ async function initMap(event) {
             const geojson = await res.json();
             const layer = L.geoJSON(geojson, {
                 pointToLayer: function (feature, latlng) {
+                    // Calculate color based on intensity (same logic as Analysis View)
+                    let fillColor = '#FFFFFF';
+                    if (feature.properties && feature.properties.intensity !== null && feature.properties.intensity !== undefined) {
+                        const intensity = Math.round(feature.properties.intensity);
+                        if (typeof intColors !== 'undefined' && intColors[intensity]) {
+                            fillColor = intColors[intensity];
+                        }
+                    }
+
                     // Create triangle marker using divIcon
                     const triangleIcon = L.divIcon({
                         className: 'triangle-marker',
@@ -435,7 +507,7 @@ async function initMap(event) {
                                     height: 0;
                                     border-left: 6px solid transparent;
                                     border-right: 6px solid transparent;
-                                    border-bottom: 10px solid #fff;
+                                    border-bottom: 10px solid ${fillColor};
                                     position: absolute;
                                     left: -6px;
                                     top: 2px;
@@ -533,6 +605,29 @@ async function initMap(event) {
         console.warn('Failed to load legend', e);
     }
 }
+
+
+window.switchDataLayer = function (selectedName) {
+    // Defined data keys that are part of the radio group
+    const dataKeys = [
+        'Intensity (MMI)', 'PGA', 'PGV',
+        'PSA 0.3s', 'PSA 1.0s', 'PSA 3.0s'
+    ];
+
+    dataKeys.forEach(name => {
+        if (currentLayers[name]) {
+            if (name === selectedName) {
+                if (!map.hasLayer(currentLayers[name])) {
+                    map.addLayer(currentLayers[name]);
+                }
+            } else {
+                if (map.hasLayer(currentLayers[name])) {
+                    map.removeLayer(currentLayers[name]);
+                }
+            }
+        }
+    });
+};
 
 window.toggleLayer = function (name) {
     if (currentLayers[name]) {

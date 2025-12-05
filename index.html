@@ -39,6 +39,14 @@
 
             <div class="filters">
                 <div class="filter-group">
+                    <label>Event Scale</label>
+                    <select id="period-filter">
+                        <option value="modern" selected>Modern events</option>
+                        <option value="historical">Historical events</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
                     <label>Select year</label>
                     <select id="year-filter">
                         <option value="">All</option>
@@ -56,12 +64,6 @@
                         <option value="7">7</option>
                         <option value="8">8</option>
                         <option value="9">9</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Region</label>
-                    <select id="region-filter">
-                        <!-- Populated by JS -->
                     </select>
                 </div>
             </div>
