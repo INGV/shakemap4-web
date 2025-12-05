@@ -255,6 +255,37 @@ process_event() {
         }'
 }
 
+# Function to update or add a single event in events.json incrementally
+# Parameters:
+#   $1 - event_json: JSON string of the event to add/update
+#   $2 - event_id: ID of the event
+update_event_in_json() {
+    local event_json=$1
+    local event_id=$2
+
+    # Extract year and month for the structure
+    local year=$(echo "$event_json" | jq -r '.year')
+    local month=$(echo "$event_json" | jq -r '.month' | awk '{printf "%02d", $0}')
+
+    # Update events.json incrementally
+    # Logic:
+    # 1. Check if event already exists in events.json
+    # 2. If exists, remove old entry and add new one
+    # 3. If doesn't exist, add new one
+    # 4. Keep all other events intact
+
+    local tmp_json=$(mktemp)
+    jq --argjson new_event "$event_json" \
+       --arg year "$year" \
+       --arg month "$month" \
+       --arg id "$event_id" \
+       '
+       .[$year] = (.[$year] // {}) |
+       .[$year][$month] = (.[$year][$month] // []) |
+       .[$year][$month] |= map(select(.id != $id)) + [$new_event]
+       ' "$EVENTS_JSON" > "$tmp_json" && mv "$tmp_json" "$EVENTS_JSON"
+}
+
 # Initialize events.json if it doesn't exist
 if [ ! -f "$EVENTS_JSON" ]; then
     echo "{}" > "$EVENTS_JSON"
@@ -267,30 +298,9 @@ START_TIME=$(date +%s)
 if [ -n "$SINGLE_EVENT_ID" ]; then
     echo_date "Processing single event: $SINGLE_EVENT_ID"
     event_json=$(process_event "$SINGLE_EVENT_ID")
-    
+
     if [ -n "$event_json" ]; then
-        # Extract year and month for the structure
-        year=$(echo "$event_json" | jq -r '.year')
-        month=$(echo "$event_json" | jq -r '.month' | awk '{printf "%02d", $0}') # Ensure 2 digits for key if needed, but user example showed "04"
-        
-        # Update events.json
-        # Logic: 
-        # 1. Ensure year key exists
-        # 2. Ensure month key exists
-        # 3. Remove existing entry for this id in that year/month list if exists
-        # 4. Add new entry
-        
-        tmp_json=$(mktemp)
-        jq --argjson new_event "$event_json" \
-           --arg year "$year" \
-           --arg month "$month" \
-           --arg id "$SINGLE_EVENT_ID" \
-           '
-           .[$year] = (.[$year] // {}) |
-           .[$year][$month] = (.[$year][$month] // []) |
-           .[$year][$month] |= map(select(.id != $id)) + [$new_event]
-           ' "$EVENTS_JSON" > "$tmp_json" && mv "$tmp_json" "$EVENTS_JSON"
-           
+        update_event_in_json "$event_json" "$SINGLE_EVENT_ID"
         echo "Event $SINGLE_EVENT_ID processed."
     fi
 elif [ -n "$LAST_EVENTS" ]; then
@@ -342,27 +352,7 @@ elif [ -n "$LAST_EVENTS" ]; then
         event_json=$(process_event "$event_id")
 
         if [ -n "$event_json" ]; then
-            # Extract year and month for the structure
-            year=$(echo "$event_json" | jq -r '.year')
-            month=$(echo "$event_json" | jq -r '.month' | awk '{printf "%02d", $0}')
-
-            # Update events.json incrementally
-            # Logic:
-            # 1. Check if event already exists in events.json
-            # 2. If exists, remove old entry and add new one
-            # 3. If doesn't exist, add new one
-            # 4. Keep all other events intact
-
-            tmp_json=$(mktemp)
-            jq --argjson new_event "$event_json" \
-               --arg year "$year" \
-               --arg month "$month" \
-               --arg id "$event_id" \
-               '
-               .[$year] = (.[$year] // {}) |
-               .[$year][$month] = (.[$year][$month] // []) |
-               .[$year][$month] |= map(select(.id != $id)) + [$new_event]
-               ' "$EVENTS_JSON" > "$tmp_json" && mv "$tmp_json" "$EVENTS_JSON"
+            update_event_in_json "$event_json" "$event_id"
         fi
     done
 
