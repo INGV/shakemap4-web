@@ -14,5 +14,10 @@ const config = {
         { name: "All", minlat: -90, maxlat: 90, minlon: -180, maxlon: 180 },
         { name: "Italy", minlat: 35, maxlat: 49, minlon: 5, maxlon: 20 },
         { name: "Mediterranean", minlat: 27, maxlat: 48, minlon: -7, maxlon: 37.5 }
+    ],
+    bBox: [
+        { minlat: 42, maxlat: 43, minlon: 12, maxlon: 13 }
     ]
 };
+
+window.config = config;

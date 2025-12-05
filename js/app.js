@@ -55,6 +55,21 @@ async function loadEvents() {
             }
         }
 
+        // Apply mandatory bBox filter if defined
+        if (typeof config !== 'undefined' && config.bBox && Array.isArray(config.bBox) && config.bBox.length > 0) {
+            allEvents = allEvents.filter(event => {
+                const lat = parseFloat(event.lat);
+                const lon = parseFloat(event.lon);
+
+                if (isNaN(lat) || isNaN(lon)) return false; // Exclude invalid data
+
+                return config.bBox.some(box =>
+                    lat >= box.minlat && lat <= box.maxlat &&
+                    lon >= box.minlon && lon <= box.maxlon
+                );
+            });
+        }
+
         // Sort by time descending
         allEvents.sort((a, b) => {
             const dateA = new Date(a.year, a.month - 1, a.day, a.h, a.m, a.s);
