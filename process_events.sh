@@ -160,7 +160,7 @@ fi
 # Function to restructure flat event list into Year -> Month -> List structure
 restructure_events_json() {
     echo "Restructuring data..."
-    jq 'group_by(.year) | map({
+    jq 'map(del(._used_time_parsing)) | group_by(.year) | map({
         key: (.[0].year | tostring),
         value: (
             group_by(.month) | map({
@@ -204,6 +204,7 @@ process_event() {
     local depth=$(get_attr "depth")
 
     # Check if date/time fields are missing and parse from "time" attribute if needed
+    local used_time_parsing=0
     if [ -z "$year" ] || [ -z "$month" ] || [ -z "$day" ]; then
         local time_attr=$(get_attr "time")
         if [ -n "$time_attr" ]; then
@@ -215,9 +216,9 @@ process_event() {
             m="${time_attr:14:2}"
             s="${time_attr:17:2}"
 
-            # Log warning and track this event
+            # Log warning and mark that we used time parsing
             echo "Warning: Event $id uses 'time' attribute instead of individual date/time fields. Parsed: $year-$month-$day $h:$m:$s" >&2
-            EVENTS_WITH_TIME_PARSING+=("$id")
+            used_time_parsing=1
         else
             echo "Error: Event $id has no valid date/time information" >&2
             return 1
@@ -226,6 +227,7 @@ process_event() {
 
     # Construct JSON object for this event
     # We use jq to ensure proper escaping and formatting
+    # Include a marker if time parsing was used
     jq -n \
         --arg id "$id" \
         --arg description "$description" \
@@ -239,6 +241,7 @@ process_event() {
         --argjson lon "$lon" \
         --argjson mag "$mag" \
         --argjson depth "$depth" \
+        --argjson used_time_parsing "$used_time_parsing" \
         '{
             id: $id,
             description: $description,
@@ -251,7 +254,8 @@ process_event() {
             lat: $lat,
             lon: $lon,
             mag: $mag,
-            depth: $depth
+            depth: $depth,
+            _used_time_parsing: $used_time_parsing
         }'
 }
 
@@ -282,7 +286,7 @@ update_event_in_json() {
        '
        .[$year] = (.[$year] // {}) |
        .[$year][$month] = (.[$year][$month] // []) |
-       .[$year][$month] |= map(select(.id != $id)) + [$new_event]
+       .[$year][$month] |= map(select(.id != $id)) + [($new_event | del(._used_time_parsing))]
        ' "$EVENTS_JSON" > "$tmp_json" && mv "$tmp_json" "$EVENTS_JSON"
 }
 
@@ -300,6 +304,10 @@ if [ -n "$SINGLE_EVENT_ID" ]; then
     event_json=$(process_event "$SINGLE_EVENT_ID")
 
     if [ -n "$event_json" ]; then
+        # Check if time parsing was used
+        if [ "$(echo "$event_json" | jq -r '._used_time_parsing')" = "1" ]; then
+            EVENTS_WITH_TIME_PARSING+=("$SINGLE_EVENT_ID")
+        fi
         update_event_in_json "$event_json" "$SINGLE_EVENT_ID"
         echo "Event $SINGLE_EVENT_ID processed."
     fi
@@ -352,6 +360,10 @@ elif [ -n "$LAST_EVENTS" ]; then
         event_json=$(process_event "$event_id")
 
         if [ -n "$event_json" ]; then
+            # Check if time parsing was used
+            if [ "$(echo "$event_json" | jq -r '._used_time_parsing')" = "1" ]; then
+                EVENTS_WITH_TIME_PARSING+=("$event_id")
+            fi
             update_event_in_json "$event_json" "$event_id"
         fi
     done < <(echo "$event_dirs")
@@ -389,7 +401,11 @@ else
         # Process event
         json_str=$(process_event "$event_id")
         if [ -n "$json_str" ]; then
-             echo "$json_str"
+            # Check if time parsing was used
+            if [ "$(echo "$json_str" | jq -r '._used_time_parsing')" = "1" ]; then
+                EVENTS_WITH_TIME_PARSING+=("$event_id")
+            fi
+            echo "$json_str"
         fi
     done < <(find "$DATA_DIR" -maxdepth 3 -path "*/current/event.xml") > "${EVENTS_JSON_RAW}"
 
