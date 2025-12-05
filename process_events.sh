@@ -114,6 +114,7 @@ done
 
 DATA_DIR=""
 EVENTS_JSON=${WORKDIR}/events.json
+EVENTS_JSON_TMP=${WORKDIR}/events.json.tmp
 SINGLE_EVENT_ID=""
 LAST_EVENTS=""
 # Array to track events with time parsing issues
@@ -328,7 +329,7 @@ elif [ -n "$LAST_EVENTS" ]; then
         if [ -n "$json_str" ]; then
              echo "$json_str"
         fi
-    done | jq -s '.' > all_events_flat.json
+    done | jq -s '.' > "${EVENTS_JSON_TMP}"
     
     # Now restructure flat list into Year -> Month -> List
     echo "Restructuring data..."
@@ -340,9 +341,9 @@ elif [ -n "$LAST_EVENTS" ]; then
                 value: .
             }) | from_entries
         )
-    }) | from_entries' all_events_flat.json > "$EVENTS_JSON"
+    }) | from_entries' "${EVENTS_JSON_TMP}" > "$EVENTS_JSON"
     
-    rm all_events_flat.json
+    rm "${EVENTS_JSON_TMP}"
     echo "Last $LAST_EVENTS events processed."
 else
     echo_date "Processing all events..."
@@ -377,7 +378,7 @@ else
         if [ -n "$json_str" ]; then
              echo "$json_str"
         fi
-    done | jq -s '.' > all_events_flat.json
+    done | jq -s '.' > "${EVENTS_JSON_TMP}"
     
     # Now restructure flat list into Year -> Month -> List
     echo "Restructuring data..."
@@ -389,9 +390,9 @@ else
                 value: .
             }) | from_entries
         )
-    }) | from_entries' all_events_flat.json > "$EVENTS_JSON"
+    }) | from_entries' "${EVENTS_JSON_TMP}" > "$EVENTS_JSON"
     
-    rm all_events_flat.json
+    rm "${EVENTS_JSON_TMP}"
     echo "All events processed."
 fi
 
