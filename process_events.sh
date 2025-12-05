@@ -295,11 +295,11 @@ if [ -n "$SINGLE_EVENT_ID" ]; then
     fi
 elif [ -n "$LAST_EVENTS" ]; then
     echo_date "Processing last $LAST_EVENTS events (ordered by modification date)..."
-    
+
     # Find all event directories that have current/event.xml
     # Sort by modification time (newest first) and take the last N
     # Cross-platform solution that works on both macOS and Linux
-    
+
     # Detect OS for stat command compatibility
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # macOS (BSD stat)
@@ -316,39 +316,56 @@ elif [ -n "$LAST_EVENTS" ]; then
                      head -n "$LAST_EVENTS" | \
                      cut -d' ' -f2-)
     fi
-    
+
     if [ -z "$event_dirs" ]; then
         echo "No events found in $DATA_DIR" >&2
         exit 1
     fi
-    
+
     # Count total events to process
     total_events=$(echo "$event_dirs" | wc -l | tr -d ' ')
     echo "Found $total_events events to process"
-    
+
     # Initialize counter
     current=0
-    
-    # Process each event
+
+    # Process each event and update events.json incrementally
     echo "$event_dirs" | while read xml_file; do
         # Extract event_id from path
         event_id=$(basename $(dirname $(dirname "$xml_file")))
-        
+
         # Increment counter
         current=$((current + 1))
         echo "$current/$total_events - Processing $event_id" >&2
-        
+
         # Process event
-        json_str=$(process_event "$event_id")
-        if [ -n "$json_str" ]; then
-             echo "$json_str"
+        event_json=$(process_event "$event_id")
+
+        if [ -n "$event_json" ]; then
+            # Extract year and month for the structure
+            year=$(echo "$event_json" | jq -r '.year')
+            month=$(echo "$event_json" | jq -r '.month' | awk '{printf "%02d", $0}')
+
+            # Update events.json incrementally
+            # Logic:
+            # 1. Check if event already exists in events.json
+            # 2. If exists, remove old entry and add new one
+            # 3. If doesn't exist, add new one
+            # 4. Keep all other events intact
+
+            tmp_json=$(mktemp)
+            jq --argjson new_event "$event_json" \
+               --arg year "$year" \
+               --arg month "$month" \
+               --arg id "$event_id" \
+               '
+               .[$year] = (.[$year] // {}) |
+               .[$year][$month] = (.[$year][$month] // []) |
+               .[$year][$month] |= map(select(.id != $id)) + [$new_event]
+               ' "$EVENTS_JSON" > "$tmp_json" && mv "$tmp_json" "$EVENTS_JSON"
         fi
-    done | jq -s '.' > "${EVENTS_JSON_TMP}"
+    done
 
-    # Now restructure flat list into Year -> Month -> List
-    restructure_events_json
-
-    rm "${EVENTS_JSON_TMP}"
     echo "Last $LAST_EVENTS events processed."
 else
     echo_date "Processing all events..."
