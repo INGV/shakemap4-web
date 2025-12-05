@@ -568,6 +568,7 @@ async function initMap(event) {
 
     // Add Legend Control
     let legendControl = null;
+    let legendExists = false;
     try {
         const legendRes = await fetch(`${DATA_DIR}/${event.id}/current/products/mmi_legend.png`, { method: 'HEAD' });
         if (legendRes.ok) {
@@ -590,20 +591,21 @@ async function initMap(event) {
             legendControl = L.control.legend({ position: 'bottomleft' });
             legendControl.addTo(map);
             currentLayers['Legend'] = legendControl;
-
-            // Add checkbox control
-            const div = document.createElement('div');
-            div.innerHTML = `
-                <label>
-                    <input type="checkbox" checked onchange="toggleLayer('Legend')">
-                    Show Legend
-                </label>
-            `;
-            layerList.appendChild(div);
+            legendExists = true;
         }
     } catch (e) {
         console.warn('Failed to load legend', e);
     }
+
+    // Always add checkbox control (User requirement: must be always visible)
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <label>
+            <input type="checkbox" ${legendExists ? 'checked' : ''} onchange="toggleLayer('Legend')">
+            Show Legend
+        </label>
+    `;
+    layerList.appendChild(div);
 }
 
 
