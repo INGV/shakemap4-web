@@ -1,3 +1,4 @@
 .claude/
 CLAUDE.md
 ./data/*
+events.json
