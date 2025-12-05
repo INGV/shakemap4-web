@@ -829,8 +829,8 @@ footer {
 
 .epicenter-container {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -845,9 +845,9 @@ footer {
 
 .epicenter-pulse {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    border: 3px solid #ff0000;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #000000;
     border-radius: 50%;
     opacity: 0;
     animation: pulse 2s ease-out infinite;
