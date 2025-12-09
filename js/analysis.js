@@ -116,7 +116,7 @@ async function stationList(newPlot, regrType, showDYFI) {
                     intensity: props.intensity,
                     pga: props.pga,
                     pgv: props.pgv,
-                    color: intColors[Math.round(props.intensity)] || 'black',
+                    color: intColors_USGS[Math.round(props.intensity)] || 'black',
                     intensityPrediction: getPredictedValue('mmi', props.predictions),
                     pgaPrediction: getPredictedValue('pga', props.predictions),
                     pgvPrediction: getPredictedValue('pgv', props.predictions),
