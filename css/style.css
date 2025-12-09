@@ -1001,3 +1001,165 @@ footer {
         width: 100%;
     }
 }
+
+/* Station List Styles */
+.station-list-container {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.station-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Collapsible Button Style */
+.collapsible {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    font-family: inherit;
+}
+
+.collapsible:hover {
+    background-color: #ccc;
+}
+
+.collapsible.activeCol {
+    /* active style */
+    border-bottom: none;
+}
+
+/* Header Row Style (first button) */
+.collapsible.header-row {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    cursor: default;
+    pointer-events: none;
+    /* Make header not clickable */
+}
+
+/* Content (Hidden by default) */
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.content p {
+    padding: 10px 0;
+    margin: 0;
+}
+
+.station-row-data {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /* Approximation of columns */
+}
+
+.col-id {
+    width: 30%;
+    font-weight: bold;
+}
+
+.col-mmi {
+    width: 10%;
+}
+
+.col-pga {
+    width: 15%;
+}
+
+.col-pgv {
+    width: 15%;
+}
+
+.col-dist {
+    width: 15%;
+}
+
+.col-dummy {
+    width: 30%;
+}
+
+/* Spacer */
+
+/* Channel Table inside expanded view */
+.channel-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.channel-table th,
+.channel-table td {
+    border: 1px solid #ddd;
+    padding: 4px 8px;
+    text-align: right;
+}
+
+.channel-table th {
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.channel-table td:first-child {
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Mobile Responsive Fix for Station List */
+@media (max-width: 1024px) {
+    .station-row-data {
+        font-size: 11px;
+    }
+
+    .col-id {
+        width: 20% !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .col-mmi {
+        width: 10% !important;
+        text-align: center;
+    }
+
+    .col-pga {
+        width: 18% !important;
+        text-align: center;
+    }
+
+    .col-pgv {
+        width: 18% !important;
+        text-align: center;
+    }
+
+    .col-dist {
+        width: 15% !important;
+        text-align: right;
+    }
+
+    .col-dummy {
+        display: none;
+    }
+}
