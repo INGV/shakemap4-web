@@ -116,7 +116,7 @@ async function stationList(newPlot, regrType, showDYFI) {
                     intensity: props.intensity,
                     pga: props.pga,
                     pgv: props.pgv,
-                    color: intColors[Math.round(props.intensity)] || '#FFFFFF',
+                    color: intColors[Math.round(props.intensity)] || 'black',
                     intensityPrediction: getPredictedValue('mmi', props.predictions),
                     pgaPrediction: getPredictedValue('pga', props.predictions),
                     pgvPrediction: getPredictedValue('pgv', props.predictions),
@@ -398,20 +398,29 @@ function plot_data(data, regrArr, comp_id, newPlot) {
                 .style("stroke-width", "3px")
                 .style("filter", "brightness(1.2)");
 
-            // Show tooltip
-            tooltip.style("visibility", "visible")
-                .html(
-                    `<strong>Station ID:</strong> ${d.id}<br/>` +
-                    `<strong>Station type:</strong> ${d.obsType}<br/>` +
-                    `<strong>Distance:</strong> ${d.distance.toFixed(3)} km<br/>` +
-                    `<strong>MMI:</strong> ${d.intensity ? d.intensity.toFixed(1) : 'N/A'}<br/>` +
-                    `<strong>MMI predicted:</strong> ${d.intensityPrediction ? d.intensityPrediction.toFixed(4) : 'N/A'}<br/>` +
-                    `<strong>PGA:</strong> ${d.pga ? d.pga.toFixed(4) : 'N/A'} %g<br/>` +
-                    `<strong>PGA pred:</strong> ${d.pgaPrediction ? d.pgaPrediction.toFixed(4) : 'N/A'} %g<br/>` +
-                    `<strong>PGV:</strong> ${d.pgv ? d.pgv.toFixed(4) : 'N/A'} cm/s<br/>` +
-                    `<strong>PGV pred:</strong> ${d.pgvPrediction ? d.pgvPrediction.toFixed(4) : 'N/A'} cm/s<br/>` +
-                    `<strong>Vs30:</strong> ${d.vs30 || 'N/A'} m/s`
-                );
+            // Show tooltip - Update content
+            tooltip.html(
+                `<strong>Station ID:</strong> ${d.id}<br/>` +
+                `<strong>Station type:</strong> ${d.obsType}<br/>` +
+                `<strong>Distance:</strong> ${d.distance.toFixed(3)} km<br/>` +
+                `<strong>MMI:</strong> ${d.intensity ? d.intensity.toFixed(1) : 'N/A'}<br/>` +
+                `<strong>MMI predicted:</strong> ${d.intensityPrediction ? d.intensityPrediction.toFixed(4) : 'N/A'}<br/>` +
+                `<strong>PGA:</strong> ${d.pga ? d.pga.toFixed(4) : 'N/A'} %g<br/>` +
+                `<strong>PGA pred:</strong> ${d.pgaPrediction ? d.pgaPrediction.toFixed(4) : 'N/A'} %g<br/>` +
+                `<strong>PGV:</strong> ${d.pgv ? d.pgv.toFixed(4) : 'N/A'} cm/s<br/>` +
+                `<strong>PGV pred:</strong> ${d.pgvPrediction ? d.pgvPrediction.toFixed(4) : 'N/A'} cm/s<br/>` +
+                `<strong>Vs30:</strong> ${d.vs30 || 'N/A'} m/s`
+            );
+
+            // Move to current position immediately to avoid overlap with previous location
+            // Use same offset logic as mousemove (simplified)
+            const left = event.pageX + 20;
+            const top = event.pageY - 20;
+
+            tooltip
+                .style("top", top + "px")
+                .style("left", left + "px")
+                .style("visibility", "visible");
         })
         .on("mousemove", function (event) {
             // Position tooltip near mouse with smart positioning to avoid cutoff
@@ -419,22 +428,23 @@ function plot_data(data, regrArr, comp_id, newPlot) {
             const tooltipWidth = tooltipNode ? tooltipNode.offsetWidth : 200;
             const tooltipHeight = tooltipNode ? tooltipNode.offsetHeight : 150;
 
-            let left = event.pageX + 15;
-            let top = event.pageY - 10;
+            // Increased offset to prevent cursor overlap/flickering
+            let left = event.pageX + 20;
+            let top = event.pageY - 20;
 
             // Check if tooltip would go off right edge of screen
             if (left + tooltipWidth > window.innerWidth + window.scrollX) {
-                left = event.pageX - tooltipWidth - 15;
+                left = event.pageX - tooltipWidth - 20;
             }
 
             // Check if tooltip would go off bottom edge of screen
             if (top + tooltipHeight > window.innerHeight + window.scrollY) {
-                top = event.pageY - tooltipHeight - 10;
+                top = event.pageY - tooltipHeight - 20;
             }
 
             // Check if tooltip would go off top edge
             if (top < window.scrollY) {
-                top = event.pageY + 20;
+                top = event.pageY + 30; // Push it down below cursor if hit top
             }
 
             tooltip
