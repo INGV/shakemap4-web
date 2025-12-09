@@ -318,7 +318,7 @@ async function showEventDetails(id) {
         <div class="meta-item"><label>Time (UTC)</label><span>${dateStr}</span></div>
         <div class="meta-item"><label>Magnitude</label><span>${parseFloat(event.mag).toFixed(1)}</span></div>
         <div class="meta-item"><label>Depth</label><span>${Math.round(event.depth)} km</span></div>
-        <div class="meta-item"><label>Lat/Lon</label><span>${event.lat}, ${event.lon}</span></div>
+        <div class="meta-item"><label>Lat/Lon</label><span>${parseFloat(event.lat).toFixed(2)}, ${parseFloat(event.lon).toFixed(2)}</span></div>
         <div class="meta-item"><label>Event ID</label><span>${event.id}</span></div>
     `;
 
@@ -433,7 +433,8 @@ async function initMap(event) {
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties && feature.properties.value) {
-                        layer.bindPopup(`${name}: ${feature.properties.value} ${feature.properties.units || ''}`);
+                        // usage of formatUnit
+                        layer.bindPopup(`${name}: ${feature.properties.value} ${formatUnit(feature.properties.units || '')}`);
                     }
                 }
             });
@@ -478,19 +479,7 @@ async function initMap(event) {
     separator2.style.borderTop = '1px solid var(--border-color)';
     layerList.appendChild(separator2);
 
-    // USGC Color scale
-    const intColors_USGS_USGS = {
-        1: '#FFFFFF',
-        2: '#BFCCFF',
-        3: '#A0E6FF',
-        4: '#80FFFF',
-        5: '#7AFF93',
-        6: '#FFFF00',
-        7: '#FFC800',
-        8: '#FF9100',
-        9: '#FF0000',
-        10: '#C80000'
-    };
+
 
     try {
         const res = await fetch(`${DATA_DIR}/${event.id}/current/products/stationlist.json`);
@@ -504,9 +493,9 @@ async function initMap(event) {
                 },
                 pointToLayer: function (feature, latlng) {
                     // Logic from user requirement:
-                    // Color based on intensity using intColors_USGS_USGS
+                    // Color based on intensity using intColors_USGS
                     let stationColorIndex = Math.round(feature.properties.intensity);
-                    let color = intColors_USGS_USGS[stationColorIndex] || 'black';
+                    let color = intColors_USGS[stationColorIndex] || 'black';
 
                     return L.circleMarker(latlng, {
                         radius: 4,
@@ -575,7 +564,7 @@ async function initMap(event) {
                         stationColorIndex = Math.round(feature.properties.intensity || 1);
                     }
 
-                    const fillColor = intColors_USGS_USGS[stationColorIndex] || '#FFFFFF';
+                    const fillColor = intColors_USGS[stationColorIndex] || '#FFFFFF';
 
                     // Triangle marker
                     const triangleIcon = L.divIcon({
@@ -810,6 +799,8 @@ async function showProducts(id) {
         if (!res.ok) throw new Error('Products list not found');
 
         const allProducts = await res.json();
+
+
 
         // Check which files exist and group by category
         const categories = {};
@@ -1126,4 +1117,21 @@ function loadStaticImage(imageType) {
         img.style.opacity = '1';
     };
     preloadImg.src = imagePath;
+}
+
+/**
+ * Helper to format unit strings
+ * Converts "cms" -> "cm/s"
+ * Converts "pctg" -> "%g"
+ */
+function formatUnit(unit) {
+    if (!unit) return '';
+    let u = unit.toLowerCase();
+    if (u.includes('cms')) {
+        return u.replace('cms', 'cm/s');
+    }
+    if (u.includes('pctg')) {
+        return u.replace('pctg', '%g');
+    }
+    return unit;
 }
