@@ -105,8 +105,8 @@ function populateYearFilter() {
 
     // Modern events: Filter valid years
     let relevantEvents = allEvents;
-    if (typeof config !== 'undefined' && config.historycalCutOff) {
-        const parts = config.historycalCutOff.split('-'); // e.g. "2000-01-01"
+    if (typeof config !== 'undefined' && config.historicalCutOff) {
+        const parts = config.historicalCutOff.split('-'); // e.g. "2000-01-01"
         if (parts.length === 3) {
             const cutOffYear = parseInt(parts[0]);
             const cutOffMonth = parseInt(parts[1]) - 1;
@@ -181,6 +181,11 @@ window.switchTab = function (tabName) {
         if (typeof loadAnalysisView === 'function') {
             const event = allEvents.find(e => e.id == id);
             loadAnalysisView(id, event ? event.year : null);
+        }
+    } else if (tabName === 'stations') {
+        // Load Station List
+        if (typeof initStationList === 'function') {
+            initStationList(id);
         }
     } else if (tabName === 'static') {
         // Load Static View
@@ -269,11 +274,11 @@ function applyArchiveFilters() {
 
 
     // Apply Historical/Modern Filter
-    if (typeof config !== 'undefined' && config.historycalCutOff) {
+    if (typeof config !== 'undefined' && config.historicalCutOff) {
         const period = document.getElementById('period-filter').value;
 
         // Parse cutoff date
-        const parts = config.historycalCutOff.split('-');
+        const parts = config.historicalCutOff.split('-');
         if (parts.length === 3) {
             const cutOffYear = parseInt(parts[0]);
             const cutOffMonth = parseInt(parts[1]) - 1; // Months are 0-indexed
@@ -474,7 +479,7 @@ async function initMap(event) {
     layerList.appendChild(separator2);
 
     // USGC Color scale
-    const intColors_USGS = {
+    const intColors_USGS_USGS = {
         1: '#FFFFFF',
         2: '#BFCCFF',
         3: '#A0E6FF',
@@ -499,9 +504,9 @@ async function initMap(event) {
                 },
                 pointToLayer: function (feature, latlng) {
                     // Logic from user requirement:
-                    // Color based on intensity using intColors_USGS
+                    // Color based on intensity using intColors_USGS_USGS
                     let stationColorIndex = Math.round(feature.properties.intensity);
-                    let color = intColors_USGS[stationColorIndex] || 'black';
+                    let color = intColors_USGS_USGS[stationColorIndex] || 'black';
 
                     return L.circleMarker(latlng, {
                         radius: 4,
@@ -570,7 +575,7 @@ async function initMap(event) {
                         stationColorIndex = Math.round(feature.properties.intensity || 1);
                     }
 
-                    const fillColor = intColors_USGS[stationColorIndex] || '#FFFFFF';
+                    const fillColor = intColors_USGS_USGS[stationColorIndex] || '#FFFFFF';
 
                     // Triangle marker
                     const triangleIcon = L.divIcon({
