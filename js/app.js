@@ -473,22 +473,106 @@ async function initMap(event) {
     separator2.style.borderTop = '1px solid var(--border-color)';
     layerList.appendChild(separator2);
 
+    // USGC Color scale
+    const intColors_USGS = {
+        1: '#FFFFFF',
+        2: '#BFCCFF',
+        3: '#A0E6FF',
+        4: '#80FFFF',
+        5: '#7AFF93',
+        6: '#FFFF00',
+        7: '#FFC800',
+        8: '#FF9100',
+        9: '#FF0000',
+        10: '#C80000'
+    };
+
     try {
         const res = await fetch(`${DATA_DIR}/${event.id}/current/products/stationlist.json`);
         if (res.ok) {
             const geojson = await res.json();
-            const layer = L.geoJSON(geojson, {
+
+            // --- 1. Macroseismic Stations Layer ---
+            const macroseismicLayer = L.geoJSON(geojson, {
+                filter: function (feature) {
+                    return feature.properties.station_type === 'macroseismic';
+                },
                 pointToLayer: function (feature, latlng) {
-                    // Calculate color based on intensity (same logic as Analysis View)
-                    let fillColor = '#FFFFFF';
-                    if (feature.properties && feature.properties.intensity !== null && feature.properties.intensity !== undefined) {
-                        const intensity = Math.round(feature.properties.intensity);
-                        if (typeof intColors !== 'undefined' && intColors[intensity]) {
-                            fillColor = intColors[intensity];
+                    // Logic from user requirement:
+                    // Color based on intensity using intColors_USGS
+                    let stationColorIndex = Math.round(feature.properties.intensity);
+                    let color = intColors_USGS[stationColorIndex] || 'black';
+
+                    return L.circleMarker(latlng, {
+                        radius: 4,
+                        fillColor: color,
+                        color: 'black',
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 1
+                    });
+                },
+                onEachFeature: function (feature, layer) {
+                    bindStationPopup(feature, layer);
+                }
+            });
+
+            currentLayers['Macroseismic'] = macroseismicLayer;
+            // Add Checkbox for Macroseismic (Show DYFI observations)
+            // Only if there are features
+            if (macroseismicLayer.getLayers().length > 0) {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label>
+                        <input type="checkbox" onchange="toggleLayer('Macroseismic')">
+                        Show DYFI observations
+                    </label>
+                `;
+                layerList.appendChild(div);
+            }
+
+
+            // --- 2. Seismic Stations Layer ---
+            const seismicLayer = L.geoJSON(geojson, {
+                filter: function (feature) {
+                    return feature.properties.station_type !== 'macroseismic';
+                },
+                pointToLayer: function (feature, latlng) {
+                    // Logic from user requirement:
+                    let stationColorIndex = 1;
+
+                    // If intensity < 5 use PGA, else use PGV from mmi_from_pgm if available
+                    // Fallback to direct intensity if complex logic fails or properties missing
+                    let useComplexLogic = false;
+
+                    if (feature.properties.mmi_from_pgm && Array.isArray(feature.properties.mmi_from_pgm)) {
+                        try {
+                            if (feature.properties.intensity < 5) {
+                                const result = feature.properties.mmi_from_pgm.find(obj => obj.name === 'pga');
+                                if (result) {
+                                    stationColorIndex = Math.round(result.value);
+                                    useComplexLogic = true;
+                                }
+                            } else {
+                                const result = feature.properties.mmi_from_pgm.find(obj => obj.name === 'pgv');
+                                if (result) {
+                                    stationColorIndex = Math.round(result.value);
+                                    useComplexLogic = true;
+                                }
+                            }
+                        } catch (err) {
+                            console.warn('Error in station color logic', err);
                         }
                     }
 
-                    // Create triangle marker using divIcon
+                    if (!useComplexLogic) {
+                        // Fallback to simple intensity
+                        stationColorIndex = Math.round(feature.properties.intensity || 1);
+                    }
+
+                    const fillColor = intColors_USGS[stationColorIndex] || '#FFFFFF';
+
+                    // Triangle marker
                     const triangleIcon = L.divIcon({
                         className: 'triangle-marker',
                         html: `<div style="width: 14px; height: 12px; position: relative; background-color: rgba(255, 255, 255, 0.01);">
@@ -521,51 +605,95 @@ async function initMap(event) {
                     return L.marker(latlng, { icon: triangleIcon });
                 },
                 onEachFeature: function (feature, layer) {
-                    if (feature.properties) {
-                        const props = feature.properties;
-
-                        // Extract station code and network
-                        const code = props.code || props.id || 'Unknown';
-                        const network = props.network || props.name?.split('.')[0] || 'N/A';
-                        const stationName = code.includes('.') ? code.split('.').slice(1).join('.') : code;
-
-                        // Safely format numeric values
-                        const formatNumber = (val, decimals) => {
-                            return (val !== null && val !== undefined && !isNaN(val)) ? Number(val).toFixed(decimals) : 'N/A';
-                        };
-
-                        // Format popup content
-                        const popupContent = `
-                            <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.6;">
-                                <strong>Station:</strong> ${stationName}<br>
-                                <strong>Network:</strong> ${network}<br>
-                                <strong>Distance:</strong> ${formatNumber(props.distance, 3)} km<br>
-                                <strong>Intensity:</strong> ${formatNumber(props.intensity, 1)}<br>
-                                <strong>PGA:</strong> ${formatNumber(props.pga, 4)}<br>
-                                <strong>PGV:</strong> ${formatNumber(props.pgv, 4)}<br>
-                                <strong>Vs30:</strong> ${props.vs30 && !isNaN(props.vs30) ? Math.round(props.vs30) : 'N/A'} m/s
-                            </div>
-                        `;
-
-                        layer.bindPopup(popupContent);
-                    }
+                    bindStationPopup(feature, layer);
                 }
             });
 
-            currentLayers['Stations'] = layer;
-            const div = document.createElement('div');
-            div.innerHTML = `
+            currentLayers['Stations'] = seismicLayer;
+            const divSt = document.createElement('div');
+            divSt.innerHTML = `
                 <label>
                     <input type="checkbox" onchange="toggleLayer('Stations')">
                     Show Stations
                 </label>
             `;
-            layerList.appendChild(div);
+            layerList.appendChild(divSt);
+
         }
     } catch (e) {
         console.warn('Failed to load stations', e);
     }
 
+    // --- 3. Fault/Rupture Layer ---
+    try {
+        const ruptureRes = await fetch(`${DATA_DIR}/${event.id}/current/products/rupture.json`);
+        if (ruptureRes.ok) {
+            const ruptureJson = await ruptureRes.json();
+
+            // Logic check: "Show fault" only if there is more than one point (i.e., not just a scalar point)
+            // Check first feature's geometry coordinates
+            let isValidFault = false;
+            if (ruptureJson.features && ruptureJson.features.length > 0) {
+                const geometry = ruptureJson.features[0].geometry;
+                if (geometry && geometry.coordinates && Array.isArray(geometry.coordinates)) {
+                    // Check if coordinates[0] is an Array (LineString/Polygon) vs Number (Point)
+                    if (Array.isArray(geometry.coordinates[0])) {
+                        isValidFault = true;
+                    }
+                }
+            }
+
+            if (isValidFault) {
+                const ruptureLayer = L.geoJSON(ruptureJson, {
+                    style: {
+                        color: 'black',
+                        weight: 3,
+                        opacity: 1
+                    }
+                });
+
+                currentLayers['Fault'] = ruptureLayer;
+
+                const divFault = document.createElement('div');
+                divFault.innerHTML = `
+                    <label>
+                        <input type="checkbox" onchange="toggleLayer('Fault')">
+                        Show fault
+                    </label>
+                `;
+                layerList.appendChild(divFault);
+            }
+        }
+    } catch (e) {
+        console.warn('Failed to load rupture.json', e);
+    }
+    // Helper for popups
+    function bindStationPopup(feature, layer) {
+        if (feature.properties) {
+            const props = feature.properties;
+            const code = props.code || props.id || 'Unknown';
+            const network = props.network || props.name?.split('.')[0] || 'N/A';
+            const stationName = code.includes('.') ? code.split('.').slice(1).join('.') : code;
+
+            const formatNumber = (val, decimals) => {
+                return (val !== null && val !== undefined && !isNaN(val)) ? Number(val).toFixed(decimals) : 'N/A';
+            };
+
+            const popupContent = `
+                <div style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.6;">
+                    <strong>Station:</strong> ${stationName}<br>
+                    <strong>Network:</strong> ${network}<br>
+                    <strong>Type:</strong> ${props.station_type || 'N/A'}<br>
+                    <strong>Distance:</strong> ${formatNumber(props.distance, 3)} km<br>
+                    <strong>Intensity:</strong> ${formatNumber(props.intensity, 1)}<br>
+                    <strong>PGA:</strong> ${formatNumber(props.pga, 4)}<br>
+                    <strong>PGV:</strong> ${formatNumber(props.pgv, 4)}<br>
+                    <strong>Vs30:</strong> ${props.vs30 && !isNaN(props.vs30) ? Math.round(props.vs30) : 'N/A'} m/s
+                </div>
+            `;
+            layer.bindPopup(popupContent);
+        }
+    }
     // Add Legend Control
     let legendControl = null;
     let legendExists = false;
