@@ -6,7 +6,7 @@ const config = {
     bannerImage: './images/shakemapit_banner.png',
     //bannerImage: './images/shakemapeu_banner.png',
 
-    historycalCutOff: "1980-01-01",
+    historicalCutOff: "1980-01-01",
 
     disclaimer: {
         it: "Le mappe di scuotimento (shakemaps) pubblicate in questo sito sono determinate automaticamente e forniscono stime preliminari ed incomplete dello scuotimento causato dal terremoto. Le mappe vengono aggiornate man mano che ulteriori dati registrati dalle stazioni sismiche diventano disponibili. Le stazioni appartengono alla Rete Sismica Nazionale Italiana o ad altre reti locali, regionali e nazionali di altre istituzioni italiane o estere, come indicato dai loghi sottostanti. Le mappe non hanno alcun valore ufficiale e INGV declina qualsiasi responsabilità sull'utilizzo che viene fatto da un uso improprio delle informazioni in esse contenute. Questo sito utilizza la nuova configurazione per l'Italia del software ShakeMap descritta in <a href='#'>Scientific Background</a>. Il sito della versione precedente è raggiungibile al <a href='#'>seguente link</a> e sarà aggiornato fino al 31/12/2020. A partire dal 6 marzo 2023, le mappe di scuotimento vengono calcolate utilizzando le relazioni tra i parametri di scuotimento e l'intensità macrosismica di <a href='#'>Olivieri et al. (2022)</a>.",
