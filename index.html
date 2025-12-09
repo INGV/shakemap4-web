@@ -89,6 +89,7 @@
                 <button id="tab-metadata" class="btn tab-btn" onclick="switchTab('metadata')">Metadata</button>
                 <button id="tab-products" class="btn tab-btn" onclick="switchTab('products')">Download Products</button>
                 <button id="tab-analysis" class="btn tab-btn" onclick="switchTab('analysis')">Analysis View</button>
+                <button id="tab-stations" class="btn tab-btn" onclick="switchTab('stations')">Station List</button>
                 <button id="tab-static" class="btn tab-btn" onclick="switchTab('static')">Static View</button>
             </div>
 
@@ -160,6 +161,12 @@
                 </div>
             </div>
 
+            <div id="content-stations" class="tab-content hidden">
+                <div class="station-list-container">
+                    <div id="stationTable" class="station-table"></div>
+                </div>
+            </div>
+
             <div id="content-static" class="tab-content hidden">
                 <!-- Static View header with image selector -->
                 <div class="static-view-header">
@@ -209,6 +216,7 @@
     <script src="js/colors.js"></script>
     <script src="js/app.js"></script>
     <script src="js/analysis.js"></script>
+    <script src="js/station-list.js"></script>
 </body>
 
 </html>
