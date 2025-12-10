@@ -127,6 +127,11 @@ function populateYearFilter() {
         option.textContent = year;
         select.appendChild(option);
     });
+
+    // Set the most recent year as default if available
+    if (years.length > 0) {
+        select.value = years[0];
+    }
 }
 
 
