@@ -31,7 +31,7 @@ if [ "$PROCESS_ALL_DATA_FIRST_TIME" = "true" ]; then
     /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -l 20
     
     # second run to process all data
-    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data
+    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data &
     
     echo "All data processed."
 else
