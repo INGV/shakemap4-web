@@ -231,6 +231,51 @@ main {
     font-weight: 500;
 }
 
+/* Event Card Body Layout */
+.event-card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    width: 100%;
+}
+
+.event-intro {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-image {
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Cropping */
+.event-image img {
+    width: 100%;
+    height: 140%;
+    /* Larger than container to allow cropping */
+    object-fit: cover;
+    object-position: top center;
+    /* Align to top, hiding the bottom legend */
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .event-image {
+        width: 100px;
+        height: 100px;
+    }
+}
+
 /* Filters */
 .filters {
     display: flex;

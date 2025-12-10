@@ -231,17 +231,24 @@ function renderCards(events, containerId) {
         const magColor = event.mag >= 6 ? '#d32f2f' : (event.mag >= 4 ? 'var(--accent-color)' : 'var(--text-secondary)');
 
         card.innerHTML = `
-            <div class="event-card-header">
-                <div class="event-magnitude" style="color: ${magColor}">${parseFloat(event.mag).toFixed(1)}</div>
-                <div class="event-date">
-                    <div>${dateStr}</div>
-                    <div>${timeStr}</div>
+            <div class="event-card-body">
+                <div class="event-intro">
+                    <div class="event-card-header">
+                        <div class="event-magnitude" style="color: ${magColor}">${parseFloat(event.mag).toFixed(1)}</div>
+                         <div class="event-date">
+                            <div>${dateStr}</div>
+                            <div>${timeStr}</div>
+                        </div>
+                    </div>
+                    <div class="event-location">${event.description}</div>
+                    <div class="event-footer">
+                        <div class="event-depth"><i class="fas fa-layer-group"></i> ${Math.round(event.depth)} km</div>
+                        <div class="event-more">More Info <i class="fas fa-arrow-right"></i></div>
+                    </div>
                 </div>
-            </div>
-            <div class="event-location">${event.description}</div>
-            <div class="event-footer">
-                <div class="event-depth"><i class="fas fa-layer-group"></i> ${Math.round(event.depth)} km</div>
-                <div class="event-more">More Info <i class="fas fa-arrow-right"></i></div>
+                <div class="event-image">
+                     <img src="${DATA_DIR}/${event.id}/current/products/intensity.jpg" alt="ShakeMap Intensity" onerror="this.style.display='none'">
+                </div>
             </div>
         `;
 
