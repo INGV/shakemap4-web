@@ -51,6 +51,17 @@ When `ENABLE_CRONTAB=true` is set, the container will automatically:
 - Process the last 5 events every 2 minutes (logs: `/tmp/process_events_incremental.log`)
 - Reprocess all events daily at 00:10 UTC (logs: `/tmp/process_events_full.log`)
 
+**Run with initial data processing:**
+```bash
+docker run -d -p 8080:80 \
+  -v $(pwd)/data:/usr/share/nginx/html/data:ro \
+  --name shakemap4-web__container \
+  -e PROCESS_ALL_DATA_FIRST_TIME=true \
+  ingv/shakemap4-web
+```
+
+When `PROCESS_ALL_DATA_FIRST_TIME=true` is set, the container will process all events in the data directory at startup before starting the Nginx server. This is useful for initializing the `events.json` file on first deployment.
+
 #### Alternative: Build Docker image locally
 **Build the Docker image:**
 ```bash
