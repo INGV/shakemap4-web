@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+echo ""
 
 # Check if ENABLE_CRONTAB is set to true
 if [ "$ENABLE_CRONTAB" = "true" ]; then
@@ -20,18 +21,23 @@ if [ "$ENABLE_CRONTAB" = "true" ]; then
 else
     echo "ENABLE_CRONTAB is not set to true. Cron service will not start."
 fi
+echo ""
 
 # Check if PROCESS_ALL_DATA_FIRST_TIME is set to true
 if [ "$PROCESS_ALL_DATA_FIRST_TIME" = "true" ]; then
     echo "PROCESS_ALL_DATA_FIRST_TIME is set to true. Processing all data..."
+
+    # first run with -l 20 to create events.json
+    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -l 20
     
-    # Run process_events.sh with -d and -l options
+    # second run to process all data
     /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data
     
     echo "All data processed."
 else
     echo "PROCESS_ALL_DATA_FIRST_TIME is not set to true. Data processing will not run."
 fi
+echo ""
 
 # Start nginx in the foreground
 echo "Starting nginx..."
