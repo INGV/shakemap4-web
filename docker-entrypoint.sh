@@ -21,6 +21,18 @@ else
     echo "ENABLE_CRONTAB is not set to true. Cron service will not start."
 fi
 
+# Check if PROCESS_ALL_DATA_FIRST_TIME is set to true
+if [ "$PROCESS_ALL_DATA_FIRST_TIME" = "true" ]; then
+    echo "PROCESS_ALL_DATA_FIRST_TIME is set to true. Processing all data..."
+    
+    # Run process_events.sh with -d and -l options
+    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data
+    
+    echo "All data processed."
+else
+    echo "PROCESS_ALL_DATA_FIRST_TIME is not set to true. Data processing will not run."
+fi
+
 # Start nginx in the foreground
 echo "Starting nginx..."
 exec nginx -g "daemon off;"
