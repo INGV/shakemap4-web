@@ -421,7 +421,7 @@ async function initMap(event) {
     // Data Layers Group Name
     const DATA_LAYER_GROUP = 'datalayer';
     const dataLayers = [
-        { name: 'Intensity (MMI)', file: 'cont_mi.json', color: '#ff0000' },
+        { name: 'Intensity', file: 'cont_mi.json', color: '#ff0000' },
         { name: 'PGA', file: 'cont_pga.json', color: '#0000ff' },
         { name: 'PGV', file: 'cont_pgv.json', color: '#008000' },
         { name: 'PSA 0.3s', file: 'cont_psa0p3.json', color: '#ffa500' },
@@ -746,7 +746,7 @@ async function initMap(event) {
 window.switchDataLayer = function (selectedName) {
     // Defined data keys that are part of the radio group
     const dataKeys = [
-        'Intensity (MMI)', 'PGA', 'PGV',
+        'Intensity', 'PGA', 'PGV',
         'PSA 0.3s', 'PSA 1.0s', 'PSA 3.0s'
     ];
 
