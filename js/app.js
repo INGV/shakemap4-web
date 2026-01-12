@@ -250,7 +250,7 @@ function renderCards(events, containerId) {
                         <div class="event-depth" style="white-space: nowrap; margin-left: 10px; color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-layer-group"></i> ${Math.round(event.depth)} km</div>
                     </div>
                     <div class="event-footer">
-                        <div class="event-id">eventid: ${event.id}</div>
+                        <div class="event-id">Event ID: ${event.id}</div>
                         <div class="event-more">More Info <i class="fas fa-arrow-right"></i></div>
                     </div>
                 </div>
