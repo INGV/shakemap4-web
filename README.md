@@ -135,6 +135,11 @@ This work has been partially funded by the Seismology and Earthquake Engineering
 ## Contribute
 Thanks to your contributions!
 
+For develop run:
+```bash
+docker run --rm -p 8085:80 -e ENABLE_CRONTAB=true -v $(pwd):/usr/share/nginx/html --name shakemap4-web__container ingv/shakemap4-web
+```
+
 Here is a list of users who already contributed to this repository: \
 <a href="https://github.com/ingv/shakemap4-web/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ingv/shakemap4-web" />
