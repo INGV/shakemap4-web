@@ -535,7 +535,7 @@ function plot_data(data, regrArr, comp_id, newPlot) {
     svg.append("g")
         .call(d3.axisLeft(y).ticks(tickNumber));
 
-    let yVar = 'Intensity (MMI)';
+    let yVar = 'Intensity';
     if (comp_id === 'pga') {
         yVar = 'Peak ground acceleration (%g)';
     } else if (comp_id === 'pgv') {
