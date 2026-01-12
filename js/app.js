@@ -448,8 +448,20 @@ async function initMap(event) {
                 },
                 onEachFeature: function (feature, layer) {
                     if (feature.properties && feature.properties.value) {
-                        // usage of formatUnit
-                        layer.bindPopup(`${name}: ${feature.properties.value} ${formatUnit(feature.properties.units || '')}`);
+                        let label = name;
+                        let val = feature.properties.value;
+                        let unit = formatUnit(feature.properties.units || '');
+
+                        // Fix for Intensity label and unit
+                        if (name.includes('Intensity')) {
+                            label = 'Intensity';
+                            if (unit.toLowerCase() === 'mmi') {
+                                unit = '';
+                            }
+                        }
+
+                        let content = `${label}: ${val} ${unit}`;
+                        layer.bindPopup(content.trim());
                     }
                 }
             });
