@@ -37,6 +37,14 @@ function injectCommonStylesheets() {
  * @param {string} currentPage - 'index' or 'analysis'
  */
 function injectHeader(currentPage = 'index') {
+    // Generate dropdown items from informationLinks config
+    let dropdownItemsHTML = '';
+    if (typeof informationLinks !== 'undefined' && informationLinks.length > 0) {
+        dropdownItemsHTML = informationLinks.map(item =>
+            `<a href="${item.link}" class="nav-dropdown-item" target="_blank" rel="noopener noreferrer">${item.text}</a>`
+        ).join('');
+    }
+
     const headerHTML = `
         <div class="container header-content">
             <div class="logo">
@@ -46,8 +54,14 @@ function injectHeader(currentPage = 'index') {
                 <ul>
                     <li><a href="${currentPage === 'index' ? '#' : 'index.html'}" class="nav-link ${currentPage === 'index' ? 'active' : ''}" id="nav-home">HOME</a></li>
                     <li><a href="${currentPage === 'index' ? '#archive' : 'index.html#archive'}" class="nav-link" id="nav-archive">ARCHIVE</a></li>
-                    <li><a href="#" class="nav-link">INFORMATION <i class="fas fa-caret-down"></i></a></li>
-                    <li><button id="theme-toggle" class="nav-link" style="background:none; border:none; cursor:pointer;"><i class="fas fa-moon"></i></button></li>
+                    <li class="nav-dropdown">
+                        <a href="#" class="nav-link nav-dropdown-toggle" id="nav-information">
+                            INFORMATION <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            ${dropdownItemsHTML}
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -56,6 +70,26 @@ function injectHeader(currentPage = 'index') {
     const header = document.querySelector('header');
     if (header) {
         header.innerHTML = headerHTML;
+
+        // Add dropdown toggle functionality
+        const dropdownToggle = header.querySelector('.nav-dropdown-toggle');
+        const dropdownMenu = header.querySelector('.nav-dropdown-menu');
+
+        if (dropdownToggle && dropdownMenu) {
+            dropdownToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('show');
+                dropdownToggle.classList.toggle('open');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.nav-dropdown')) {
+                    dropdownMenu.classList.remove('show');
+                    dropdownToggle.classList.remove('open');
+                }
+            });
+        }
     }
 }
 
@@ -73,36 +107,6 @@ function injectBanner() {
     }
 }
 
-/**
- * Initialize theme toggle functionality
- */
-function initTheme() {
-    const toggleBtn = document.getElementById('theme-toggle');
-    if (!toggleBtn) return;
-
-    const icon = toggleBtn.querySelector('i');
-    if (!icon) return;
-
-    // Check saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.body.setAttribute('data-theme', 'dark');
-        icon.classList.replace('fa-moon', 'fa-sun');
-    }
-
-    toggleBtn.addEventListener('click', () => {
-        const isDark = document.body.getAttribute('data-theme') === 'dark';
-        if (isDark) {
-            document.body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            icon.classList.replace('fa-sun', 'fa-moon');
-        } else {
-            document.body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            icon.classList.replace('fa-moon', 'fa-sun');
-        }
-    });
-}
 
 /**
  * Render the footer with disclaimer, logos, and version info
@@ -163,7 +167,7 @@ function initSharedComponents(currentPage = 'index') {
     injectCommonStylesheets();
     injectHeader(currentPage);
     injectBanner();
-    initTheme();
+
     renderFooter();
 }
 

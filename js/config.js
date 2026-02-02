@@ -15,6 +15,22 @@ const ShakeMap = {
     basemapLayers: {}   // Basemap tile layers
 };
 
+// Information menu links - easily add/remove/modify links
+const informationLinks = [
+    {
+        text: "INGV Website",
+        link: "https://www.ingv.it"
+    },
+    {
+        text: "Shakemap USGS",
+        link: "https://earthquake.usgs.gov/data/shakemap/"
+    },
+    {
+        text: "GitHub Repository",
+        link: "https://github.com/INGV/shakemap4-web"
+    }
+];
+
 const config = {
     version: "v2.0.0",
     githubLink: "https://github.com/INGV/shakemap4-web",
