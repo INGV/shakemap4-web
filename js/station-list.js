@@ -17,11 +17,11 @@ async function loadStationData(eventId) {
         const stations = json.features;
 
         // Determine isHistoric based on config and event year
-        // We need to look up the event year from the global allEvents list or another source
-        // Since we passed eventId, let's find the event in allEvents to get the date
+        // We need to look up the event year from the ShakeMap.allEvents list
+        // Since we passed eventId, let's find the event in ShakeMap.allEvents to get the date
         let isHistoric = false;
-        if (typeof allEvents !== 'undefined' && typeof config !== 'undefined' && config.historicalCutOff) {
-            const event = allEvents.find(e => e.id == eventId);
+        if (typeof ShakeMap !== 'undefined' && ShakeMap.allEvents && typeof config !== 'undefined' && config.historicalCutOff) {
+            const event = ShakeMap.allEvents.find(e => e.id == eventId);
             if (event) {
                 const eventDate = new Date(event.year, event.month - 1, event.day, event.h, event.m, event.s);
                 const parts = config.historicalCutOff.split('-');

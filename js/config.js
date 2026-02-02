@@ -1,3 +1,20 @@
+/**
+ * ShakeMap Configuration
+ * Global configuration and shared state namespace
+ */
+
+// Path constants
+const DATA_DIR = 'data';
+const EVENTS_JSON = 'events.json';
+
+// ShakeMap namespace for global shared state
+const ShakeMap = {
+    allEvents: [],      // Flat list of all events
+    map: null,          // Leaflet map instance
+    currentLayers: {},  // Active map layers
+    basemapLayers: {}   // Basemap tile layers
+};
+
 const config = {
     version: "v2.0.0",
     githubLink: "https://github.com/INGV/shakemap4-web",
