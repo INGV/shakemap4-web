@@ -2,3 +2,4 @@
 CLAUDE.md
 data/*
 events.json
+.playwright-cli/

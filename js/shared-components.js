@@ -53,7 +53,7 @@ function injectHeader(currentPage = 'index') {
     const headerHTML = `
         <div class="container header-content">
             <div class="logo">
-                <h1>ShakeMap <span class="version">v4</span></h1>
+                <a href="${currentPage === 'index' ? '#' : 'index.html'}" class="logo-link"><h1>ShakeMap <span class="version">v4</span></h1></a>
             </div>
             <nav>
                 <ul>
@@ -94,6 +94,14 @@ function injectHeader(currentPage = 'index') {
                     dropdownToggle.classList.remove('open');
                 }
             });
+
+            // Close dropdown when clicking on a dropdown item
+            dropdownMenu.querySelectorAll('.nav-dropdown-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    dropdownMenu.classList.remove('show');
+                    dropdownToggle.classList.remove('open');
+                });
+            });
         }
     }
 }
@@ -125,8 +133,9 @@ function renderFooter() {
 
     footerContainer.innerHTML = `
         <div class="footer-info">
-            <span id="footer-version">Website Version: ${config.version}</span>
-            <span id="footer-github">Development of this portal has been made by INGV and it is publicly available at <a href="${config.githubLink}" target="_blank">GitHub INGV/shakemap4-web</a></span>
+            <span id="footer-version">${config.version}</span>
+            <span class="footer-separator">·</span>
+            <span id="footer-github">Developed by INGV · <a href="${config.githubLink}" target="_blank">GitHub</a></span>
         </div>
     `;
 }

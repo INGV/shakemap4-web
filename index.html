@@ -84,6 +84,11 @@
                 <!-- Metadata populated by JS -->
             </div>
 
+            <div class="data-source-toggle" id="data-source-toggle" style="display: none;">
+                <button class="toggle-btn active" id="toggle-instrumental" onclick="setDataSource('instrumental')">Instrumental</button>
+                <button class="toggle-btn" id="toggle-feltreport" onclick="setDataSource('feltreport')" disabled>Felt Report</button>
+            </div>
+
             <div class="action-bar tabs">
                 <button id="tab-map" class="btn tab-btn active" onclick="switchTab('map')">Map</button>
                 <button id="tab-analysis" class="btn tab-btn" onclick="switchTab('analysis')">Analysis View</button>

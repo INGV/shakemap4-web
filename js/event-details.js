@@ -1,6 +1,6 @@
 /**
  * Event Details Module - Event details page functionality
- * 
+ *
  * Handles the display of event details and metadata.
  */
 
@@ -18,6 +18,9 @@ async function showEventDetails(id) {
         return;
     }
 
+    // Set the active data source to the base event ID
+    ShakeMap.activeDataId = id;
+
     // Populate Meta
     document.getElementById('event-title').textContent = `Event: ${event.description}`;
     const dateStr = `${event.year}-${String(event.month).padStart(2, '0')}-${String(event.day).padStart(2, '0')} ${String(event.h).padStart(2, '0')}:${String(event.m).padStart(2, '0')}:${String(event.s).padStart(2, '0')}`;
@@ -30,12 +33,70 @@ async function showEventDetails(id) {
         <div class="meta-item"><label>Event ID</label><span>${event.id}</span></div>
     `;
 
+    // Configure data source toggle
+    const toggleContainer = document.getElementById('data-source-toggle');
+    const toggleFR = document.getElementById('toggle-feltreport');
+    const toggleInstr = document.getElementById('toggle-instrumental');
+
+    toggleContainer.style.display = 'flex';
+    toggleInstr.classList.add('active');
+    toggleFR.classList.remove('active');
+    toggleFR.disabled = true;
+
+    // Check if Felt Report data exists
+    try {
+        const frCheckRes = await fetch(`${DATA_DIR}/${id}_fr/current/products/info.json`, { method: 'HEAD' });
+        if (frCheckRes.ok) {
+            toggleFR.disabled = false;
+        }
+    } catch (e) {
+        // _fr does not exist, button stays disabled
+    }
+
     // Reset to Map tab
     switchTab('map');
 
     // Initialize Map
     initMap(event);
 }
+
+/**
+ * Switch between Instrumental and Felt Report data sources
+ * @param {string} source - 'instrumental' or 'feltreport'
+ */
+window.setDataSource = function (source) {
+    const hash = window.location.hash;
+    const baseId = hash.split('/')[1];
+    const toggleFR = document.getElementById('toggle-feltreport');
+    const toggleInstr = document.getElementById('toggle-instrumental');
+
+    if (source === 'feltreport') {
+        if (toggleFR.disabled) return;
+        ShakeMap.activeDataId = baseId + '_fr';
+        toggleFR.classList.add('active');
+        toggleInstr.classList.remove('active');
+    } else {
+        ShakeMap.activeDataId = baseId;
+        toggleInstr.classList.add('active');
+        toggleFR.classList.remove('active');
+    }
+
+    // Reload the currently active tab with the new data source
+    const activeTabBtn = document.querySelector('.tab-btn.active');
+    if (activeTabBtn) {
+        const tabName = activeTabBtn.id.replace('tab-', '');
+
+        if (tabName === 'map') {
+            const event = ShakeMap.allEvents.find(e => e.id == baseId);
+            if (event) {
+                const mappedEvent = Object.assign({}, event, { id: ShakeMap.activeDataId });
+                initMap(mappedEvent);
+            }
+        } else {
+            switchTab(tabName);
+        }
+    }
+};
 
 // Export to global scope
 window.showEventDetails = showEventDetails;

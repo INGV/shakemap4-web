@@ -58,6 +58,11 @@ header {
     width: 100%;
 }
 
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
 .logo h1 {
     font-size: 1.2rem;
     font-weight: bold;
@@ -473,6 +478,52 @@ input[type="number"] {
     font-size: 1.1rem;
 }
 
+/* Data Source Toggle (Instrumental / Felt Report) */
+.data-source-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 0;
+}
+
+.data-source-toggle .toggle-btn {
+    padding: 10px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 2px solid var(--accent-color);
+    background: var(--surface-color);
+    color: var(--accent-color);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    outline: none;
+}
+
+.data-source-toggle .toggle-btn:first-child {
+    border-radius: 24px 0 0 24px;
+    border-right: 1px solid var(--accent-color);
+}
+
+.data-source-toggle .toggle-btn:last-child {
+    border-radius: 0 24px 24px 0;
+    border-left: 1px solid var(--accent-color);
+}
+
+.data-source-toggle .toggle-btn.active {
+    background: var(--accent-color);
+    color: #ffffff;
+}
+
+.data-source-toggle .toggle-btn:not(.active):not(:disabled):hover {
+    background: rgba(0, 166, 156, 0.1);
+}
+
+.data-source-toggle .toggle-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
 .action-bar {
     display: flex;
     flex-wrap: wrap;
@@ -776,37 +827,38 @@ input[type="number"] {
 /* Footer */
 footer {
     background-color: var(--bg-color);
-    padding: 20px 0;
+    padding: 15px 0;
     margin-top: 40px;
     border-top: 1px solid var(--border-color);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
     text-align: center;
 }
 
 .footer-info {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
-    border-top: 1px solid #ddd;
-    padding-top: 10px;
+    gap: 6px;
 }
 
 .footer-info span {
     color: #999;
 }
 
+.footer-info .footer-separator {
+    color: #ccc;
+}
+
 .footer-info a {
-    color: #0056b3;
-    /* Standard link color */
-    text-decoration: underline;
-    font-weight: bold;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .footer-info a:hover {
-    color: #004494;
+    text-decoration: underline;
 }
 
 /* Markdown Content Pages (Disclaimer, Contributors) */
@@ -916,6 +968,31 @@ footer {
         height: auto;
     }
 
+    nav ul {
+        gap: 10px;
+    }
+
+    .nav-link {
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    .logo h1 {
+        font-size: 1rem;
+        margin-right: 15px;
+        white-space: nowrap;
+    }
+
+    .nav-dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+
+    .data-source-toggle .toggle-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
     .action-bar {
         flex-direction: column;
     }
@@ -939,7 +1016,6 @@ footer {
     }
 
     .footer-info {
-        flex-direction: column;
         text-align: center;
     }
 

@@ -171,15 +171,16 @@ window.switchTab = function (tabName) {
 
     // Load content if needed
     const hash = window.location.hash;
-    const id = hash.split('/')[1];
+    const baseId = hash.split('/')[1];
+    const id = ShakeMap.activeDataId || baseId;
     if (tabName === 'products') {
         showProducts(id);
     } else if (tabName === 'metadata') {
         showMetadata(id);
     } else if (tabName === 'analysis') {
-        // Load Analysis View
+        // Load Analysis View (use baseId for year lookup, id for data)
         if (typeof loadAnalysisView === 'function') {
-            const event = ShakeMap.allEvents.find(e => e.id == id);
+            const event = ShakeMap.allEvents.find(e => e.id == baseId);
             loadAnalysisView(id, event ? event.year : null);
         }
     } else if (tabName === 'stations') {
