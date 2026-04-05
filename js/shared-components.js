@@ -40,9 +40,14 @@ function injectHeader(currentPage = 'index') {
     // Generate dropdown items from informationLinks config
     let dropdownItemsHTML = '';
     if (typeof informationLinks !== 'undefined' && informationLinks.length > 0) {
-        dropdownItemsHTML = informationLinks.map(item =>
-            `<a href="${item.link}" class="nav-dropdown-item" target="_blank" rel="noopener noreferrer">${item.text}</a>`
-        ).join('');
+        dropdownItemsHTML = informationLinks.map(item => {
+            if (item.type === 'separator') {
+                return '<hr class="nav-dropdown-divider">';
+            } else if (item.type === 'internal') {
+                return `<a href="${item.link}" class="nav-dropdown-item">${item.text}</a>`;
+            }
+            return `<a href="${item.link}" class="nav-dropdown-item" target="_blank" rel="noopener noreferrer">${item.text}</a>`;
+        }).join('');
     }
 
     const headerHTML = `
@@ -118,44 +123,12 @@ function renderFooter() {
     const footerContainer = document.querySelector('footer .container');
     if (!footerContainer) return;
 
-    // Create Toggle Button
-    const toggleBtn = document.createElement('button');
-    toggleBtn.id = 'footer-toggle';
-    toggleBtn.textContent = 'Show Disclaimer';
-    toggleBtn.onclick = () => {
-        const content = document.getElementById('disclaimer-content');
-        content.classList.toggle('hidden');
-        toggleBtn.textContent = content.classList.contains('hidden') ? 'Show Disclaimer' : 'Hide Disclaimer';
-    };
-
-    // Create Disclaimer Container
-    const disclaimerDiv = document.createElement('div');
-    disclaimerDiv.id = 'disclaimer-content';
-    disclaimerDiv.className = 'hidden';
-    disclaimerDiv.innerHTML = `
-        <div id="disclaimer-container">
-            <p class="disclaimer-text">${config.disclaimer.it}</p>
-            <hr class="disclaimer-separator">
-            <p class="disclaimer-text">${config.disclaimer.en}</p>
-        </div>
-    `;
-
-    // Create Static Content (Logos + Info)
-    const staticDiv = document.createElement('div');
-    staticDiv.innerHTML = `
-        <div id="logos-container">
-            <img src="${config.logosPath}" alt="Participating Institutions">
-        </div>
+    footerContainer.innerHTML = `
         <div class="footer-info">
             <span id="footer-version">Website Version: ${config.version}</span>
             <span id="footer-github">Development of this portal has been made by INGV and it is publicly available at <a href="${config.githubLink}" target="_blank">GitHub INGV/shakemap4-web</a></span>
         </div>
     `;
-
-    footerContainer.innerHTML = '';
-    footerContainer.appendChild(toggleBtn);
-    footerContainer.appendChild(disclaimerDiv);
-    footerContainer.appendChild(staticDiv);
 }
 
 /**

@@ -107,6 +107,7 @@ function handleRoute() {
     document.getElementById('view-home').classList.add('hidden');
     document.getElementById('view-archive').classList.add('hidden');
     document.getElementById('view-details').classList.add('hidden');
+    document.getElementById('view-markdown').classList.add('hidden');
 
     // Update Nav Active State
     document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
@@ -117,12 +118,38 @@ function handleRoute() {
     } else if (hash === '#archive') {
         document.getElementById('nav-archive').classList.add('active');
         showArchive();
+    } else if (hash === '#disclaimer') {
+        showMarkdownPage(config.disclaimerPage);
+    } else if (hash === '#contributors') {
+        showMarkdownPage(config.contributorsPage);
     } else if (hash.startsWith('#event/')) {
         const id = hash.split('/')[1];
         showEventDetails(id);
     } else {
         showHome();
     }
+}
+
+/**
+ * Fetch a Markdown file, render it as HTML, and display it
+ * @param {string} mdPath - Path to the Markdown file
+ */
+async function showMarkdownPage(mdPath) {
+    const container = document.getElementById('markdown-content');
+    const view = document.getElementById('view-markdown');
+
+    try {
+        const response = await fetch(mdPath);
+        if (!response.ok) throw new Error(`Failed to load ${mdPath}`);
+
+        const mdText = await response.text();
+        container.innerHTML = marked.parse(mdText);
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = '<p>Error loading content.</p>';
+    }
+
+    view.classList.remove('hidden');
 }
 
 /**

@@ -19,6 +19,8 @@ RUN rm -rf /usr/share/nginx/html/*
 # Copy application files to nginx web root
 COPY index.html /usr/share/nginx/html/
 COPY analysis.html /usr/share/nginx/html/
+COPY disclaimer.md /usr/share/nginx/html/
+COPY contributors.md /usr/share/nginx/html/
 COPY productsListToProcess.json /usr/share/nginx/html/
 COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/
@@ -32,8 +34,8 @@ RUN chmod +x /usr/share/nginx/html/process_events.sh
 RUN mkdir -p /usr/share/nginx/html/data
 
 # Create crontab file
-RUN echo "*/2 * * * * /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -l 5 >> /tmp/process_events_incremental.log 2>&1" > /etc/cron.d/shakemap-cron && \
-    echo "00 12 * * * /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data >> /tmp/process_events_full.log 2>&1" >> /etc/cron.d/shakemap-cron && \
+RUN echo "*/2 * * * * /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -l 5 -x _fr >> /tmp/process_events_incremental.log 2>&1" > /etc/cron.d/shakemap-cron && \
+    echo "00 12 * * * /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -x _fr >> /tmp/process_events_full.log 2>&1" >> /etc/cron.d/shakemap-cron && \
     echo "01 00 * * * mv /tmp/process_events_incremental.log /tmp/process_events_incremental.yesterday.log" && \
     echo "01 00 * * * mv /tmp/process_events_full.log /tmp/process_events_full.yesterday.log" && \
     chmod 0644 /etc/cron.d/shakemap-cron

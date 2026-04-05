@@ -15,6 +15,39 @@ echo_date() {
     echo "[${DATE_NOW}] - ${1}"
 }
 
+# Function to display usage/help
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") -d DATA_DIR [-e EVENT_ID | -l LAST_N_EVENTS] [-x SUFFIX] [-h]
+
+Process ShakeMap event data and generate events.json.
+
+Options:
+  -d DATA_DIR                (required) Path to the data directory containing
+                             event subdirectories (e.g., data/)
+  -e EVENT_ID                Process a single event by its ID. Performs an
+                             incremental update: adds or updates the event in
+                             events.json while preserving all other events
+  -l N                       Process the last N events sorted by modification
+                             time (newest first). Performs an incremental update
+  -x, --exclude-dir-end SUFFIX
+                             Exclude event directories whose name ends with
+                             SUFFIX (e.g., "_fr" excludes "44940322_fr")
+  -h, --help                 Display this help message and exit
+
+Note: Options -e and -l are mutually exclusive. If neither is specified,
+all events in DATA_DIR are processed (full rebuild of events.json).
+
+Examples:
+  $(basename "$0") -d data/                        Process all events (full rebuild)
+  $(basename "$0") -d data/ -e 44683062            Process a single event
+  $(basename "$0") -d data/ -l 5                   Process last 5 modified events
+  $(basename "$0") -d data/ -l 5 -x _fr            Exclude dirs ending with "_fr"
+  $(basename "$0") -d data/ --exclude-dir-end _fr  Same, using long option
+  $(basename "$0") -h                              Show this help
+EOF
+}
+
 
 # Function to check if a lock is stale and clean it up if needed
 # Returns: 0 if no lock or stale lock removed, 1 if valid lock exists
@@ -117,11 +150,38 @@ EVENTS_JSON=${WORKDIR}/events.json
 EVENTS_JSON_TMP=${WORKDIR}/events.json.tmp
 SINGLE_EVENT_ID=""
 LAST_EVENTS=""
+EXCLUDE_DIR_END=""
 # Array to track events with time parsing issues
 EVENTS_WITH_TIME_PARSING=()
+# Array to track excluded directories
+EVENTS_EXCLUDED=()
+
+# Handle long options (getopts does not support them)
+ARGS=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --help)
+            usage
+            exit 0
+            ;;
+        --exclude-dir-end)
+            EXCLUDE_DIR_END="$2"
+            shift 2
+            ;;
+        --exclude-dir-end=*)
+            EXCLUDE_DIR_END="${1#*=}"
+            shift
+            ;;
+        *)
+            ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+set -- "${ARGS[@]}"
 
 # Parse arguments
-while getopts "d:e:l:" opt; do
+while getopts "d:e:l:x:h" opt; do
   case $opt in
     d) DATA_DIR="$OPTARG"
     ;;
@@ -129,7 +189,12 @@ while getopts "d:e:l:" opt; do
     ;;
     l) LAST_EVENTS="$OPTARG"
     ;;
-    \?) echo "Invalid option -$OPTARG" >&2
+    x) EXCLUDE_DIR_END="$OPTARG"
+    ;;
+    h) usage
+    exit 0
+    ;;
+    \?) usage >&2
     exit 1
     ;;
   esac
@@ -138,14 +203,16 @@ done
 # Validate required argument
 if [ -z "$DATA_DIR" ]; then
     echo "Error: -d option is required to specify DATA_DIR" >&2
-    echo "Usage: $0 -d DATA_DIR [-e EVENT_ID | -l LAST_N_EVENTS]" >&2
+    echo "" >&2
+    usage >&2
     exit 1
 fi
 
 # Validate mutual exclusivity of -e and -l
 if [ -n "$SINGLE_EVENT_ID" ] && [ -n "$LAST_EVENTS" ]; then
     echo "Error: Options -e and -l are mutually exclusive" >&2
-    echo "Usage: $0 -d DATA_DIR [-e EVENT_ID | -l LAST_N_EVENTS]" >&2
+    echo "" >&2
+    usage >&2
     exit 1
 fi
 
@@ -169,6 +236,18 @@ restructure_events_json() {
             }) | from_entries
         )
     }) | from_entries' "${EVENTS_JSON_TMP}" > "$EVENTS_JSON"
+}
+
+# Function to check if an event directory should be excluded
+# Parameters:
+#   $1 - event_id: directory name to check
+# Returns: 0 if excluded, 1 if not excluded
+is_excluded() {
+    local event_id=$1
+    if [ -n "${EXCLUDE_DIR_END}" ] && [[ "${event_id}" == *"${EXCLUDE_DIR_END}" ]]; then
+        return 0
+    fi
+    return 1
 }
 
 # Function to process a single event
@@ -301,15 +380,21 @@ START_TIME=$(date +%s)
 # Main logic
 if [ -n "$SINGLE_EVENT_ID" ]; then
     echo_date "Processing single event: $SINGLE_EVENT_ID"
-    event_json=$(process_event "$SINGLE_EVENT_ID")
 
-    if [ -n "$event_json" ]; then
-        # Check if time parsing was used
-        if [ "$(echo "$event_json" | jq -r '._used_time_parsing')" = "1" ]; then
-            EVENTS_WITH_TIME_PARSING+=("$SINGLE_EVENT_ID")
+    if is_excluded "$SINGLE_EVENT_ID"; then
+        echo_date "Skipping event $SINGLE_EVENT_ID: directory name ends with '${EXCLUDE_DIR_END}' (excluded by -x/--exclude-dir-end)"
+        EVENTS_EXCLUDED+=("$SINGLE_EVENT_ID")
+    else
+        event_json=$(process_event "$SINGLE_EVENT_ID")
+
+        if [ -n "$event_json" ]; then
+            # Check if time parsing was used
+            if [ "$(echo "$event_json" | jq -r '._used_time_parsing')" = "1" ]; then
+                EVENTS_WITH_TIME_PARSING+=("$SINGLE_EVENT_ID")
+            fi
+            update_event_in_json "$event_json" "$SINGLE_EVENT_ID"
+            echo "Event $SINGLE_EVENT_ID processed."
         fi
-        update_event_in_json "$event_json" "$SINGLE_EVENT_ID"
-        echo "Event $SINGLE_EVENT_ID processed."
     fi
 elif [ -n "$LAST_EVENTS" ]; then
     echo_date "Processing last $LAST_EVENTS events (ordered by modification date)..."
@@ -354,6 +439,14 @@ elif [ -n "$LAST_EVENTS" ]; then
 
         # Increment counter
         current=$((current + 1))
+
+        # Check exclusion
+        if is_excluded "$event_id"; then
+            echo "$current/$total_events - Skipping $event_id: directory name ends with '${EXCLUDE_DIR_END}' (excluded by -x/--exclude-dir-end)" >&2
+            EVENTS_EXCLUDED+=("$event_id")
+            continue
+        fi
+
         echo "$current/$total_events - Processing $event_id" >&2
 
         # Process event
@@ -396,6 +489,14 @@ else
 
         # Increment counter
         current=$((current + 1))
+
+        # Check exclusion
+        if is_excluded "$event_id"; then
+            echo "$current/$total_events - Skipping $event_id: directory name ends with '${EXCLUDE_DIR_END}' (excluded by -x/--exclude-dir-end)" >&2
+            EVENTS_EXCLUDED+=("$event_id")
+            continue
+        fi
+
         echo "$current/$total_events - Processing $event_id" >&2
 
         # Process event
@@ -418,6 +519,16 @@ else
 
     rm "${EVENTS_JSON_TMP}"
     echo "All events processed."
+fi
+
+# Report excluded directories
+if [ ${#EVENTS_EXCLUDED[@]} -gt 0 ]; then
+    echo ""
+    echo_date "=== Excluded directories (${#EVENTS_EXCLUDED[@]} events, suffix '${EXCLUDE_DIR_END}') ==="
+    for event_id in "${EVENTS_EXCLUDED[@]}"; do
+        echo "  - $event_id"
+    done
+    echo ""
 fi
 
 # Report events with time parsing issues

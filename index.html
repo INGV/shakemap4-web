@@ -192,16 +192,17 @@
                 </div>
             </div>
         </div>
+
+        <!-- Markdown Page View (Disclaimer, Contributors) -->
+        <div id="view-markdown" class="hidden">
+            <div class="markdown-content" id="markdown-content">
+                <!-- Populated by JS from .md files -->
+            </div>
+        </div>
     </main>
 
     <footer>
         <div class="container">
-            <div id="disclaimer-container">
-                <!-- Populated by JS -->
-            </div>
-            <div id="logos-container">
-                <!-- Populated by JS -->
-            </div>
             <div class="footer-info">
                 <span id="footer-version"></span>
                 <span id="footer-github"></span>
@@ -212,6 +213,8 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <!-- D3.js v7 for Analysis View -->
     <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <!-- Configuration and Utilities (load first) -->
     <script src="js/config.js"></script>
