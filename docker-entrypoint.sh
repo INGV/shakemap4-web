@@ -18,12 +18,7 @@ if [ "$ENABLE_CRONTAB" = "true" ]; then
     echo "ENABLE_CRONTAB is set to true. Starting cron service..."
     crontab /etc/cron.d/shakemap-cron
     cron
-    echo "Cron service started. Scheduled jobs:"
-    echo "  - Every 2 minutes: process_events.sh -d /usr/share/nginx/html/data -l 5"
-    echo "  - Daily at 00:10: process_events.sh -d /usr/share/nginx/html/data"
-    echo "Logs will be written to:"
-    echo "  - /tmp/process_events_incremental.log"
-    echo "  - /tmp/process_events_full.log"
+    echo "Cron service started; check Dockerfile for more info."
 else
     echo "ENABLE_CRONTAB is not set to true. Cron service will not start."
 fi
