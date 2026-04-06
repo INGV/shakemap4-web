@@ -29,23 +29,6 @@ else
 fi
 echo ""
 
-# --- First-boot data processing ---
-if [ "$PROCESS_ALL_DATA_FIRST_TIME" = "true" ]; then
-    echo "PROCESS_ALL_DATA_FIRST_TIME is set to true. Processing all data..."
-
-    # Two-pass strategy: the first run processes only the 20 most recent events
-    # so that events.json is available quickly and the portal is usable right away.
-    # The second run rebuilds the full dataset in the background without blocking
-    # nginx startup — it may take a long time on large data directories.
-    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -l 20
-    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data &
-
-    echo "All data processed."
-else
-    echo "PROCESS_ALL_DATA_FIRST_TIME is not set to true. Data processing will not run."
-fi
-echo ""
-
 # --- Runtime config overrides ---
 # config.js is a static file baked into the image at build time. To allow the
 # same image to serve different deployments (e.g. Italy vs Europe bbox, custom
@@ -88,6 +71,23 @@ if [ -n "${BBOX}" ]; then
         echo "         Example: BBOX=35,49,5,20"
         echo "         Keeping default bBox configuration."
     fi
+fi
+echo ""
+
+# --- First-boot data processing ---
+if [ "$PROCESS_ALL_DATA_FIRST_TIME" = "true" ]; then
+    echo "PROCESS_ALL_DATA_FIRST_TIME is set to true. Processing all data..."
+
+    # Two-pass strategy: the first run processes only the 20 most recent events
+    # so that events.json is available quickly and the portal is usable right away.
+    # The second run rebuilds the full dataset in the background without blocking
+    # nginx startup — it may take a long time on large data directories.
+    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -l 20
+    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data &
+
+    echo "All data processed."
+else
+    echo "PROCESS_ALL_DATA_FIRST_TIME is not set to true. Data processing will not run."
 fi
 echo ""
 
