@@ -50,8 +50,8 @@ const informationLinks = [
 const config = {
     version: "v2.0.0",
     githubLink: "https://github.com/INGV/shakemap4-web",
-    disclaimerPage: './disclaimer1.md',
-    contributorsPage: './contributors1.md',
+    disclaimerPage: './disclaimer-ingv.md',
+    contributorsPage: './contributors-ingv.md',
     bannerImage: './images/shakemapit_banner.png',
     //bannerImage: './images/shakemapeu_banner.png',
 
