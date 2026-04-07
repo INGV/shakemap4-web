@@ -24,7 +24,7 @@ window.loadAnalysisView = function (eventid, eventyear) {
         isAnalysisInitialized = true;
     }
 
-    // Auto-check macroseismic data for old events
+    // Auto-check Reported Intensity for old events
     const dyfiCheck = document.getElementById('dyfiCheck');
     if (dyfiCheck && analysisEventYear && analysisEventYear < 1972) {
         dyfiCheck.checked = true;
