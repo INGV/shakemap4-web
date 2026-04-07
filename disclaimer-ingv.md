@@ -8,7 +8,7 @@ Le mappe non hanno alcun valore ufficiale e INGV declina qualsiasi responsabilit
 
 Questo sito utilizza la nuova configurazione per l'Italia del software ShakeMap descritta in [Scientific Background](#scientific-background). 
 
-A partire dal 6 marzo 2023, e per specifici eventi per i quali sono stati rivisti i parametri del terremoto, le mappe di scuotimento vengono calcolate utilizzando le relazioni tra i parametri di scuotimento e l'intensità macrosismica di [Oliveti et al. (2022)](#).
+A partire dal 6 marzo 2023, e per specifici eventi per i quali sono stati rivisti i parametri del terremoto, le mappe di scuotimento vengono calcolate utilizzando le relazioni tra i parametri di scuotimento e l'intensità macrosismica di [Oliveti et al. (2022)](https://doi.org/10.1093/gji/ggac245).
 
 ---
 
@@ -20,4 +20,4 @@ The maps do not have any official value and INGV declines any responsibility for
 
 This website shows the ShakeMaps calculated using the configuration described in the [Scientific Background](#scientific-background). 
 
-Since March 6, 2023, and for specific events for which the earthquake parameters have been revised, the ShakeMaps have been generated using the ground motion intensity conversion equations (GMICEs) of [Oliveti et al. (2022)](#).
+Since March 6, 2023, and for specific events for which the earthquake parameters have been revised, the ShakeMaps have been generated using the ground motion intensity conversion equations (GMICEs) of [Oliveti et al. (2022)](https://doi.org/10.1093/gji/ggac245).
