@@ -2,7 +2,6 @@
 
 | DOI | Title | Reference |
 |-----|-------|-----------|
-| [10.5194/egusphere-egu23-5937](https://doi.org/10.5194/egusphere-egu23-5937) | ShakeMap-EU: an update on the shakemap service in Europe | Michelini et al. 2023 |
 | [10.1785/0220190130](https://doi.org/10.1785/0220190130) | The New ShakeMap in Italy: Progress and Advances in the Last 10 Yr | Michelini et al. 2021 |
 | [10.1093/gji/ggac245](https://doi.org/10.1093/gji/ggac245) | New reversible relationships between ground motion parameters and macroseismic intensity for Italy and their application in ShakeMap | Oliveti et al. 2022 |
 | [10.1785/0220230138](https://doi.org/10.1785/0220230138) | The ShakeMap Atlas of Historical Earthquakes in Italy: Configuration and Validation | Oliveti et al. 2023 |
