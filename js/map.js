@@ -206,7 +206,7 @@ async function initMap(event) {
                 const div = document.createElement('div');
                 div.innerHTML = `
                     <label>
-                        <input type="checkbox" checked onchange="toggleLayer('Macroseismic')">
+                        <input type="checkbox" onchange="toggleLayer('Macroseismic')">
                         Show Reported Intensity
                     </label>
                 `;
