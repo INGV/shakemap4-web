@@ -207,7 +207,7 @@ async function initMap(event) {
                 div.innerHTML = `
                     <label>
                         <input type="checkbox" onchange="toggleLayer('Macroseismic')">
-                        Show Felt Reports
+                        Show Felt Reports observations
                     </label>
                 `;
                 layerList.appendChild(div);
