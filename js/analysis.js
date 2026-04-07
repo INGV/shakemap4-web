@@ -502,7 +502,7 @@ function plot_data(data, regrArr, comp_id, newPlot) {
     svg.append("text")
         .attr("x", legendX + 35)
         .attr("y", 40)
-        .text("Macroseismic")
+        .text("Reported Intensity")
         .style("font-size", "15px")
         .attr("alignment-baseline", "middle");
 
