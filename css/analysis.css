@@ -116,11 +116,6 @@
 
 /* Plot Styling */
 .plot-area .point {
-    transition: transform 0.2s;
-}
-
-.plot-area .point:hover {
-    transform: scale(1.3);
     cursor: pointer;
 }
 

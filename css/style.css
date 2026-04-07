@@ -1214,9 +1214,36 @@ footer {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.station-section {
+    margin-bottom: 30px;
+}
+
+.station-section:last-child {
+    margin-bottom: 0;
+}
+
+.station-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--accent-color, #2196F3);
+}
+
 .station-table {
     width: 100%;
     border-collapse: collapse;
+}
+
+.col-stddev {
+    width: 12%;
+    text-align: center;
+}
+
+.col-nresp {
+    width: 12%;
+    text-align: center;
 }
 
 /* Collapsible Button Style */
@@ -1361,6 +1388,16 @@ footer {
     .col-dist {
         width: 15% !important;
         text-align: right;
+    }
+
+    .col-stddev {
+        width: 15% !important;
+        text-align: center;
+    }
+
+    .col-nresp {
+        width: 12% !important;
+        text-align: center;
     }
 
     .col-dummy {

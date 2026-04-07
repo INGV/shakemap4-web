@@ -65,7 +65,8 @@ const config = {
 
     // Regions removed as per user request
     bBox: [
-        { minlat: 35, maxlat: 49, minlon: 5, maxlon: 20 }
+    //    { minlat: 35, maxlat: 49, minlon: 5, maxlon: 20 }
+        { minlat: -90, maxlat: 90, minlon: -180, maxlon: 180 }
     ]
 };
 

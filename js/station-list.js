@@ -2,8 +2,8 @@
 // Station List Logic
 
 function initStationList(eventId) {
-    // Clear previous data
-    document.getElementById('stationTable').innerHTML = '<div class="loading">Loading stations...</div>';
+    document.getElementById('seismicStationTable').innerHTML = '<div class="loading">Loading stations...</div>';
+    document.getElementById('macroseismicStationTable').innerHTML = '<div class="loading">Loading stations...</div>';
     loadStationData(eventId);
 }
 
@@ -16,24 +16,6 @@ async function loadStationData(eventId) {
         const json = await response.json();
         const stations = json.features;
 
-        // Determine isHistoric based on config and event year
-        // We need to look up the event year from the ShakeMap.allEvents list
-        // Since we passed eventId, let's find the event in ShakeMap.allEvents to get the date
-        let isHistoric = false;
-        if (typeof ShakeMap !== 'undefined' && ShakeMap.allEvents && typeof config !== 'undefined' && config.historicalCutOff) {
-            const event = ShakeMap.allEvents.find(e => e.id == eventId);
-            if (event) {
-                const eventDate = new Date(event.year, event.month - 1, event.day, event.h, event.m, event.s);
-                const parts = config.historicalCutOff.split('-');
-                const cutOffDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-
-                // If event is OLDER than cutoff, it is HISTORIC
-                if (eventDate < cutOffDate) {
-                    isHistoric = true;
-                }
-            }
-        }
-
         // Sort stations by distance
         const stationsSorted = stations.sort((a, b) => {
             const distA = a.properties.distance || 0;
@@ -41,20 +23,31 @@ async function loadStationData(eventId) {
             return distA > distB ? 1 : -1;
         });
 
-        renderStationTable(stationsSorted, isHistoric);
+        // Partition into seismic and macroseismic
+        const seismicStations = stationsSorted.filter(s => s.properties.station_type !== 'macroseismic');
+        const macroseismicStations = stationsSorted.filter(s => s.properties.station_type === 'macroseismic');
+
+        renderSeismicTable(seismicStations);
+        renderMacroseismicTable(macroseismicStations);
 
     } catch (error) {
         console.error('Error loading stations:', error);
-        document.getElementById('stationTable').innerHTML = '<div class="error">Could not load station list.</div>';
+        document.getElementById('seismicStationTable').innerHTML = '<div class="error">Could not load station list.</div>';
+        document.getElementById('macroseismicStationTable').innerHTML = '';
     }
 }
 
-function renderStationTable(stations, isHistoric) {
-    const container = document.getElementById('stationTable');
+function renderSeismicTable(stations) {
+    const container = document.getElementById('seismicStationTable');
+
+    if (stations.length === 0) {
+        container.innerHTML = '<div class="info">No seismic stations available.</div>';
+        return;
+    }
+
     let html = '';
 
-    // Define Header
-    // Columns: ID, MMI, PGA (%g), PGV (cm/s), Distance (km)
+    // Header
     html += `
         <button type="button" class="collapsible header-row">
             <div class="station-row-data">
@@ -68,33 +61,11 @@ function renderStationTable(stations, isHistoric) {
         </button>
     `;
 
-    // Filter Logic from user snippet: "dontUseStationType = 'macroseismic'" if NOT historic
-    // If Historic, use ALL. If Modern, exclude 'macroseismic' ??
-    // User snippet: 
-    // var dontUseStationType = 'macroseismic';
-    // if (historic == true) { dontUseStationType = '' };
-    // if (stations[i].properties.station_type != dontUseStationType) ...
-
-    // So if Modern (historic=false), exclude 'macroseismic'. 
-    // If Historic (historic=true), exclude '' (which means include everything basically).
-
-    const excludeType = isHistoric ? '' : 'macroseismic';
-
     stations.forEach(station => {
         const props = station.properties;
+        const getVal = (val, fixed) => (val !== null && val !== undefined && val !== "null" && !isNaN(val)) ? Number(val).toFixed(fixed) : '-';
+        const getRound = (val) => (val !== null && val !== undefined && val !== "null" && !isNaN(val)) ? Math.round(val) : '-';
 
-        if (props.station_type === excludeType && excludeType !== '') {
-            return; // Skip
-        }
-
-        // Helpers
-        const getVal = (val, fixed) => (val !== null && val !== undefined && !isNaN(val)) ? Number(val).toFixed(fixed) : '-';
-        const getRound = (val) => (val !== null && val !== undefined && !isNaN(val)) ? Math.round(val) : '-';
-
-        // Intensity Color
-        // Use intColors from js/colors.js (assuming simple integer index or handled otherwise)
-        // User snippet used `intColors[Math.round(...)]`.
-        // We have `intColors` object in colors.js now.
         const id = station.id || props.code || '-';
         const mmi = getRound(props.intensity);
         const color = getStationColor(mmi);
@@ -102,7 +73,7 @@ function renderStationTable(stations, isHistoric) {
         const pgv = getVal(props.pgv, 4);
         const dist = getVal(props.distance, 1);
 
-        let coords = station.geometry.coordinates; // [lon, lat]
+        const coords = station.geometry.coordinates;
         const lat = coords[1];
         const lon = coords[0];
         const vs30 = getVal(props.vs30, 2);
@@ -117,7 +88,7 @@ function renderStationTable(stations, isHistoric) {
                         <tr>
                             <th>Channel</th>
                             <th>PGA (%g)</th>
-                            <th>PGV (cm/s)</th> <!-- Label says m/s in snippet but dataset usually has specific units, user snippet says cm/s in header but m/s in subtable? let's stick to consistent units or user snippet. Header said (cm/s) -->
+                            <th>PGV (cm/s)</th>
                             <th>SA(0.3) (%g)</th>
                             <th>SA(1.0) (%g)</th>
                             <th>SA(3.0) (%g)</th>
@@ -127,10 +98,9 @@ function renderStationTable(stations, isHistoric) {
             `;
 
             props.channels.forEach(channel => {
-                // Find amplitudes
                 const findAmp = (name) => {
                     const amp = channel.amplitudes.find(a => a.name === name);
-                    return amp ? amp.value : '-'; // Value is raw string/number
+                    return amp ? amp.value : '-';
                 };
 
                 channelsHtml += `
@@ -168,13 +138,89 @@ function renderStationTable(stations, isHistoric) {
     });
 
     container.innerHTML = html;
-    initCollapsible();
+    initCollapsible('seismicStationTable');
 }
 
-function initCollapsible() {
-    const coll = document.getElementsByClassName("collapsible");
+function renderMacroseismicTable(stations) {
+    const container = document.getElementById('macroseismicStationTable');
+
+    if (stations.length === 0) {
+        container.innerHTML = '<div class="info">No macroseismic stations available.</div>';
+        return;
+    }
+
+    let html = '';
+
+    // Header
+    html += `
+        <button type="button" class="collapsible header-row">
+            <div class="station-row-data">
+                <span class="col-id">ID</span>
+                <span class="col-mmi">MMI</span>
+                <span class="col-stddev">Std Dev</span>
+                <span class="col-nresp">N. Resp</span>
+                <span class="col-dist">Distance (km)</span>
+                <span class="col-dummy"></span>
+            </div>
+        </button>
+    `;
+
+    stations.forEach(station => {
+        const props = station.properties;
+        const getVal = (val, fixed) => (val !== null && val !== undefined && val !== "null" && !isNaN(val)) ? Number(val).toFixed(fixed) : '-';
+        const getRound = (val) => (val !== null && val !== undefined && val !== "null" && !isNaN(val)) ? Math.round(val) : '-';
+
+        const id = station.id || props.code || '-';
+        const mmi = getRound(props.intensity);
+        const color = getStationColor(mmi);
+        const stddev = getVal(props.intensity_stddev, 2);
+        const nresp = (props.nresp !== null && props.nresp !== undefined && props.nresp !== "null") ? props.nresp : '-';
+        const dist = getVal(props.distance, 1);
+
+        const coords = station.geometry.coordinates;
+        const lat = coords[1];
+        const lon = coords[0];
+        const vs30 = getVal(props.vs30, 2);
+
+        // Distances detail
+        let distancesHtml = '';
+        if (props.distances) {
+            distancesHtml = '<div style="margin-top:10px;"><b>Distances:</b></div><table class="channel-table"><thead><tr>';
+            const keys = Object.keys(props.distances);
+            keys.forEach(key => { distancesHtml += `<th>${key}</th>`; });
+            distancesHtml += '</tr></thead><tbody><tr>';
+            keys.forEach(key => { distancesHtml += `<td>${getVal(props.distances[key], 3)}</td>`; });
+            distancesHtml += '</tr></tbody></table>';
+        }
+
+        html += `
+            <button type="button" class="collapsible" style="background-color: ${color}; border-left: 5px solid rgba(0,0,0,0.2);">
+                <div class="station-row-data">
+                    <span class="col-id">${id}</span>
+                    <span class="col-mmi">${mmi}</span>
+                    <span class="col-stddev">${stddev}</span>
+                    <span class="col-nresp">${nresp}</span>
+                    <span class="col-dist">${dist}</span>
+                    <span class="col-dummy"></span>
+                </div>
+            </button>
+            <div class="content">
+                <p>
+                    <strong>Latitude:</strong> ${lat} &emsp; <strong>Longitude:</strong> ${lon} &emsp; <strong>Vs30 (m/s):</strong> ${vs30}
+                    ${distancesHtml}
+                </p>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    initCollapsible('macroseismicStationTable');
+}
+
+function initCollapsible(containerId) {
+    const container = document.getElementById(containerId);
+    const coll = container.getElementsByClassName("collapsible");
     for (let i = 0; i < coll.length; i++) {
-        // Skip header row
         if (coll[i].classList.contains('header-row')) continue;
 
         coll[i].addEventListener("click", function () {
@@ -192,26 +238,11 @@ function initCollapsible() {
 function getStationColor(intensity) {
     if (intensity === null || intensity === undefined) return '#ffffff';
 
-    // intColors is an OBJECT now: { 1: '#...', 1.5: '#...', ... }
-    // We should round to nearest key or floor/ceil? 
-    // User snippet was `Math.round`. 
-    // `colors.js` keys are 1, 1.5, 2, 2.5...
-    // Let's use exact match or round to nearest 0.5?
-    // Actually the user snippet used `Math.round(stations[i].properties.intensity)` which implies Integers.
-    // If intColors keys are 1, 1.5, 2... and we have Integer intensity (e.g. 5), it matches.
-
-    // Check if intColors is defined
     if (typeof intColors !== 'undefined') {
-        const rounded = Math.round(intensity * 2) / 2; // Round to nearest 0.5
-        // Or just Round to integer as per user snippet? 
-        // User snippet: `intColors[Math.round(stations[i].properties.intensity)]`
-        // But the new `intColors` object has 0.5 steps.
-        // I will try to find exact match for nearest 0.5, fallback to integer match.
-
+        const rounded = Math.round(intensity * 2) / 2;
         if (intColors[rounded]) return intColors[rounded];
         if (intColors[Math.round(intensity)]) return intColors[Math.round(intensity)];
     } else if (typeof intColors_USGS !== 'undefined') {
-        // Fallback to array config if object not found (legacy support)
         return intColors_USGS[Math.round(intensity)] || '#ffffff';
     }
 

@@ -283,6 +283,9 @@ function plot_data(data, regrArr, comp_id, newPlot) {
             .style("box-shadow", "0 4px 6px rgba(0,0,0,0.3)");
     }
 
+    // Debounce timer for tooltip hide (prevents flickering)
+    let hideTooltipTimer = null;
+
     // Set scales
     const x = d3.scaleLog().range([0, width]);
 
@@ -393,10 +396,16 @@ function plot_data(data, regrArr, comp_id, newPlot) {
         })
         .attr("transform", d => `translate(${x(d.distance)},${y(d[comp_id])})`)
         .on("mouseover", function (event, d) {
+            // Cancel any pending tooltip hide
+            if (hideTooltipTimer) {
+                clearTimeout(hideTooltipTimer);
+                hideTooltipTimer = null;
+            }
+
             // Highlight the point
             d3.select(this)
                 .style("stroke-width", "3px")
-                .style("filter", "brightness(1.2)");
+                .style("fill-opacity", "0.7");
 
             // Show tooltip - Update content
             tooltip.html(
@@ -452,13 +461,15 @@ function plot_data(data, regrArr, comp_id, newPlot) {
                 .style("left", left + "px");
         })
         .on("mouseout", function () {
-            // Remove highlight
-            d3.select(this)
-                .style("stroke-width", "1.5px")
-                .style("filter", "none");
-
-            // Hide tooltip
-            tooltip.style("visibility", "hidden");
+            const self = this;
+            // Debounce: delay hiding to absorb flicker cycles
+            hideTooltipTimer = setTimeout(function () {
+                d3.select(self)
+                    .style("stroke-width", "1.5px")
+                    .style("fill-opacity", "1");
+                tooltip.style("visibility", "hidden");
+                hideTooltipTimer = null;
+            }, 100);
         });
 
     // Legend
@@ -467,7 +478,7 @@ function plot_data(data, regrArr, comp_id, newPlot) {
     svg.append("rect")
         .attr("x", legendX)
         .attr("y", 0)
-        .attr("width", 140)
+        .attr("width", 200)
         .attr("height", 90)
         .style("stroke", "#000000")
         .attr("stroke-width", 2)
