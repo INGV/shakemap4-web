@@ -34,11 +34,11 @@ const informationLinks = [
         link: "#scientific-background",
         type: "internal"
     },
-    {
-        text: "ShakeMap Config. GitHub Repository",
-        link: "https://github.com/INGV/shakemap-conf-eu",
-        type: "external"
-    },
+    //{
+    //    text: "ShakeMap Config. GitHub Repository",
+    //    link: "https://github.com/INGV/shakemap-conf-eu",
+    //    type: "external"
+    //},
     { type: "separator" },
     {
         text: "Contributors",
@@ -65,8 +65,8 @@ const config = {
 
     // Regions removed as per user request
     bBox: [
-    //    { minlat: 35, maxlat: 49, minlon: 5, maxlon: 20 }
-        { minlat: -90, maxlat: 90, minlon: -180, maxlon: 180 }
+        { minlat: 35, maxlat: 49, minlon: 5, maxlon: 20 }
+    //    { minlat: -90, maxlat: 90, minlon: -180, maxlon: 180 }
     ]
 };
 
