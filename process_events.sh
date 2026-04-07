@@ -32,7 +32,7 @@ Options:
                              time (newest first). Performs an incremental update
   -x, --exclude-dir-end SUFFIX
                              Exclude event directories whose name ends with
-                             SUFFIX (e.g., "_fr" excludes "44940322_fr")
+                             SUFFIX (e.g., "_ri" excludes "44940322_ri")
   -h, --help                 Display this help message and exit
 
 Note: Options -e and -l are mutually exclusive. If neither is specified,
@@ -42,8 +42,8 @@ Examples:
   $(basename "$0") -d data/                        Process all events (full rebuild)
   $(basename "$0") -d data/ -e 44683062            Process a single event
   $(basename "$0") -d data/ -l 5                   Process last 5 modified events
-  $(basename "$0") -d data/ -l 5 -x _fr            Exclude dirs ending with "_fr"
-  $(basename "$0") -d data/ --exclude-dir-end _fr  Same, using long option
+  $(basename "$0") -d data/ -l 5 -x _ri            Exclude dirs ending with "_ri"
+  $(basename "$0") -d data/ --exclude-dir-end _ri  Same, using long option
   $(basename "$0") -h                              Show this help
 EOF
 }

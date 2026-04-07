@@ -45,7 +45,7 @@ async function showEventDetails(id) {
 
     // Check if Reported Intensity data exists
     try {
-        const riCheckRes = await fetch(`${DATA_DIR}/${id}_fr/current/products/info.json`, { method: 'HEAD' });
+        const riCheckRes = await fetch(`${DATA_DIR}/${id}_ri/current/products/info.json`, { method: 'HEAD' });
         if (riCheckRes.ok) {
             toggleRI.disabled = false;
         }
@@ -72,7 +72,7 @@ window.setDataSource = function (source) {
 
     if (source === 'reported-intensity') {
         if (toggleRI.disabled) return;
-        ShakeMap.activeDataId = baseId + '_fr';
+        ShakeMap.activeDataId = baseId + '_ri';
         toggleRI.classList.add('active');
         toggleInstr.classList.remove('active');
     } else {
