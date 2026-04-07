@@ -8,7 +8,7 @@
  * Initialize the ShakeMap Leaflet map for an event
  * @param {Object} event - Event object
  */
-async function initMap(event) {
+async function initMap(event, options = {}) {
     if (ShakeMap.map) {
         ShakeMap.map.remove();
         ShakeMap.map = null;
@@ -203,10 +203,14 @@ async function initMap(event) {
             // Add Checkbox for Macroseismic (Show Reported Intensity)
             // Only if there are features
             if (macroseismicLayer.getLayers().length > 0) {
+                const autoEnable = options.enableMacroseismic === true;
+                if (autoEnable) {
+                    macroseismicLayer.addTo(ShakeMap.map);
+                }
                 const div = document.createElement('div');
                 div.innerHTML = `
                     <label>
-                        <input type="checkbox" onchange="toggleLayer('Macroseismic')">
+                        <input type="checkbox" ${autoEnable ? 'checked' : ''} onchange="toggleLayer('Macroseismic')">
                         Show Reported Intensity
                     </label>
                 `;

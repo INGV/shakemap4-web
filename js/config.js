@@ -13,7 +13,7 @@ const ShakeMap = {
     map: null,          // Leaflet map instance
     currentLayers: {},  // Active map layers
     basemapLayers: {},  // Basemap tile layers
-    activeDataId: null  // Active data directory ID (differs from event.id when Felt Report is active)
+    activeDataId: null  // Active data directory ID (differs from event.id when Reported Intensity is active)
 };
 
 // Information menu links - easily add/remove/modify links

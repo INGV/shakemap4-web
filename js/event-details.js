@@ -35,22 +35,22 @@ async function showEventDetails(id) {
 
     // Configure data source toggle
     const toggleContainer = document.getElementById('data-source-toggle');
-    const toggleFR = document.getElementById('toggle-feltreport');
+    const toggleRI = document.getElementById('toggle-reported-intensity');
     const toggleInstr = document.getElementById('toggle-instrumental');
 
     toggleContainer.style.display = 'flex';
     toggleInstr.classList.add('active');
-    toggleFR.classList.remove('active');
-    toggleFR.disabled = true;
+    toggleRI.classList.remove('active');
+    toggleRI.disabled = true;
 
-    // Check if Felt Report data exists
+    // Check if Reported Intensity data exists
     try {
-        const frCheckRes = await fetch(`${DATA_DIR}/${id}_fr/current/products/info.json`, { method: 'HEAD' });
-        if (frCheckRes.ok) {
-            toggleFR.disabled = false;
+        const riCheckRes = await fetch(`${DATA_DIR}/${id}_fr/current/products/info.json`, { method: 'HEAD' });
+        if (riCheckRes.ok) {
+            toggleRI.disabled = false;
         }
     } catch (e) {
-        // _fr does not exist, button stays disabled
+        // Reported Intensity data does not exist, button stays disabled
     }
 
     // Reset to Map tab
@@ -61,24 +61,24 @@ async function showEventDetails(id) {
 }
 
 /**
- * Switch between Instrumental and Felt Report data sources
- * @param {string} source - 'instrumental' or 'feltreport'
+ * Switch between Instrumental and Reported Intensity data sources
+ * @param {string} source - 'instrumental' or 'reported-intensity'
  */
 window.setDataSource = function (source) {
     const hash = window.location.hash;
     const baseId = hash.split('/')[1];
-    const toggleFR = document.getElementById('toggle-feltreport');
+    const toggleRI = document.getElementById('toggle-reported-intensity');
     const toggleInstr = document.getElementById('toggle-instrumental');
 
-    if (source === 'feltreport') {
-        if (toggleFR.disabled) return;
+    if (source === 'reported-intensity') {
+        if (toggleRI.disabled) return;
         ShakeMap.activeDataId = baseId + '_fr';
-        toggleFR.classList.add('active');
+        toggleRI.classList.add('active');
         toggleInstr.classList.remove('active');
     } else {
         ShakeMap.activeDataId = baseId;
         toggleInstr.classList.add('active');
-        toggleFR.classList.remove('active');
+        toggleRI.classList.remove('active');
     }
 
     // Reload the currently active tab with the new data source
@@ -90,7 +90,7 @@ window.setDataSource = function (source) {
             const event = ShakeMap.allEvents.find(e => e.id == baseId);
             if (event) {
                 const mappedEvent = Object.assign({}, event, { id: ShakeMap.activeDataId });
-                initMap(mappedEvent);
+                initMap(mappedEvent, { enableMacroseismic: source === 'reported-intensity' });
             }
         } else {
             switchTab(tabName);
