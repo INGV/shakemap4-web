@@ -200,14 +200,14 @@ async function initMap(event) {
             });
 
             ShakeMap.currentLayers['Macroseismic'] = macroseismicLayer;
-            // Add Checkbox for Macroseismic (Show DYFI observations)
+            // Add Checkbox for Macroseismic (Show Felt Reports)
             // Only if there are features
             if (macroseismicLayer.getLayers().length > 0) {
                 const div = document.createElement('div');
                 div.innerHTML = `
                     <label>
                         <input type="checkbox" onchange="toggleLayer('Macroseismic')">
-                        Show DYFI observations
+                        Show Felt Reports
                     </label>
                 `;
                 layerList.appendChild(div);
