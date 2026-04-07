@@ -122,6 +122,8 @@ function handleRoute() {
         showMarkdownPage(config.disclaimerPage);
     } else if (hash === '#contributors') {
         showMarkdownPage(config.contributorsPage);
+    } else if (hash === '#scientific-background') {
+        showMarkdownPage(config.scientificBackgroundPage);
     } else if (hash.startsWith('#event/')) {
         const id = hash.split('/')[1];
         showEventDetails(id);

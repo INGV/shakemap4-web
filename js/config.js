@@ -30,8 +30,13 @@ const informationLinks = [
         type: "external"
     },
     {
-        text: "GitHub Repository",
-        link: "https://github.com/INGV/shakemap4-web",
+        text: "Scientific Background",
+        link: "#scientific-background",
+        type: "internal"
+    },
+    {
+        text: "ShakeMap Config. GitHub Repository",
+        link: "https://github.com/INGV/shakemap-conf-eu",
         type: "external"
     },
     { type: "separator" },
@@ -52,6 +57,7 @@ const config = {
     githubLink: "https://github.com/INGV/shakemap4-web",
     disclaimerPage: './disclaimer-ingv.md',
     contributorsPage: './contributors-ingv.md',
+    scientificBackgroundPage: './scientific-background-ingv.md',
     bannerImage: './images/shakemapit_banner.png',
     //bannerImage: './images/shakemapeu_banner.png',
 
