@@ -62,14 +62,12 @@ docker run -d -p 8080:80 \
 
 When `PROCESS_ALL_DATA_FIRST_TIME=true` is set, the container will process all events in the data directory at startup before starting the Nginx server. This is useful for initializing the `events.json` file on first deployment.
 
-**Run with custom configuration overrides:**
+**Run with a specific environment profile (e.g. EU):**
 ```bash
 docker run -d -p 8080:80 \
   -v $(pwd)/data:/usr/share/nginx/html/data:ro \
   --name shakemap4-web__container \
-  -e FILE_DISCLAIMER='./my_disclaimer.md' \
-  -e FILE_CONTRIBUTORS='./my_contributors.md' \
-  -e BBOX='35,49,5,20' \
+  -e SHAKEMAP_ENV=eu \
   ingv/shakemap4-web
 ```
 
@@ -79,14 +77,11 @@ docker run -d -p 8080:80 \
 |---|---|---|---|
 | `ENABLE_CRONTAB` | Enable automated event processing via cron | `false` | `true` |
 | `PROCESS_ALL_DATA_FIRST_TIME` | Process all events at container startup | `false` | `true` |
-| `FILE_DISCLAIMER` | Override disclaimer page Markdown file path | `./disclaimer1.md` | `./my_disclaimer.md` |
-| `FILE_CONTRIBUTORS` | Override contributors page Markdown file path | `./contributors1.md` | `./my_contributors.md` |
-| `BBOX` | Override bounding box filter (minlat,maxlat,minlon,maxlon) | `35,49,5,20` (Italy) | `36,72,-25,45` (Europe) |
+| `SHAKEMAP_ENV` | Environment profile to load (`ingv`, `eu`, or custom) | `ingv` | `eu` |
 
 **Notes:**
-- All environment variables are optional. If not set, the defaults from `js/config.js` are used.
-- Custom Markdown files (for `FILE_DISCLAIMER` / `FILE_CONTRIBUTORS`) must be present in the container's web root. You can mount them as volumes or add them to a custom Dockerfile.
-- The `BBOX` value must contain exactly 4 comma-separated numeric values. Invalid values are ignored with a warning.
+- All environment variables are optional. If not set, the INGV defaults from `js/config-base.js` are used.
+- `SHAKEMAP_ENV` selects which environment profile file (`js/config-<name>.js`) to copy into `js/config-env.js` at container startup. To add a new environment, create a `js/config-<name>.js` file with `Object.assign(config, { ... })` overrides.
 
 #### Alternative: Build Docker image locally
 **Build the Docker image:**

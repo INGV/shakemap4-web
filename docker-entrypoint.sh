@@ -5,10 +5,10 @@
 # Runs all optional setup steps before handing control to nginx:
 #   1. Cron scheduling for periodic event processing (ENABLE_CRONTAB)
 #   2. One-shot full data processing at first boot (PROCESS_ALL_DATA_FIRST_TIME)
-#   3. Runtime config overrides via env vars (FILE_DISCLAIMER, FILE_CONTRIBUTORS, BBOX)
+#   3. Environment profile selection via SHAKEMAP_ENV
 #
 # Every step is opt-in: with no env vars set, the container just serves the
-# static site with default config.js values.
+# static site with INGV defaults from config-base.js.
 #
 set -e
 echo ""
@@ -24,48 +24,21 @@ else
 fi
 echo ""
 
-# --- Runtime config overrides ---
-# config.js is a static file baked into the image at build time. To allow the
-# same image to serve different deployments (e.g. Italy vs Europe bbox, custom
-# disclaimer), we patch it in-place with sed before nginx starts.
-CONFIG_FILE="/usr/share/nginx/html/js/config.js"
+# --- Environment configuration ---
+# SHAKEMAP_ENV selects which environment profile to load.
+# Supported values: "ingv" (default), "eu", or any custom name matching config-<name>.js
+CONFIG_DIR="/usr/share/nginx/html/js"
+ENV_CONFIG="${CONFIG_DIR}/config-env.js"
+SHAKEMAP_ENV="${SHAKEMAP_ENV:-ingv}"
 
-if [ -n "${FILE_DISCLAIMER}" ]; then
-    echo "FILE_DISCLAIMER is set to '${FILE_DISCLAIMER}'. Overriding disclaimerPage in config.js..."
-    # Escape '&' which sed interprets as "matched text" in the replacement string
-    SAFE_FILE_DISCLAIMER=$(echo "${FILE_DISCLAIMER}" | sed 's|&|\\&|g')
-    sed -i "s|disclaimerPage: '.*'|disclaimerPage: '${SAFE_FILE_DISCLAIMER}'|" "${CONFIG_FILE}"
-fi
+PROFILE_FILE="${CONFIG_DIR}/config-${SHAKEMAP_ENV}.js"
 
-if [ -n "${FILE_CONTRIBUTORS}" ]; then
-    echo "FILE_CONTRIBUTORS is set to '${FILE_CONTRIBUTORS}'. Overriding contributorsPage in config.js..."
-    SAFE_FILE_CONTRIBUTORS=$(echo "${FILE_CONTRIBUTORS}" | sed 's|&|\\&|g')
-    sed -i "s|contributorsPage: '.*'|contributorsPage: '${SAFE_FILE_CONTRIBUTORS}'|" "${CONFIG_FILE}"
-fi
-
-# BBOX override: expects "minlat,maxlat,minlon,maxlon" (e.g. "36,72,-25,45" for Europe).
-# Replaces the multi-line bBox array in config.js using a sed range match.
-if [ -n "${BBOX}" ]; then
-    echo "BBOX is set to '${BBOX}'. Overriding bBox in config.js..."
-
-    IFS=',' read -r BBOX_MINLAT BBOX_MAXLAT BBOX_MINLON BBOX_MAXLON <<< "${BBOX}"
-
-    # Tolerate "35, 49, 5, 20" (spaces after commas)
-    BBOX_MINLAT=$(echo "${BBOX_MINLAT}" | tr -d ' ')
-    BBOX_MAXLAT=$(echo "${BBOX_MAXLAT}" | tr -d ' ')
-    BBOX_MINLON=$(echo "${BBOX_MINLON}" | tr -d ' ')
-    BBOX_MAXLON=$(echo "${BBOX_MAXLON}" | tr -d ' ')
-
-    if echo "${BBOX_MINLAT}" | grep -qE '^-?[0-9]+\.?[0-9]*$' && \
-       echo "${BBOX_MAXLAT}" | grep -qE '^-?[0-9]+\.?[0-9]*$' && \
-       echo "${BBOX_MINLON}" | grep -qE '^-?[0-9]+\.?[0-9]*$' && \
-       echo "${BBOX_MAXLON}" | grep -qE '^-?[0-9]+\.?[0-9]*$'; then
-        sed -i "/bBox: \[/,/    \]/c\\    bBox: [\\n        { minlat: ${BBOX_MINLAT}, maxlat: ${BBOX_MAXLAT}, minlon: ${BBOX_MINLON}, maxlon: ${BBOX_MAXLON} }\\n    ]" "${CONFIG_FILE}"
-    else
-        echo "WARNING: Invalid BBOX format '${BBOX}'. Expected: minlat,maxlat,minlon,maxlon (numeric values)."
-        echo "         Example: BBOX=35,49,5,20"
-        echo "         Keeping default bBox configuration."
-    fi
+if [ -f "${PROFILE_FILE}" ]; then
+    echo "Applying environment profile: ${SHAKEMAP_ENV} (${PROFILE_FILE})"
+    cp "${PROFILE_FILE}" "${ENV_CONFIG}"
+else
+    echo "WARNING: Profile config-${SHAKEMAP_ENV}.js not found. Using empty config-env.js (INGV defaults)."
+    echo "// No environment overrides (using defaults from config-base.js)" > "${ENV_CONFIG}"
 fi
 echo ""
 
