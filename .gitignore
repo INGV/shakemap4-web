@@ -1,6 +1,5 @@
-events.js
-events.js.tmp
+.claude/
+CLAUDE.md
+data/*
 events.json
-config.js
-test_sergio/
-.idea/
+.playwright-cli/
