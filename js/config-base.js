@@ -18,7 +18,7 @@ const ShakeMap = {
 };
 
 const config = {
-    version: "v2.0.0",
+    version: "v2.1.0-dev",
     githubLink: "https://github.com/INGV/shakemap4-web",
     disclaimerPage: './disclaimer-ingv.md',
     contributorsPage: './contributors-ingv.md',
