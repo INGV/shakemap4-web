@@ -36,8 +36,11 @@ const config = {
         },
         right: {
             type: 'text',
-            content: 'ISTITUTO NAZIONALE DI GEOFISICA E VULCANOLOGIA',
-            style: 'bold uppercase'
+            //content: 'ISTITUTO NAZIONALE DI GEOFISICA E VULCANOLOGIA',
+            content: 'ShakeMap INGV',
+            //style: 'bold uppercase'
+            style: 'bold',
+            fontSize: '2rem'
         },
         backgroundColor: '#ffffff'
     },
