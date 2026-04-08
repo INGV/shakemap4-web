@@ -1,8 +1,12 @@
 # Contributors
 
 ## DOI and Citation
+**DOI**: 
 
-*DOI and citation will be added here.*
+**Cite as**:
+```
+--
+```
 
 ## Participating Institutes
 
