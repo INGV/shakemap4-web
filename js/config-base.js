@@ -25,6 +25,23 @@ const config = {
     scientificBackgroundPage: './scientific-background-ingv.md',
     bannerImage: './images/shakemapit_banner.png',
 
+    // HTML banner configuration (takes precedence over bannerImage)
+    // NOTE: Environment profiles replace this entire object via Object.assign (no deep merge)
+    banner: {
+        left: {
+            type: 'logo',
+            src: './images/contributors-ingv/INGV_without_footer.png',
+            alt: 'INGV Logo',
+            maxHeight: '80px'
+        },
+        right: {
+            type: 'text',
+            content: 'ISTITUTO NAZIONALE DI GEOFISICA E VULCANOLOGIA',
+            style: 'bold uppercase'
+        },
+        backgroundColor: '#ffffff'
+    },
+
     enableReportedIntensity: false,
 
     historicalCutOff: "1980-01-01",

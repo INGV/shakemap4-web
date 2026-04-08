@@ -107,16 +107,78 @@ function injectHeader(currentPage = 'index') {
 }
 
 /**
- * Create and inject the banner section
+ * Render a single banner slot (left or right) based on its type.
+ * @param {Object} slot - Slot configuration { type, ... }
+ * @returns {string} HTML string
+ */
+function renderBannerSlot(slot) {
+    if (!slot) return '';
+
+    switch (slot.type) {
+        case 'logo':
+            return `<img class="banner-logo" src="${slot.src}" alt="${slot.alt || ''}"
+                         style="max-height: ${slot.maxHeight || '80px'}">`;
+
+        case 'text': {
+            const classes = ['banner-text'];
+            if (slot.style) {
+                if (slot.style.includes('bold')) classes.push('banner-text--bold');
+                if (slot.style.includes('uppercase')) classes.push('banner-text--uppercase');
+            }
+            const fontSize = slot.fontSize ? `font-size: ${slot.fontSize};` : '';
+            return `<span class="${classes.join(' ')}" style="${fontSize}">${slot.content}</span>`;
+        }
+
+        case 'logos-grid': {
+            const cols = slot.columns || 2;
+            const logosHTML = slot.logos.map(logo =>
+                `<img class="banner-grid-logo" src="${logo.src}" alt="${logo.alt || ''}">`
+            ).join('');
+            return `<div class="banner-logos-grid" style="grid-template-columns: repeat(${cols}, 1fr);">
+                        ${logosHTML}
+                    </div>`;
+        }
+
+        default:
+            return '';
+    }
+}
+
+/**
+ * Create and inject the banner section.
+ * Supports two modes:
+ *   1. HTML banner (config.banner) - declarative layout with text and logos
+ *   2. Legacy image banner (config.bannerImage) - single image fallback
  */
 function injectBanner() {
-    const bannerHTML = `
-        <img src="${config.bannerImage}" alt="ShakeMap4 Banner" onerror="this.style.display='none'">
-    `;
+    const bannerEl = document.querySelector('.banner');
+    if (!bannerEl) return;
 
-    const banner = document.querySelector('.banner');
-    if (banner) {
-        banner.innerHTML = bannerHTML;
+    // New HTML banner mode
+    if (config.banner) {
+        const banner = config.banner;
+
+        if (banner.backgroundColor) {
+            bannerEl.style.backgroundColor = banner.backgroundColor;
+        }
+
+        const leftHTML = renderBannerSlot(banner.left);
+        const rightHTML = renderBannerSlot(banner.right);
+
+        bannerEl.innerHTML = `
+            <div class="banner-content">
+                <div class="banner-slot banner-left">${leftHTML}</div>
+                <div class="banner-slot banner-right">${rightHTML}</div>
+            </div>
+        `;
+        return;
+    }
+
+    // Legacy fallback: single image mode
+    if (config.bannerImage) {
+        bannerEl.innerHTML = `
+            <img src="${config.bannerImage}" alt="ShakeMap4 Banner" onerror="this.style.display='none'">
+        `;
     }
 }
 

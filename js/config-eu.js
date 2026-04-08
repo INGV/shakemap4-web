@@ -8,6 +8,25 @@ Object.assign(config, {
     contributorsPage: './contributors-eu.md',
     scientificBackgroundPage: './scientific-background-eu.md',
     bannerImage: './images/shakemapeu_banner.png',
+    banner: {
+        left: {
+            type: 'text',
+            content: 'European ShakeMap',
+            style: 'bold',
+            fontSize: '2rem'
+        },
+        right: {
+            type: 'logos-grid',
+            columns: 2,
+            logos: [
+                { src: './images/contributors-eu/RISE.png', alt: 'RISE' },
+                { src: './images/contributors-eu/Geo-INQUIRE.jpg', alt: 'Geo-INQUIRE' },
+                { src: './images/contributors-eu/Sera.jpg', alt: 'SERA' },
+                { src: './images/contributors-eu/DTGEO.png', alt: 'DT-GEO' }
+            ]
+        },
+        backgroundColor: '#ffffff'
+    },
     enableReportedIntensity: true,
 
     bBox: [
