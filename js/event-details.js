@@ -38,19 +38,24 @@ async function showEventDetails(id) {
     const toggleRI = document.getElementById('toggle-reported-intensity');
     const toggleInstr = document.getElementById('toggle-instrumental');
 
-    toggleContainer.style.display = 'flex';
     toggleInstr.classList.add('active');
     toggleRI.classList.remove('active');
     toggleRI.disabled = true;
 
-    // Check if Reported Intensity data exists
-    try {
-        const riCheckRes = await fetch(`${DATA_DIR}/${id}_ri/current/products/info.json`, { method: 'HEAD' });
-        if (riCheckRes.ok) {
-            toggleRI.disabled = false;
+    if (config.enableReportedIntensity) {
+        toggleContainer.style.display = 'flex';
+
+        // Check if Reported Intensity data exists
+        try {
+            const riCheckRes = await fetch(`${DATA_DIR}/${id}_ri/current/products/info.json`, { method: 'HEAD' });
+            if (riCheckRes.ok) {
+                toggleRI.disabled = false;
+            }
+        } catch (e) {
+            // Reported Intensity data does not exist, button stays disabled
         }
-    } catch (e) {
-        // Reported Intensity data does not exist, button stays disabled
+    } else {
+        toggleContainer.style.display = 'none';
     }
 
     // Reset to Map tab

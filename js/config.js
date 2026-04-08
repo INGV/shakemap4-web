@@ -61,6 +61,8 @@ const config = {
     bannerImage: './images/shakemapit_banner.png',
     //bannerImage: './images/shakemapeu_banner.png',
 
+    enableReportedIntensity: false,
+
     historicalCutOff: "1980-01-01",
 
     // Regions removed as per user request
