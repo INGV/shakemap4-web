@@ -39,8 +39,8 @@ function injectCommonStylesheets() {
 function injectHeader(currentPage = 'index') {
     // Generate dropdown items from informationLinks config
     let dropdownItemsHTML = '';
-    if (typeof informationLinks !== 'undefined' && informationLinks.length > 0) {
-        dropdownItemsHTML = informationLinks.map(item => {
+    if (typeof config !== 'undefined' && config.informationLinks && config.informationLinks.length > 0) {
+        dropdownItemsHTML = config.informationLinks.map(item => {
             if (item.type === 'separator') {
                 return '<hr class="nav-dropdown-divider">';
             } else if (item.type === 'internal') {
