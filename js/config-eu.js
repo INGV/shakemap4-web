@@ -8,6 +8,7 @@ Object.assign(config, {
     contributorsPage: './contributors-eu.md',
     scientificBackgroundPage: './scientific-background-eu.md',
     bannerImage: './images/shakemapeu_banner.png',
+    enableReportedIntensity: true,
 
     bBox: [
         { minlat: -90, maxlat: 90, minlon: -180, maxlon: 180 }
