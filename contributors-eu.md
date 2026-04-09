@@ -32,16 +32,17 @@
 
 | Name | Institute | Nationality |
 |------|----------|-------------|
-| David J Wald | USGS Golden Colorado | USA |
+| David J Wald | USGS Golden, CO,  Colorado | USA |
 | C. Bruce Worden | Synergetics, Inc. contractor in support of the U.S. Geological Survey | USA |
-| Eric M Thompson | USGS Golden Colorado | USA |
+| Eric M Thompson | USGS Golden, CO, Colorado | USA |
 
 ## ShakeMap EU Support Group: Historical and Instrumental data
 
 | Name | Institute | Nationality |
 |------|----------|-------------|
 | Ludmila Provost | IRSN, PSE-ENV/SCAN, Fontenay-aux-Roses Cedex | France |
-| Graeme Weatherill | German Research Centre for Geosciences GFZ | Germany |
+| Remy Bossu | Euro-Mediterranean Seismological Centre (EMCS/CSEM) | France |
+| Graeme Weatherill | German Research Centre for Geosciences (GFZ) | Germany |
 | Andrea Antonucci | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
 | Mario Locati | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
 | Lucia Luzi | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
