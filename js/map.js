@@ -175,7 +175,7 @@ async function initMap(event, options = {}) {
         if (res.ok) {
             const geojson = await res.json();
 
-            // --- 1. Macroseismic Stations Layer ---
+            // --- 1. Reported Intensity Layer ---
             const macroseismicLayer = L.geoJSON(geojson, {
                 filter: function (feature) {
                     return feature.properties.station_type === 'macroseismic';
