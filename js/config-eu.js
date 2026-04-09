@@ -17,7 +17,7 @@ Object.assign(config, {
         },
         right: {
             type: 'logos-grid',
-            columns: 2,
+            columns: 3,
             logos: [
                 { src: './images/contributors-eu/RISE.png', alt: 'RISE' },
                 { src: './images/contributors-eu/Geo-INQUIRE.jpg', alt: 'Geo-INQUIRE' },
