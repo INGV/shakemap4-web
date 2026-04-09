@@ -156,7 +156,7 @@ function renderMacroseismicTable(stations) {
         <button type="button" class="collapsible header-row">
             <div class="station-row-data">
                 <span class="col-id">ID</span>
-                <span class="col-mmi">MMI</span>
+                <span class="col-mmi">Intensity</span>
                 <span class="col-stddev">Std Dev</span>
                 <span class="col-nresp">N. Resp</span>
                 <span class="col-dist">Distance (km)</span>
