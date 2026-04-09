@@ -28,6 +28,14 @@
 | ![NIEP](images/contributors-eu/INFP.png) | National Institute for Earth Physics (NIEP) | Bogdan Grecu, Constantin Ionescu, Alexandru Marmureanu |
 | ![ARSO](images/contributors-eu/Slovenia.jpg) | Slovenian Environment Agency (ARSO) | Martina Čarman, Polona Zupančič |
 
+## ShakeMap Scientific and Technical Developer
+
+| Name | Institute | Nationality |
+|------|----------|-------------|
+| David J Wald | USGS Golden Colorado | USA |
+| C. Bruce Worden | Synergetics, Inc. contractor in support of the U.S. Geological Survey | USA |
+| Eric M Thompson | USGS Golden Colorado | USA |
+
 ## ShakeMap EU Support Group: Historical and Instrumental data
 
 | Name | Institute | Nationality |
@@ -50,6 +58,3 @@
 | Domenico Giardini | Department of Earth Sciences ERDW at ETH Zurich | Switzerland |
 | Stefan Wiemer | Swiss Seismological Service SED@ETH Zurich | Switzerland |
 | Anastasia Kiratzi | Aristotle University of Thessaloniki and EPOS-Seismology Secretary | Greece |
-| David J Wald | USGS Golden | USA |
-| Eric M Thompson | USGS Golden | USA |
-| C. Bruce Worden | Synergetics, Inc. contractor in support of the U.S. Geological Survey | USA |
