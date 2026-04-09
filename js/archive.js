@@ -46,7 +46,7 @@ function applyArchiveFilters() {
 
             filtered = filtered.filter(e => {
                 const eventDate = new Date(e.year, e.month - 1, e.day, e.h, e.m, e.s);
-                if (period === 'modern') {
+                if (period === 'instrumental') {
                     return eventDate >= cutOffDate;
                 } else {
                     return eventDate < cutOffDate;
@@ -73,7 +73,7 @@ function populateYearFilter() {
         return;
     }
 
-    // Modern events: Filter valid years
+    // Instrumental events: Filter valid years
     let relevantEvents = ShakeMap.allEvents;
     if (typeof config !== 'undefined' && config.historicalCutOff) {
         const parts = config.historicalCutOff.split('-'); // e.g. "2000-01-01"
