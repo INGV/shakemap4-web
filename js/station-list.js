@@ -145,7 +145,7 @@ function renderMacroseismicTable(stations) {
     const container = document.getElementById('macroseismicStationTable');
 
     if (stations.length === 0) {
-        container.innerHTML = '<div class="info">No macroseismic stations available.</div>';
+        container.innerHTML = '<div class="info">No reported intensity data available.</div>';
         return;
     }
 
