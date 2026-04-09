@@ -1,8 +1,9 @@
 # Release Notes
 
 ### Release 2.1.0-dev (2026-04-08)
+  - Add License in the footer
   - Update citation format in contributors files
-  - Update contributors-ingv.md with DOI and citation  
+  - Update contributors-ingv.md with DOI and citation
   - Add DOI and citation info to contributors files
   - Update event filter options in index.html
 
