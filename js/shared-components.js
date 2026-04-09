@@ -198,6 +198,10 @@ function renderFooter() {
             <span id="footer-version">${config.version}</span>
             <span class="footer-separator">·</span>
             <span id="footer-github">Developed by INGV · <a href="${config.githubLink}" target="_blank">GitHub</a></span>
+            <span class="footer-separator">·</span>
+            |
+            <span class="footer-separator">·</span>
+            <span id="footer-license"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><span class="cnt-cc-88x31"></span></a></span>
         </div>
     `;
 }
