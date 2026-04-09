@@ -1,6 +1,6 @@
 # Release Notes
 
-### Release 2.1.0 (2026-04-0999999999)
+### Release 2.1.0 (2026-04-09)
   - Add License in the footer
   - Update citation format in contributors files
   - Update contributors-ingv.md with DOI and citation
