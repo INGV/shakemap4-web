@@ -11,7 +11,7 @@ Object.assign(config, {
     banner: {
         left: {
             type: 'text',
-            content: 'European ShakeMap',
+            content: 'ShakeMapEU',
             style: 'bold',
             fontSize: '2rem'
         },
