@@ -923,6 +923,17 @@ footer {
     text-decoration: underline;
 }
 
+/* Creative Commons License Badge */
+.cnt-cc-88x31 {
+    display: inline-block;
+    width: 88px;
+    height: 31px;
+    background-image: url("https://i.creativecommons.org/l/by/4.0/88x31.png");
+    background-size: 88px 31px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+}
+
 /* Markdown Content Pages (Disclaimer, Contributors) */
 .markdown-content {
     max-width: 900px;

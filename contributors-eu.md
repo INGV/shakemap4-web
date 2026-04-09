@@ -1,5 +1,13 @@
 # Contributors
 
+## DOI and Citation
+**DOI**: 
+
+**Cite as**:
+```
+--
+```
+
 ## Participating Institutes
 
 | Logo | Institute | People involved |

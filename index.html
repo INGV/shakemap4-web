@@ -39,10 +39,10 @@
 
             <div class="filters">
                 <div class="filter-group">
-                    <label>Event Scale</label>
+                    <label>Event Classification</label>
                     <select id="period-filter">
-                        <option value="modern" selected>Modern events</option>
-                        <option value="historical">Historical events</option>
+                        <option value="modern" selected>Modern Events</option>
+                        <option value="historical">Pre-instrumental Events</option>
                     </select>
                 </div>
 
@@ -85,8 +85,10 @@
             </div>
 
             <div class="data-source-toggle" id="data-source-toggle" style="display: none;">
-                <button class="toggle-btn active" id="toggle-instrumental" onclick="setDataSource('instrumental')">Instrumental</button>
-                <button class="toggle-btn" id="toggle-reported-intensity" onclick="setDataSource('reported-intensity')" disabled>Reported Intensity</button>
+                <button class="toggle-btn active" id="toggle-instrumental"
+                    onclick="setDataSource('instrumental')">Instrumental</button>
+                <button class="toggle-btn" id="toggle-reported-intensity" onclick="setDataSource('reported-intensity')"
+                    disabled>Reported Intensity</button>
             </div>
 
             <div class="action-bar tabs">
@@ -214,12 +216,7 @@
     </main>
 
     <footer>
-        <div class="container">
-            <div class="footer-info">
-                <span id="footer-version"></span>
-                <span id="footer-github"></span>
-            </div>
-        </div>
+        <div class="container"></div>
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>

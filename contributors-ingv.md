@@ -1,5 +1,15 @@
 # Contributors
 
+## DOI and Citation
+**DOI**: https://doi.org/10.13127/shakemaps
+
+**Cite as**:
+```
+Faenza L., Oliveti I., Michelini A., Lauciani V. (2008). ShakeMaps. 
+Istituto Nazionale di Geofisica e Vulcanologia (INGV). https://doi.org/10.13127/shakemaps
+```
+
+
 ## Participating Institutes
 
 | Logo | Institute | Personnel involved |
