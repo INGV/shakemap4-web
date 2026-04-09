@@ -3,3 +3,4 @@ CLAUDE.md
 data/*
 events.json
 .playwright-cli/
+js/config-env.js

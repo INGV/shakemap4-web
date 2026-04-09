@@ -31,13 +31,13 @@ CONFIG_DIR="/usr/share/nginx/html/js"
 ENV_CONFIG="${CONFIG_DIR}/config-env.js"
 SHAKEMAP_ENV="${SHAKEMAP_ENV:-ingv}"
 
-PROFILE_FILE="${CONFIG_DIR}/config-${SHAKEMAP_ENV}.js"
+PROFILE_FILE="${CONFIG_DIR}/profiles/${SHAKEMAP_ENV}.js"
 
 if [ -f "${PROFILE_FILE}" ]; then
     echo "Applying environment profile: ${SHAKEMAP_ENV} (${PROFILE_FILE})"
     cp "${PROFILE_FILE}" "${ENV_CONFIG}"
 else
-    echo "WARNING: Profile config-${SHAKEMAP_ENV}.js not found. Using empty config-env.js (INGV defaults)."
+    echo "WARNING: Profile profiles/${SHAKEMAP_ENV}.js not found. Using empty config-env.js (INGV defaults)."
     echo "// No environment overrides (using defaults from config-base.js)" > "${ENV_CONFIG}"
 fi
 echo ""
