@@ -1,7 +1,22 @@
 # Release Notes
 
 ### Release 2.2.0-dev (2026-04-09)
-  - . . .
+  - Update text from "MMI" to "Intensity"
+  - Update label and option text in index.html
+  - Update banner layout with new slot configurations
+  - Update environment profile file path in README
+  - Remove unused config-env.js file and restructure profiles
+  - Update content to 'ShakeMap-INGV'
+  - Update banner content to 'ShakeMap-EU'
+  - Update columns to 3 for right logos grid
+  - Update contributors-eu.md
+  - Add new contributors' images for EU region
+  - Update contributors-eu.md with ShakeMap developers
+  - Update message for no stations available
+  - Update layer name in comment
+  - Update banner content to 'ShakeMapEU'
+  - Update comments for clarity
+  - Update labels for event type and intensity
 
 ### Release 2.1.0 (2026-04-09)
   - Add License in the footer
