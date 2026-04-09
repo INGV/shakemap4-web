@@ -161,7 +161,7 @@ nav ul {
 .banner {
     width: 100%;
     min-height: 100px;
-    max-height: 200px;
+    max-height: 300px;
     background-color: #eee;
     display: flex;
     align-items: center;
@@ -182,11 +182,19 @@ nav ul {
 /* HTML Banner Layout */
 .banner-content {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     width: 100%;
     max-width: 1200px;
     padding: 15px 30px;
+    gap: 10px;
+}
+
+.banner-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     gap: 20px;
 }
 
@@ -196,6 +204,10 @@ nav ul {
 }
 
 .banner-left {
+    justify-content: center;
+}
+
+.banner-center {
     justify-content: center;
 }
 
@@ -232,6 +244,21 @@ nav ul {
 }
 
 .banner-grid-logo {
+    max-height: 50px;
+    max-width: 120px;
+    width: auto;
+    object-fit: contain;
+}
+
+.banner-logos-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-row-logo {
     max-height: 50px;
     max-width: 120px;
     width: auto;
@@ -1103,13 +1130,18 @@ footer {
     }
 
     .banner-content {
-        flex-direction: column;
         padding: 10px 15px;
-        gap: 10px;
+        gap: 8px;
         text-align: center;
     }
 
+    .banner-row--middle {
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .banner-left,
+    .banner-center,
     .banner-right {
         justify-content: center;
     }
@@ -1118,7 +1150,8 @@ footer {
         font-size: 1rem;
     }
 
-    .banner-grid-logo {
+    .banner-grid-logo,
+    .banner-row-logo {
         max-height: 35px;
         max-width: 90px;
     }

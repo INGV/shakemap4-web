@@ -9,15 +9,14 @@ Object.assign(config, {
     scientificBackgroundPage: './scientific-background-eu.md',
     bannerImage: './images/shakemapeu_banner.png',
     banner: {
-        left: {
+        up: {
             type: 'text',
             content: 'ShakeMap-EU',
             style: 'bold',
             fontSize: '2rem'
         },
-        right: {
-            type: 'logos-grid',
-            columns: 3,
+        down: {
+            type: 'logos-row',
             logos: [
                 { src: './images/contributors-eu/RISE.png', alt: 'RISE' },
                 { src: './images/contributors-eu/Geo-INQUIRE.jpg', alt: 'Geo-INQUIRE' },
@@ -26,7 +25,8 @@ Object.assign(config, {
                 { src: './images/contributors-eu/EPOS_IP_TCS_S.png', alt: 'EPOS' },
                 { src: './images/contributors-eu/orfeus.png', alt: 'Orfeus' },
                 { src: './images/contributors-eu/EMSC.png', alt: 'EMSC' },
-                { src: './images/contributors-eu/efehr.png', alt: 'EFEHR' }
+                { src: './images/contributors-eu/efehr.png', alt: 'EFEHR' },
+                { src: './images/contributors-eu/AHEAD.jpeg', alt: 'AHEAD' }
             ]
         },
         backgroundColor: '#ffffff'
