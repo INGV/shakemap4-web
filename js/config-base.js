@@ -18,7 +18,7 @@ const ShakeMap = {
 };
 
 const config = {
-    version: "v2.1.0",
+    version: "v2.2.0",
     githubLink: "https://github.com/INGV/shakemap4-web",
     disclaimerPage: './disclaimer-ingv.md',
     contributorsPage: './contributors-ingv.md',
@@ -37,7 +37,7 @@ const config = {
         right: {
             type: 'text',
             //content: 'ISTITUTO NAZIONALE DI GEOFISICA E VULCANOLOGIA',
-            content: 'ShakeMap INGV',
+            content: 'ShakeMap-INGV',
             //style: 'bold uppercase'
             style: 'bold',
             fontSize: '2rem'

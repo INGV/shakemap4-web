@@ -139,6 +139,13 @@ function renderBannerSlot(slot) {
                     </div>`;
         }
 
+        case 'logos-row': {
+            const logosHTML = slot.logos.map(logo =>
+                `<img class="banner-row-logo" src="${logo.src}" alt="${logo.alt || ''}">`
+            ).join('');
+            return `<div class="banner-logos-row">${logosHTML}</div>`;
+        }
+
         default:
             return '';
     }
@@ -154,7 +161,7 @@ function injectBanner() {
     const bannerEl = document.querySelector('.banner');
     if (!bannerEl) return;
 
-    // New HTML banner mode
+    // New HTML banner mode (5-slot: up/left/center/right/down)
     if (config.banner) {
         const banner = config.banner;
 
@@ -162,15 +169,35 @@ function injectBanner() {
             bannerEl.style.backgroundColor = banner.backgroundColor;
         }
 
+        const upHTML = renderBannerSlot(banner.up);
         const leftHTML = renderBannerSlot(banner.left);
+        const centerHTML = renderBannerSlot(banner.center);
         const rightHTML = renderBannerSlot(banner.right);
+        const downHTML = renderBannerSlot(banner.down);
+        const hasMiddle = leftHTML || centerHTML || rightHTML;
 
-        bannerEl.innerHTML = `
-            <div class="banner-content">
-                <div class="banner-slot banner-left">${leftHTML}</div>
-                <div class="banner-slot banner-right">${rightHTML}</div>
-            </div>
-        `;
+        let html = '<div class="banner-content">';
+
+        if (upHTML) {
+            html += `<div class="banner-row banner-row--top">
+                        <div class="banner-slot banner-up">${upHTML}</div>
+                     </div>`;
+        }
+        if (hasMiddle) {
+            html += '<div class="banner-row banner-row--middle">';
+            if (leftHTML)   html += `<div class="banner-slot banner-left">${leftHTML}</div>`;
+            if (centerHTML) html += `<div class="banner-slot banner-center">${centerHTML}</div>`;
+            if (rightHTML)  html += `<div class="banner-slot banner-right">${rightHTML}</div>`;
+            html += '</div>';
+        }
+        if (downHTML) {
+            html += `<div class="banner-row banner-row--bottom">
+                        <div class="banner-slot banner-down">${downHTML}</div>
+                     </div>`;
+        }
+
+        html += '</div>';
+        bannerEl.innerHTML = html;
         return;
     }
 

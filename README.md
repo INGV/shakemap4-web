@@ -81,7 +81,7 @@ docker run -d -p 8080:80 \
 
 **Notes:**
 - All environment variables are optional. If not set, the INGV defaults from `js/config-base.js` are used.
-- `SHAKEMAP_ENV` selects which environment profile file (`js/config-<name>.js`) to copy into `js/config-env.js` at container startup. To add a new environment, create a `js/config-<name>.js` file with `Object.assign(config, { ... })` overrides.
+- `SHAKEMAP_ENV` selects which environment profile from `js/profiles/` to copy into `js/config-env.js` at container startup. To add a new environment, create a `js/profiles/<name>.js` file with `Object.assign(config, { ... })` overrides.
 
 #### Alternative: Build Docker image locally
 **Build the Docker image:**
@@ -161,8 +161,10 @@ Thanks to your contributions!
 
 For develop run:
 ```bash
-docker run --rm -p 8085:80 -e ENABLE_CRONTAB=true -v $(pwd):/usr/share/nginx/html --name shakemap4-web__container ingv/shakemap4-web
+docker run --rm -p 8085:80 -e ENABLE_CRONTAB=true -e SHAKEMAP_ENV=ingv -v $(pwd):/usr/share/nginx/html --name shakemap4-web__container ingv/shakemap4-web
 ```
+
+> **Note:** `SHAKEMAP_ENV` selects the environment profile (`ingv`, `eu`, or custom). When mounting the full project directory, the entrypoint generates `js/config-env.js` locally — this file is gitignored.
 
 Here is a list of users who already contributed to this repository: \
 <a href="https://github.com/ingv/shakemap4-web/graphs/contributors">

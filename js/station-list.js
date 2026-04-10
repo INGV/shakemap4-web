@@ -52,7 +52,7 @@ function renderSeismicTable(stations) {
         <button type="button" class="collapsible header-row">
             <div class="station-row-data">
                 <span class="col-id">ID</span>
-                <span class="col-mmi">MMI</span>
+                <span class="col-mmi">Intensity</span>
                 <span class="col-pga">PGA (%g)</span>
                 <span class="col-pgv">PGV (cm/s)</span>
                 <span class="col-dist">Distance (km)</span>
@@ -145,7 +145,7 @@ function renderMacroseismicTable(stations) {
     const container = document.getElementById('macroseismicStationTable');
 
     if (stations.length === 0) {
-        container.innerHTML = '<div class="info">No macroseismic stations available.</div>';
+        container.innerHTML = '<div class="info">No reported intensity data available.</div>';
         return;
     }
 
@@ -156,7 +156,7 @@ function renderMacroseismicTable(stations) {
         <button type="button" class="collapsible header-row">
             <div class="station-row-data">
                 <span class="col-id">ID</span>
-                <span class="col-mmi">MMI</span>
+                <span class="col-mmi">Intensity</span>
                 <span class="col-stddev">Std Dev</span>
                 <span class="col-nresp">N. Resp</span>
                 <span class="col-dist">Distance (km)</span>
