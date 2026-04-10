@@ -1,6 +1,9 @@
 # Release Notes
 
-### Release 2.2.0-dev (2026-04-09)
+### Release 2.2.0-dev (2026-04-10)
+  - Improve alignment and consistency in action buttons
+  - Update text for clarity
+  - Update text, labels, and content for clarity
   - Update text from "MMI" to "Intensity"
   - Update label and option text in index.html
   - Update banner layout with new slot configurations
