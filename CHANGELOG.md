@@ -1,6 +1,10 @@
 # Release Notes
 
 ### Release 2.4.0-dev (2026-04-10)
+  - Update images size
+  - Update contributors-eu.md
+  - Update eu.js
+  - Update .gitignore to ignore events_raw.json.tmp
   - Update image file extension in EU profile
 
 ### Release 2.3.0 (2026-04-10)
