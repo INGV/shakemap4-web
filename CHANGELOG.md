@@ -1,5 +1,10 @@
 # Release Notes
 
+### Release 2.5.0 (2026-04-10)
+  - Update scientific-background-eu.md
+  - Update disclaimer-eu.md
+  - New Develop: 2.5.0-dev
+
 ### Release 2.4.0 (2026-04-10)
   - Update images size
   - Update contributors-eu.md
