@@ -282,6 +282,12 @@ process_event() {
     local mag=$(get_attr "mag")
     local depth=$(get_attr "depth")
 
+    # Check if Reported Intensity data exists
+    local HAS_RI=0
+    if [ -d "${DATA_DIR}/${id}_ri" ]; then
+        HAS_RI=1
+    fi
+
     # Check if date/time fields are missing and parse from "time" attribute if needed
     local used_time_parsing=0
     if [ -z "$year" ] || [ -z "$month" ] || [ -z "$day" ]; then
@@ -321,6 +327,7 @@ process_event() {
         --argjson mag "$mag" \
         --argjson depth "$depth" \
         --argjson used_time_parsing "$used_time_parsing" \
+        --argjson has_ri "$HAS_RI" \
         '{
             id: $id,
             description: $description,
@@ -334,6 +341,7 @@ process_event() {
             lon: $lon,
             mag: $mag,
             depth: $depth,
+            hasRI: ($has_ri == 1),
             _used_time_parsing: $used_time_parsing
         }'
 }

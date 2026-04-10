@@ -42,6 +42,10 @@ function renderCards(events, containerId) {
         // Determine color based on magnitude (optional visual cue)
         const magColor = event.mag >= 6 ? '#d32f2f' : (event.mag >= 4 ? 'var(--accent-color)' : 'var(--text-secondary)');
 
+        const riBadge = (event.hasRI === true && config.enableReportedIntensity)
+            ? '<span class="ri-badge" title="Reported Intensity data available">RI</span>'
+            : '';
+
         card.innerHTML = `
             <div class="event-card-body">
                 <div class="event-intro">
@@ -57,7 +61,10 @@ function renderCards(events, containerId) {
                         <div class="event-depth" style="white-space: nowrap; margin-left: 10px; color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-layer-group"></i> ${Math.round(event.depth)} km</div>
                     </div>
                     <div class="event-footer">
-                        <div class="event-id">Event ID: ${event.id}</div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div class="event-id">Event ID: ${event.id}</div>
+                            ${riBadge}
+                        </div>
                         <div class="event-more">More Info <i class="fas fa-arrow-right"></i></div>
                     </div>
                 </div>
