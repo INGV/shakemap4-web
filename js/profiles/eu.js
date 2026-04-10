@@ -25,7 +25,7 @@ Object.assign(config, {
                 { src: './images/contributors-eu/EPOS_IP_TCS_S.png', alt: 'EPOS' },
                 { src: './images/contributors-eu/orfeus.png', alt: 'Orfeus' },
                 { src: './images/contributors-eu/EMSC.png', alt: 'EMSC' },
-                { src: './images/contributors-eu/AHEAD_01.jpeg', alt: 'AHEAD' },
+                { src: './images/contributors-eu/AHEAD_01.png', alt: 'AHEAD' },
                 { src: './images/contributors-eu/efehr.png', alt: 'EFEHR' }
             ]
         },
@@ -38,11 +38,6 @@ Object.assign(config, {
     ],
 
     informationLinks: [
-        {
-            text: "EFEHR Website",
-            link: "https://www.efehr.org",
-            type: "external"
-        },
         {
             text: "Shakemap USGS",
             link: "https://earthquake.usgs.gov/data/shakemap/",
