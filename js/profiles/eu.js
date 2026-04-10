@@ -39,11 +39,6 @@ Object.assign(config, {
 
     informationLinks: [
         {
-            text: "EFEHR Website",
-            link: "https://www.efehr.org",
-            type: "external"
-        },
-        {
             text: "Shakemap USGS",
             link: "https://earthquake.usgs.gov/data/shakemap/",
             type: "external"
