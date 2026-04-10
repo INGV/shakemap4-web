@@ -806,11 +806,19 @@ input[type="number"] {
     background-color: rgba(0, 0, 0, 0.02);
 }
 
+/* Actions cell layout */
+.actions-cell {
+    text-align: right;
+    white-space: nowrap;
+}
+
 .btn-download {
     color: var(--accent-color);
     font-size: 1.1rem;
     transition: transform 0.2s;
     display: inline-block;
+    width: 36px;
+    text-align: center;
 }
 
 .btn-download:hover {
@@ -821,8 +829,9 @@ input[type="number"] {
 /* Preview/View button */
 .btn-view {
     display: inline-block;
-    padding: 6px 10px;
-    margin-right: 5px;
+    width: 36px;
+    text-align: center;
+    padding: 6px 0;
     color: #2196F3;
     text-decoration: none;
     border-radius: 4px;
@@ -836,6 +845,12 @@ input[type="number"] {
 
 .btn-view i {
     font-size: 16px;
+}
+
+/* Placeholder to maintain alignment when preview button is absent */
+.btn-placeholder {
+    display: inline-block;
+    width: 36px;
 }
 
 

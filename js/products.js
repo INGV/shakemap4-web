@@ -143,17 +143,16 @@ function renderCategory(container, id, catName, items) {
         const fileUrl = `${DATA_DIR}/${id}/current/products/${item.name}`;
         const isViewable = isViewableInBrowser(item.name);
 
-        // Build action buttons
-        let actionButtons = '';
-        if (isViewable) {
-            actionButtons += `<a href="${fileUrl}" target="_blank" rel="noopener noreferrer" class="btn-view" title="Preview in browser"><i class="fas fa-eye"></i></a> `;
-        }
-        actionButtons += `<a href="${fileUrl}" download class="btn-download" title="Download"><i class="fas fa-download"></i></a>`;
+        // Build action buttons with consistent alignment
+        const viewButton = isViewable
+            ? `<a href="${fileUrl}" target="_blank" rel="noopener noreferrer" class="btn-view" title="Preview in browser"><i class="fas fa-eye"></i></a>`
+            : `<span class="btn-placeholder"></span>`;
+        const downloadButton = `<a href="${fileUrl}" download class="btn-download" title="Download"><i class="fas fa-download"></i></a>`;
 
         tr.innerHTML = `
             <td>${item.name}</td>
             <td>${item.desc}</td>
-            <td style="text-align:right;">${actionButtons}</td>
+            <td class="actions-cell">${viewButton}${downloadButton}</td>
         `;
         tbody.appendChild(tr);
     });
