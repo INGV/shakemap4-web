@@ -1,7 +1,7 @@
 # Release Notes
 
 ### Release 2.4.0-dev (2026-04-10)
-  - . . .
+  - Update image file extension in EU profile
 
 ### Release 2.3.0 (2026-04-10)
   - Add Reported Intensity badge to event cards
