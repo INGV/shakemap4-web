@@ -1,6 +1,6 @@
 # Release Notes
 
-### Release 2.3.0-dev (2026-04-10)
+### Release 2.3.0 (2026-04-10)
   - Add Reported Intensity badge to event cards
   - Fix image order in EU profiles data
   - Update eu.js
