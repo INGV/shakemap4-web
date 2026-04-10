@@ -4,3 +4,4 @@ data/*
 events.json
 .playwright-cli/
 js/config-env.js
+events_raw.json.tmp
