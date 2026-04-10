@@ -1,6 +1,6 @@
 # Release Notes
 
-### Release 2.5.0-dev (2026-04-10)
+### Release 2.5.0 (2026-04-10)
   - Update scientific-background-eu.md
   - Update disclaimer-eu.md
   - New Develop: 2.5.0-dev
