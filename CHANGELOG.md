@@ -1,6 +1,6 @@
 # Release Notes
 
-### Release 2.2.0-dev (2026-04-10)
+### Release 2.2.0 (2026-04-10)
   - Improve alignment and consistency in action buttons
   - Update text for clarity
   - Update text, labels, and content for clarity
