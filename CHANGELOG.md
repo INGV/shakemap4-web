@@ -1,5 +1,8 @@
 # Release Notes
 
+### Release 2.5.0-dev (2026-04-10)
+  - . . .
+
 ### Release 2.4.0 (2026-04-10)
   - Update images size
   - Update contributors-eu.md
