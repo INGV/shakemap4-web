@@ -13,7 +13,7 @@
 | Logo | Institute | People involved |
 |------|----------|---------------------|
 | ![INGV](images/contributors-eu/INGV.png) | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Licia Faenza, Ilaria Oliveti, Alberto Michelini, Valentino Lauciani |
-| ![SED](images/contributors-eu/SED.png) | Swiss Earthquake Observatory (SED) | Carlo Cauzzi, Philipp Kästli, John Clinton |
+| ![SED](images/contributors-eu/SED.png) | Swiss Seismological Service (SED) | Carlo Cauzzi, Philipp Kästli, John Clinton |
 | ![Univ. Tirana](images/contributors-eu/Univ_Tirana.png) | Department of Seismology, Institute of Geosciences, Polytechnic University of Tirana | Edmond Dushi, Besian Rama |
 | ![ROB](images/contributors-eu/ROB.jpg) | Royal Observatory of Belgium (ROB) | Thomas Lecocq, Kris Vanneste, Koen Van Noten |
 | ![HGI](images/contributors-eu/HGI.jpg) | Croatian Seismological Survey (HGI) | Krešimir Kuk |
@@ -51,7 +51,7 @@
 | Ina Cecic | Slovenian Environment Agency - ARSO | Slovenia |
 | Maren Bose | Swiss Seismological Service SED@ETH Zurich | Switzerland |
 
-## ShakeMap EU Scientific and Technical Advisors
+## ShakeMap EU Scientific Advisors
 
 | Name | Institute | Nationality |
 |------|----------|-------------|
