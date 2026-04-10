@@ -18,15 +18,15 @@ Object.assign(config, {
         down: {
             type: 'logos-row',
             logos: [
-                { src: './images/contributors-eu/RISE.png', alt: 'RISE' },
-                { src: './images/contributors-eu/Geo-INQUIRE.jpg', alt: 'Geo-INQUIRE' },
                 { src: './images/contributors-eu/Sera.jpg', alt: 'SERA' },
+                { src: './images/contributors-eu/RISE.png', alt: 'RISE' },
                 { src: './images/contributors-eu/DTGEO.png', alt: 'DT-GEO' },
+                { src: './images/contributors-eu/Geo-INQUIRE.jpg', alt: 'Geo-INQUIRE' },
                 { src: './images/contributors-eu/EPOS_IP_TCS_S.png', alt: 'EPOS' },
                 { src: './images/contributors-eu/orfeus.png', alt: 'Orfeus' },
                 { src: './images/contributors-eu/EMSC.png', alt: 'EMSC' },
-                { src: './images/contributors-eu/efehr.png', alt: 'EFEHR' },
-                { src: './images/contributors-eu/AHEAD.jpeg', alt: 'AHEAD' }
+                { src: './images/contributors-eu/AHEAD_01.jpeg', alt: 'AHEAD' },
+                { src: './images/contributors-eu/efehr.png', alt: 'EFEHR' }
             ]
         },
         backgroundColor: '#ffffff'

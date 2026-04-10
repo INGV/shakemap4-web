@@ -368,6 +368,19 @@ main {
     font-weight: 500;
 }
 
+.ri-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background-color: var(--accent-color);
+    color: #fff;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
 /* Event Card Body Layout */
 .event-card-body {
     display: flex;
