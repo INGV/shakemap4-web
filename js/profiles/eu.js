@@ -25,8 +25,8 @@ Object.assign(config, {
                 { src: './images/contributors-eu/EPOS_IP_TCS_S.png', alt: 'EPOS' },
                 { src: './images/contributors-eu/orfeus.png', alt: 'Orfeus' },
                 { src: './images/contributors-eu/EMSC.png', alt: 'EMSC' },
-                { src: './images/contributors-eu/AHEAD_01.jpeg', alt: 'AHEAD' }
-                { src: './images/contributors-eu/efehr.png', alt: 'EFEHR' },
+                { src: './images/contributors-eu/AHEAD_01.jpeg', alt: 'AHEAD' },
+                { src: './images/contributors-eu/efehr.png', alt: 'EFEHR' }
             ]
         },
         backgroundColor: '#ffffff'
