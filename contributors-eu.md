@@ -42,6 +42,7 @@
 |------|----------|-------------|
 | Ludmila Provost | IRSN, PSE-ENV/SCAN, Fontenay-aux-Roses Cedex | France |
 | Remy Bossu | Euro-Mediterranean Seismological Centre (EMSC/CSEM) | France |
+| Robert Steed | Euro-Mediterranean Seismological Centre (EMSC/CSEM) | France |
 | Graeme Weatherill | German Research Centre for Geosciences (GFZ) | Germany |
 | Andrea Antonucci | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
 | Mario Locati | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
