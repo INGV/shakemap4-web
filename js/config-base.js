@@ -14,7 +14,8 @@ const ShakeMap = {
     map: null,          // Leaflet map instance
     currentLayers: {},  // Active map layers
     basemapLayers: {},  // Basemap tile layers
-    activeDataId: null  // Active data directory ID (differs from event.id when Reported Intensity is active)
+    activeDataId: null, // Active data directory ID (differs from event.id when Reported Intensity is active)
+    activeBasemap: 'street' // Currently selected basemap
 };
 
 const config = {

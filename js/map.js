@@ -9,6 +9,8 @@
  * @param {Object} event - Event object
  */
 async function initMap(event, options = {}) {
+    const selectedBasemap = ShakeMap.activeBasemap || 'street';
+
     if (ShakeMap.map) {
         ShakeMap.map.remove();
         ShakeMap.map = null;
@@ -42,8 +44,13 @@ async function initMap(event, options = {}) {
         })
     };
 
-    // Add default basemap (street)
-    ShakeMap.basemapLayers.street.addTo(ShakeMap.map);
+    // Restore the currently selected basemap when recreating the map
+    if (ShakeMap.basemapLayers[selectedBasemap]) {
+        ShakeMap.basemapLayers[selectedBasemap].addTo(ShakeMap.map);
+    } else {
+        ShakeMap.basemapLayers.street.addTo(ShakeMap.map);
+        ShakeMap.activeBasemap = 'street';
+    }
 
     // Custom epicenter star icon with pulsing animation
     const epicenterIcon = L.divIcon({
@@ -68,11 +75,11 @@ async function initMap(event, options = {}) {
     basemapDiv.style.marginBottom = '10px';
     basemapDiv.innerHTML = `
         <label style="display: block; margin-bottom: 8px;">
-            <input type="radio" name="basemap" value="street" checked onchange="switchBasemap('street')">
+            <input type="radio" name="basemap" value="street" ${selectedBasemap === 'street' ? 'checked' : ''} onchange="switchBasemap('street')">
             Street
         </label>
         <label style="display: block; margin-bottom: 8px;">
-            <input type="radio" name="basemap" value="satellite" onchange="switchBasemap('satellite')">
+            <input type="radio" name="basemap" value="satellite" ${selectedBasemap === 'satellite' ? 'checked' : ''} onchange="switchBasemap('satellite')">
             Satellite
         </label>
     `;
@@ -457,6 +464,8 @@ window.toggleLayer = function (name) {
  * Switch between basemap layers
  */
 window.switchBasemap = function (basemapType) {
+    ShakeMap.activeBasemap = basemapType;
+
     // Remove all basemap layers
     Object.values(ShakeMap.basemapLayers).forEach(layer => {
         if (ShakeMap.map.hasLayer(layer)) {
