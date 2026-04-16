@@ -259,7 +259,7 @@ async function initMap(event, options = {}) {
                     // Triangle marker
                     const triangleIcon = L.divIcon({
                         className: 'triangle-marker',
-                        html: `<div style="width: 14px; height: 12px; position: relative; background-color: rgba(255, 255, 255, 0.01);">
+                        html: `<div style="width: 14px; height: 12px; position: relative; background-color: rgba(255, 255, 255, 0.01); pointer-events: none;">
                             <div style="
                                 width: 0;
                                 height: 0;
@@ -269,6 +269,7 @@ async function initMap(event, options = {}) {
                                 position: absolute;
                                 left: 0;
                                 top: 0;
+                                pointer-events: none;
                             ">
                                 <div style="
                                     width: 0;
@@ -279,6 +280,7 @@ async function initMap(event, options = {}) {
                                     position: absolute;
                                     left: -6px;
                                     top: 2px;
+                                    pointer-events: none;
                                 "></div>
                             </div>
                         </div>`,
