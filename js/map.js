@@ -259,31 +259,11 @@ async function initMap(event, options = {}) {
                     // Triangle marker
                     const triangleIcon = L.divIcon({
                         className: 'triangle-marker',
-                        html: `<div style="width: 14px; height: 12px; position: relative; background-color: rgba(255, 255, 255, 0.01); pointer-events: none;">
-                            <div style="
-                                width: 0;
-                                height: 0;
-                                border-left: 7px solid transparent;
-                                border-right: 7px solid transparent;
-                                border-bottom: 12px solid #000;
-                                position: absolute;
-                                left: 0;
-                                top: 0;
-                                pointer-events: none;
-                            ">
-                                <div style="
-                                    width: 0;
-                                    height: 0;
-                                    border-left: 6px solid transparent;
-                                    border-right: 6px solid transparent;
-                                    border-bottom: 10px solid ${fillColor};
-                                    position: absolute;
-                                    left: -6px;
-                                    top: 2px;
-                                    pointer-events: none;
-                                "></div>
-                            </div>
-                        </div>`,
+                        html: `<svg width="14" height="12" viewBox="0 0 14 12" xmlns="http://www.w3.org/2000/svg"
+                            style="display: block; overflow: visible; pointer-events: none;" aria-hidden="true">
+                            <polygon points="7,0 14,12 0,12" fill="#000" style="pointer-events: none;" />
+                            <polygon points="7,2 13,12 1,12" fill="${fillColor}" style="pointer-events: none;" />
+                        </svg>`,
                         iconSize: [14, 12],
                         iconAnchor: [7, 12]
                     });
