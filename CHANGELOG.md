@@ -1,7 +1,10 @@
 # Release Notes
 
-### Release 2.6.0-dev (2026-04-10)
-  - . . .
+### Release 2.6.0-dev (2026-04-17)
+  - Align Leaflet JS with the loaded 1.9.4 CSS version
+  - Make triangle marker children ignore pointer events for Safari popup clicks
+  - Update marker icon to use SVG for better performance
+  - Preserve selected basemap when switching event data source
 
 ### Release 2.5.0 (2026-04-10)
   - Update scientific-background-eu.md
