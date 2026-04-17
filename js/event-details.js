@@ -20,6 +20,7 @@ async function showEventDetails(id) {
 
     // Set the active data source to the base event ID
     ShakeMap.activeDataId = id;
+    ShakeMap.activeBasemap = 'street';
 
     // Populate Meta
     document.getElementById('event-title').textContent = `Event: ${event.description}`;

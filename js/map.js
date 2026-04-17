@@ -9,6 +9,8 @@
  * @param {Object} event - Event object
  */
 async function initMap(event, options = {}) {
+    const selectedBasemap = ShakeMap.activeBasemap || 'street';
+
     if (ShakeMap.map) {
         ShakeMap.map.remove();
         ShakeMap.map = null;
@@ -42,8 +44,13 @@ async function initMap(event, options = {}) {
         })
     };
 
-    // Add default basemap (street)
-    ShakeMap.basemapLayers.street.addTo(ShakeMap.map);
+    // Restore the currently selected basemap when recreating the map
+    if (ShakeMap.basemapLayers[selectedBasemap]) {
+        ShakeMap.basemapLayers[selectedBasemap].addTo(ShakeMap.map);
+    } else {
+        ShakeMap.basemapLayers.street.addTo(ShakeMap.map);
+        ShakeMap.activeBasemap = 'street';
+    }
 
     // Custom epicenter star icon with pulsing animation
     const epicenterIcon = L.divIcon({
@@ -68,11 +75,11 @@ async function initMap(event, options = {}) {
     basemapDiv.style.marginBottom = '10px';
     basemapDiv.innerHTML = `
         <label style="display: block; margin-bottom: 8px;">
-            <input type="radio" name="basemap" value="street" checked onchange="switchBasemap('street')">
+            <input type="radio" name="basemap" value="street" ${selectedBasemap === 'street' ? 'checked' : ''} onchange="switchBasemap('street')">
             Street
         </label>
         <label style="display: block; margin-bottom: 8px;">
-            <input type="radio" name="basemap" value="satellite" onchange="switchBasemap('satellite')">
+            <input type="radio" name="basemap" value="satellite" ${selectedBasemap === 'satellite' ? 'checked' : ''} onchange="switchBasemap('satellite')">
             Satellite
         </label>
     `;
@@ -259,29 +266,11 @@ async function initMap(event, options = {}) {
                     // Triangle marker
                     const triangleIcon = L.divIcon({
                         className: 'triangle-marker',
-                        html: `<div style="width: 14px; height: 12px; position: relative; background-color: rgba(255, 255, 255, 0.01);">
-                            <div style="
-                                width: 0;
-                                height: 0;
-                                border-left: 7px solid transparent;
-                                border-right: 7px solid transparent;
-                                border-bottom: 12px solid #000;
-                                position: absolute;
-                                left: 0;
-                                top: 0;
-                            ">
-                                <div style="
-                                    width: 0;
-                                    height: 0;
-                                    border-left: 6px solid transparent;
-                                    border-right: 6px solid transparent;
-                                    border-bottom: 10px solid ${fillColor};
-                                    position: absolute;
-                                    left: -6px;
-                                    top: 2px;
-                                "></div>
-                            </div>
-                        </div>`,
+                        html: `<svg width="14" height="12" viewBox="0 0 14 12" xmlns="http://www.w3.org/2000/svg"
+                            style="display: block; overflow: visible; pointer-events: none;" aria-hidden="true">
+                            <polygon points="7,0 14,12 0,12" fill="#000" style="pointer-events: none;" />
+                            <polygon points="7,2 13,12 1,12" fill="${fillColor}" style="pointer-events: none;" />
+                        </svg>`,
                         iconSize: [14, 12],
                         iconAnchor: [7, 12]
                     });
@@ -475,6 +464,8 @@ window.toggleLayer = function (name) {
  * Switch between basemap layers
  */
 window.switchBasemap = function (basemapType) {
+    ShakeMap.activeBasemap = basemapType;
+
     // Remove all basemap layers
     Object.values(ShakeMap.basemapLayers).forEach(layer => {
         if (ShakeMap.map.hasLayer(layer)) {
