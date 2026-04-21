@@ -20,7 +20,7 @@
 | ![BCSF-RéNaSS](images/contributors-eu/BCSFReNaSS.jpg) | BCSF-Rénass Epos-France | Marc Grunberg, Véronique Mendel, Antoine Schlupp, Christophe Sira |
 | ![ITSAK](images/contributors-eu/ITSAK.png) | Institute of Engineering Seismology & Earthquake Engineering (ITSAK) | Kiriaki Konstantinidou, Nikolaos Theodoulidis |
 | ![NOA](images/contributors-eu/NOA.png) | National Observatory of Athens (NOA) | Nicos Melis |
-| ![OGS](images/contributors-eu/OGS.jpeg) | Istituto Nazionale di Oceanografia e di Geofisica Sperimentale (OGS) | Luca Moratto |
+| ![OGS](images/contributors-eu/OGS.jpeg) | Istituto Nazionale di Oceanografia e di Geofisica Sperimentale - OGS | Luca Moratto |
 | ![IHMS](images/contributors-eu/IHMS.jpeg) | Institute of Hydrometeorology and Seismology (IHMS) | Jovan Dedic, Jadranka Mihaljevic |
 | ![IGPAS](images/contributors-eu/IGPAS.jpg) | Institute of Geophysics of the Polish Academy of Sciences | Janusz Mirek, Łukasz Rudziński |
 | ![IPMA](images/contributors-eu/IPMA.png) | Portuguese Institute of the Sea and Atmosphere (IPMA) | Fernando Carrilho |
@@ -57,6 +57,6 @@
 | Name | Institute | Nationality |
 |------|----------|-------------|
 | Fabrice Cotton | German Research Centre for Geosciences GFZ | Germany |
-| Domenico Giardini | Department of Earth Sciences ERDW at ETH Zurich | Switzerland |
+| Domenico Giardini | Department of Earth and Planetary Sciences EAPS at ETH Zurich | Switzerland |
 | Stefan Wiemer | Swiss Seismological Service SED@ETH Zurich | Switzerland |
 | Anastasia Kiratzi | Aristotle University of Thessaloniki and EPOS-Seismology Secretary | Greece |
