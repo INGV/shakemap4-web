@@ -1,7 +1,8 @@
 # Release Notes
 
-### Release 2.7.0-dev (2026-04-17)
-  - . . .
+### Release 2.7.0 (2026-05-07)
+  - Add code from PR:https://github.com/INGV/shakemap4-web/pull/117
+  - Update contributors-eu.md
 
 ### Release 2.6.0 (2026-04-17)
   - Align Leaflet JS with the loaded 1.9.4 CSS version
