@@ -1,7 +1,7 @@
 # Release Notes
 
-### Release 2.8.0-dev (2026-05-07)
-  - . . .
+### Release 2.8.0-dev (2026-05-08)
+  - style: update INGV profile bounding box coordinates
 
 ### Release 2.7.0 (2026-05-07)
   - Add code from PR:https://github.com/INGV/shakemap4-web/pull/117

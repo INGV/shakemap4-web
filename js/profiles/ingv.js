@@ -8,6 +8,6 @@
 
 Object.assign(config, {
     bBox: [
-        { minlat: 36, maxlat: 72, minlon: -25, maxlon: 45 }
+        { minlat: 35.0, maxlat: 49.0, minlon: 5.0, maxlon: 20.0 }
     ]
 });
