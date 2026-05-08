@@ -1,5 +1,8 @@
 # Release Notes
 
+### Release 2.9.0-dev (2026-05-08)
+  - . . .
+
 ### Release 2.8.0 (2026-05-08)
   - style: update INGV profile bounding box coordinates
 

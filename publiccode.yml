@@ -7,7 +7,7 @@ name: "INGV - ShakeMap4 Web Page"
 releaseDate: 2026-05-08
 url: "https://github.com/INGV/shakemap4-web"
 landingURL: "https://github.com/INGV/shakemap4-web"
-softwareVersion: v2.8.0
+softwareVersion: v2.9.0-dev
 developmentStatus: stable
 softwareType: standalone/other
 platforms:
