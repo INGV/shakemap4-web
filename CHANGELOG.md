@@ -1,5 +1,8 @@
 # Release Notes
 
+### Release 2.12.0-dev (2026-05-14)
+  - . . .
+
 ### Release 2.11.0 (2026-05-14)
   - Add Docker environment variables for full-rebuild data move configuration
   - Change `--no-move` to read protected event IDs from a text file
