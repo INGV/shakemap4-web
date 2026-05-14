@@ -349,8 +349,8 @@ if [ -n "$NO_MOVE_IDS_FILE" ]; then
         exit 1
     fi
 
-    if [ ! -r "$NO_MOVE_IDS_FILE" ]; then
-        echo "Error: -n/--no-move file is not readable: $NO_MOVE_IDS_FILE" >&2
+    if ! cat "$NO_MOVE_IDS_FILE" >/dev/null 2>&1; then
+        echo "Error: -n/--no-move file cannot be opened for reading: $NO_MOVE_IDS_FILE" >&2
         exit 1
     fi
 fi
