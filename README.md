@@ -148,6 +148,27 @@ The `process_events.sh` script scans the realtime `data/` directory and generate
 
 The `--data-storage-dir` option is valid only for full rebuilds. If the same event exists in both directories, the realtime directory has priority and the storage copy is skipped.
 
+**Move old realtime events to historical storage, then process all events:**
+```bash
+./process_events.sh --data-realtime-dir data/ --data-storage-dir data_storage/ --move-days 100 --exclude-dir-end _ri
+```
+
+The `--move-days` option reads each event OriginTime directly from `current/event.xml`.
+Events older than the requested number of days are moved from `data/` to
+`data_storage/` before the full processing step starts. If a matching
+`<eventid>_ri` directory exists, it is moved together with the base event. If
+the destination already exists in `data_storage/`, it is overwritten.
+
+Protect selected event IDs from moving with `--no-move`:
+```bash
+./process_events.sh --data-realtime-dir data/ --data-storage-dir data_storage/ --move-days 100 --no-move 432423,4342342,4342343 --exclude-dir-end _ri
+```
+Each protected ID also protects its matching `<eventid>_ri` directory.
+
+When `--move-days` is used, both `data/` and `data_storage/` must be mounted
+read-write; the read-only Docker volume examples are suitable for serving and
+processing only, not for moving directories.
+
 **Process a single event:**
 ```bash
 ./process_events.sh --data-realtime-dir data/ -e <eventid>
