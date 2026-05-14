@@ -4,10 +4,10 @@
 
 publiccodeYmlVersion: "0"
 name: "INGV - ShakeMap4 Web Page"
-releaseDate: 2026-05-08
+releaseDate: 2026-05-14
 url: "https://github.com/INGV/shakemap4-web"
 landingURL: "https://github.com/INGV/shakemap4-web"
-softwareVersion: v2.8.0
+softwareVersion: v2.9.0
 developmentStatus: stable
 softwareType: standalone/other
 platforms:

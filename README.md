@@ -38,10 +38,22 @@ Docker provides a self-contained environment with all dependencies included.
 docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data:ro --name shakemap4-web__container ingv/shakemap4-web
 ```
 
+**Run with realtime data and historical storage directories:**
+```bash
+docker run -d -p 8080:80 \
+  -v $(pwd)/data:/usr/share/nginx/html/data:ro \
+  -v $(pwd)/data_storage:/usr/share/nginx/html/data_storage:ro \
+  --name shakemap4-web__container \
+  ingv/shakemap4-web
+```
+
+With this setup, public URLs remain under `/data/...`. Nginx first looks in `/usr/share/nginx/html/data` and then falls back internally to `/usr/share/nginx/html/data_storage`.
+
 **Run with automated processing enabled:**
 ```bash
 docker run -d -p 8080:80 \
   -v $(pwd)/data:/usr/share/nginx/html/data:ro \
+  -v $(pwd)/data_storage:/usr/share/nginx/html/data_storage:ro \
   --name shakemap4-web__container \
   -e ENABLE_CRONTAB=true \
   ingv/shakemap4-web
@@ -49,18 +61,21 @@ docker run -d -p 8080:80 \
 
 When `ENABLE_CRONTAB=true` is set, the container will automatically:
 - Process the last 5 events every 2 minutes (logs: `/tmp/process_events_incremental.log`)
-- Reprocess all events daily at 00:10 UTC (logs: `/tmp/process_events_full.log`)
+- Reprocess all events daily at 12:00 UTC (logs: `/tmp/process_events_full.log`)
+
+Incremental processing reads only the realtime data directory. Full rebuilds also include the historical storage directory when it is mounted.
 
 **Run with initial data processing:**
 ```bash
 docker run -d -p 8080:80 \
   -v $(pwd)/data:/usr/share/nginx/html/data:ro \
+  -v $(pwd)/data_storage:/usr/share/nginx/html/data_storage:ro \
   --name shakemap4-web__container \
   -e PROCESS_ALL_DATA_FIRST_TIME=true \
   ingv/shakemap4-web
 ```
 
-When `PROCESS_ALL_DATA_FIRST_TIME=true` is set, the container will process all events in the data directory at startup before starting the Nginx server. This is useful for initializing the `events.json` file on first deployment.
+When `PROCESS_ALL_DATA_FIRST_TIME=true` is set, the container will process events at startup before starting the Nginx server. It processes recent events from the realtime data directory first, then starts a full rebuild in the background; the full rebuild also includes `data_storage` when mounted.
 
 **Run with a specific environment profile (e.g. EU):**
 ```bash
@@ -98,6 +113,7 @@ docker run -d -p 8080:80 -v $(pwd)/data:/usr/share/nginx/html/data:ro --name sha
 ```bash
 docker run -d -p 8080:80 \
   -v $(pwd)/data:/usr/share/nginx/html/data:ro \
+  -v $(pwd)/data_storage:/usr/share/nginx/html/data_storage:ro \
   --name shakemap4-web__container \
   -e ENABLE_CRONTAB=true \
   ingv/shakemap4-web
@@ -118,18 +134,30 @@ If you prefer to run without Docker, you'll need to manually set up the environm
 - Web Server (Nginx, Apache, or Python HTTP server)
 
 #### 2. Data Processing
-The `process_events.sh` script scans the `data/` directory and generates `events.json`.
+The `process_events.sh` script scans the realtime `data/` directory and generates `events.json`.
 
-**Process all events:**
+**Process all realtime events:**
 ```bash
-./process_events.sh
+./process_events.sh --data-realtime-dir data/
 ```
+
+**Process realtime and historical storage events:**
+```bash
+./process_events.sh --data-realtime-dir data/ --data-storage-dir data_storage/ --exclude-dir-end _ri
+```
+
+The `--data-storage-dir` option is valid only for full rebuilds. If the same event exists in both directories, the realtime directory has priority and the storage copy is skipped.
 
 **Process a single event:**
 ```bash
-./process_events.sh -e <eventid>
+./process_events.sh --data-realtime-dir data/ -e <eventid>
 ```
-Example: `./process_events.sh -e 44683062`
+Example: `./process_events.sh --data-realtime-dir data/ -e 44683062`
+
+**Process the last 5 realtime events:**
+```bash
+./process_events.sh --data-realtime-dir data/ -l 5 --exclude-dir-end _ri
+```
 
 #### 3. Serve the Portal
 **Example with Python HTTP server:**
@@ -138,8 +166,11 @@ python3 -m http.server 8000
 ```
 Then open `http://localhost:8000` in your browser.
 
+Python's simple HTTP server cannot provide the `/data/...` to `data_storage/` fallback. Use the provided Nginx configuration when historical storage must be exposed without changing public URLs.
+
 ## Directory Structure
 - `data/`: Contains ShakeMap event data.
+- `data_storage/`: Optional historical ShakeMap event data served as an internal fallback for `/data/...` URLs.
 - `css/`: Stylesheets.
 - `js/`: JavaScript logic.
 - `index.html`: Main entry point.

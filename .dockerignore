@@ -1,0 +1,12 @@
+.git
+.DS_Store
+.Dockerfile.swp
+.playwright-cli
+
+data
+data_storage
+events.json
+
+*.log
+*.tmp
+*.swp

@@ -13,9 +13,45 @@
 set -e
 echo ""
 
+PROCESS_EVENTS_SCRIPT="/usr/share/nginx/html/process_events.sh"
+REALTIME_DATA_DIR="/usr/share/nginx/html/data"
+STORAGE_DATA_DIR="/usr/share/nginx/html/data_storage"
+
+get_full_rebuild_args() {
+    local args=("--data-realtime-dir" "$REALTIME_DATA_DIR")
+
+    if [ -d "$STORAGE_DATA_DIR" ]; then
+        args+=("--data-storage-dir" "$STORAGE_DATA_DIR")
+    fi
+
+    printf '%s\n' "${args[@]}"
+}
+
+get_full_rebuild_command() {
+    local cmd="$PROCESS_EVENTS_SCRIPT --data-realtime-dir $REALTIME_DATA_DIR"
+
+    if [ -d "$STORAGE_DATA_DIR" ]; then
+        cmd="$cmd --data-storage-dir $STORAGE_DATA_DIR"
+    fi
+
+    printf '%s' "$cmd"
+}
+
 # --- Cron setup for periodic event reprocessing ---
 if [ "$ENABLE_CRONTAB" = "true" ]; then
     echo "ENABLE_CRONTAB is set to true. Starting cron service..."
+
+    INCREMENTAL_CMD="$PROCESS_EVENTS_SCRIPT --data-realtime-dir $REALTIME_DATA_DIR -l 5 -x _ri"
+    FULL_REBUILD_CMD="$(get_full_rebuild_command) -x _ri"
+
+    cat > /etc/cron.d/shakemap-cron <<EOF
+*/2 * * * * $INCREMENTAL_CMD >> /tmp/process_events_incremental.log 2>&1
+00 12 * * * $FULL_REBUILD_CMD >> /tmp/process_events_full.log 2>&1
+01 00 * * * mv /tmp/process_events_incremental.log /tmp/process_events_incremental.yesterday.log 2>/dev/null || true
+01 00 * * * mv /tmp/process_events_full.log /tmp/process_events_full.yesterday.log 2>/dev/null || true
+EOF
+    chmod 0644 /etc/cron.d/shakemap-cron
+
     crontab /etc/cron.d/shakemap-cron
     cron
     echo "Cron service started; check Dockerfile for more info."
@@ -50,8 +86,9 @@ if [ "$PROCESS_ALL_DATA_FIRST_TIME" = "true" ]; then
     # so that events.json is available quickly and the portal is usable right away.
     # The second run rebuilds the full dataset in the background without blocking
     # nginx startup — it may take a long time on large data directories.
-    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data -l 20
-    /usr/share/nginx/html/process_events.sh -d /usr/share/nginx/html/data &
+    "$PROCESS_EVENTS_SCRIPT" --data-realtime-dir "$REALTIME_DATA_DIR" -l 20
+    mapfile -t FULL_REBUILD_ARGS < <(get_full_rebuild_args)
+    "$PROCESS_EVENTS_SCRIPT" "${FULL_REBUILD_ARGS[@]}" &
 
     echo "All data processed."
 else

@@ -18,13 +18,20 @@ echo_date() {
 # Function to display usage/help
 usage() {
     cat <<EOF
-Usage: $(basename "$0") -d DATA_DIR [-e EVENT_ID | -l LAST_N_EVENTS] [-x SUFFIX] [-h]
+Usage: $(basename "$0") -d DATA_DIR [-k DATA_STORAGE_DIR] [-e EVENT_ID | -l LAST_N_EVENTS] [-x SUFFIX] [-h]
 
 Process ShakeMap event data and generate events.json.
 
 Options:
   -d DATA_DIR                (required) Path to the data directory containing
                              event subdirectories (e.g., data/)
+  --data-realtime-dir DATA_DIR
+                             Long alias for -d. Use this for the primary
+                             realtime data directory
+  -k DATA_STORAGE_DIR        Optional historical storage directory. Used only
+                             during full rebuilds
+  --data-storage-dir DATA_STORAGE_DIR
+                             Long alias for -k
   -e EVENT_ID                Process a single event by its ID. Performs an
                              incremental update: adds or updates the event in
                              events.json while preserving all other events
@@ -36,15 +43,19 @@ Options:
   -h, --help                 Display this help message and exit
 
 Note: Options -e and -l are mutually exclusive. If neither is specified,
-all events in DATA_DIR are processed (full rebuild of events.json).
+all events in DATA_DIR and, when provided, DATA_STORAGE_DIR are processed
+(full rebuild of events.json). Option -k/--data-storage-dir is valid only
+for full rebuilds.
 
 Examples:
-  $(basename "$0") -d data/                        Process all events (full rebuild)
-  $(basename "$0") -d data/ -e 44683062            Process a single event
-  $(basename "$0") -d data/ -l 5                   Process last 5 modified events
-  $(basename "$0") -d data/ -l 5 -x _ri            Exclude dirs ending with "_ri"
-  $(basename "$0") -d data/ --exclude-dir-end _ri  Same, using long option
-  $(basename "$0") -h                              Show this help
+  $(basename "$0") -d data/                                      Process all realtime events (full rebuild)
+  $(basename "$0") --data-realtime-dir data/                     Same, using long option
+  $(basename "$0") -d data/ -k data_storage/                     Process realtime and storage events (full rebuild)
+  $(basename "$0") -d data/ -e 44683062                          Process a single realtime event
+  $(basename "$0") -d data/ -l 5                                 Process last 5 modified realtime events
+  $(basename "$0") -d data/ -k data_storage/ -x _ri              Full rebuild excluding dirs ending with "_ri"
+  $(basename "$0") -d data/ --exclude-dir-end _ri                Same exclusion, using long option
+  $(basename "$0") -h                                            Show this help
 EOF
 }
 
@@ -146,6 +157,7 @@ for CMD in "${REQUIRED_COMMANDS[@]}"; do
 done
 
 DATA_DIR=""
+DATA_STORAGE_DIR=""
 EVENTS_JSON=${WORKDIR}/events.json
 EVENTS_JSON_TMP=${WORKDIR}/events.json.tmp
 SINGLE_EVENT_ID=""
@@ -172,6 +184,22 @@ while [ $# -gt 0 ]; do
             EXCLUDE_DIR_END="${1#*=}"
             shift
             ;;
+        --data-realtime-dir)
+            DATA_DIR="$2"
+            shift 2
+            ;;
+        --data-realtime-dir=*)
+            DATA_DIR="${1#*=}"
+            shift
+            ;;
+        --data-storage-dir)
+            DATA_STORAGE_DIR="$2"
+            shift 2
+            ;;
+        --data-storage-dir=*)
+            DATA_STORAGE_DIR="${1#*=}"
+            shift
+            ;;
         *)
             ARGS+=("$1")
             shift
@@ -181,9 +209,11 @@ done
 set -- "${ARGS[@]}"
 
 # Parse arguments
-while getopts "d:e:l:x:h" opt; do
+while getopts "d:e:l:x:k:h" opt; do
   case $opt in
     d) DATA_DIR="$OPTARG"
+    ;;
+    k) DATA_STORAGE_DIR="$OPTARG"
     ;;
     e) SINGLE_EVENT_ID="$OPTARG"
     ;;
@@ -214,6 +244,21 @@ if [ -n "$SINGLE_EVENT_ID" ] && [ -n "$LAST_EVENTS" ]; then
     echo "" >&2
     usage >&2
     exit 1
+fi
+
+# Validate storage directory use
+if [ -n "$DATA_STORAGE_DIR" ]; then
+    if [ -n "$SINGLE_EVENT_ID" ] || [ -n "$LAST_EVENTS" ]; then
+        echo "Error: -k/--data-storage-dir is valid only for full rebuilds (do not use it with -e or -l)" >&2
+        echo "" >&2
+        usage >&2
+        exit 1
+    fi
+
+    if [ ! -d "$DATA_STORAGE_DIR" ]; then
+        echo "Error: DATA_STORAGE_DIR does not exist or is not a directory: $DATA_STORAGE_DIR" >&2
+        exit 1
+    fi
 fi
 
 # Validate -l is a positive integer
@@ -250,10 +295,35 @@ is_excluded() {
     return 1
 }
 
+# Function to check whether Reported Intensity data exists for an event
+# Parameters:
+#   $1 - event_id: base event ID
+#   $2 - source_dir: source directory where the base event was found
+# Returns: 0 if RI data exists, 1 if not
+reported_intensity_exists() {
+    local event_id=$1
+    local source_dir=$2
+
+    if [ -d "${source_dir}/${event_id}_ri" ]; then
+        return 0
+    fi
+
+    if [ "${source_dir}" != "${DATA_DIR}" ] && [ -d "${DATA_DIR}/${event_id}_ri" ]; then
+        return 0
+    fi
+
+    if [ -n "${DATA_STORAGE_DIR}" ] && [ "${source_dir}" != "${DATA_STORAGE_DIR}" ] && [ -d "${DATA_STORAGE_DIR}/${event_id}_ri" ]; then
+        return 0
+    fi
+
+    return 1
+}
+
 # Function to process a single event
 process_event() {
     local event_id=$1
-    local event_xml="$DATA_DIR/$event_id/current/event.xml"
+    local source_dir=${2:-$DATA_DIR}
+    local event_xml="$source_dir/$event_id/current/event.xml"
 
     if [ ! -f "$event_xml" ]; then
         echo "Warning: event.xml not found for event $event_id" >&2
@@ -284,7 +354,7 @@ process_event() {
 
     # Check if Reported Intensity data exists
     local HAS_RI=0
-    if [ -d "${DATA_DIR}/${id}_ri" ]; then
+    if reported_intensity_exists "$id" "$source_dir"; then
         HAS_RI=1
     fi
 
@@ -387,13 +457,13 @@ START_TIME=$(date +%s)
 
 # Main logic
 if [ -n "$SINGLE_EVENT_ID" ]; then
-    echo_date "Processing single event: $SINGLE_EVENT_ID"
+    echo_date "Processing single event: $SINGLE_EVENT_ID [realtime: $DATA_DIR]"
 
     if is_excluded "$SINGLE_EVENT_ID"; then
         echo_date "Skipping event $SINGLE_EVENT_ID: directory name ends with '${EXCLUDE_DIR_END}' (excluded by -x/--exclude-dir-end)"
         EVENTS_EXCLUDED+=("$SINGLE_EVENT_ID")
     else
-        event_json=$(process_event "$SINGLE_EVENT_ID")
+        event_json=$(process_event "$SINGLE_EVENT_ID" "$DATA_DIR")
 
         if [ -n "$event_json" ]; then
             # Check if time parsing was used
@@ -401,7 +471,7 @@ if [ -n "$SINGLE_EVENT_ID" ]; then
                 EVENTS_WITH_TIME_PARSING+=("$SINGLE_EVENT_ID")
             fi
             update_event_in_json "$event_json" "$SINGLE_EVENT_ID"
-            echo "Event $SINGLE_EVENT_ID processed."
+            echo "Event $SINGLE_EVENT_ID processed from realtime: $DATA_DIR"
         fi
     fi
 elif [ -n "$LAST_EVENTS" ]; then
@@ -455,10 +525,10 @@ elif [ -n "$LAST_EVENTS" ]; then
             continue
         fi
 
-        echo "$current/$total_events - Processing $event_id" >&2
+        echo "$current/$total_events - Processing $event_id [realtime: $DATA_DIR]" >&2
 
         # Process event
-        event_json=$(process_event "$event_id")
+        event_json=$(process_event "$event_id" "$DATA_DIR")
 
         if [ -n "$event_json" ]; then
             # Check if time parsing was used
@@ -472,43 +542,81 @@ elif [ -n "$LAST_EVENTS" ]; then
     echo "Last $LAST_EVENTS events processed."
 else
     echo_date "Processing all events..."
-    # Iterate over all directories in data/
-    # We will build a large list of objects first or update incrementally?
-    # Updating incrementally is safer but slower. Given 7000+ folders, let's try to be efficient.
-    # However, bash loop might be slow.
-    # Let's do a loop and build a temporary file with all event objects, then merge.
-    
-    # Count total events first
-    total_events=$(find "$DATA_DIR" -maxdepth 3 -path "*/current/event.xml" | wc -l | tr -d ' ')
+
+    if [ -n "$DATA_STORAGE_DIR" ]; then
+        echo_date "Using storage directory: $DATA_STORAGE_DIR"
+    fi
+
+    EVENT_SOURCES_TMP="${WORKDIR}/event_sources.tmp"
+    EVENT_IDS_TMP="${WORKDIR}/event_ids.tmp"
+    EVENTS_JSON_RAW="${WORKDIR}/events_raw.json.tmp"
+
+    : > "$EVENT_SOURCES_TMP"
+    : > "$EVENT_IDS_TMP"
+
+    add_events_from_dir() {
+        local source_dir=$1
+        local source_label=$2
+        local xml_file
+        local event_id
+
+        while read xml_file; do
+            event_id=$(basename "$(dirname "$(dirname "$xml_file")")")
+
+            if grep -Fxq "$event_id" "$EVENT_IDS_TMP"; then
+                if [ "$source_label" = "storage" ]; then
+                    echo "Warning: skipping duplicate event $event_id from DATA_STORAGE_DIR; DATA_DIR has priority when already present." >&2
+                else
+                    echo "Warning: skipping duplicate event $event_id from $source_dir; first occurrence has priority." >&2
+                fi
+                continue
+            fi
+
+            printf '%s\t%s\t%s\n' "$source_label" "$source_dir" "$xml_file" >> "$EVENT_SOURCES_TMP"
+            printf '%s\n' "$event_id" >> "$EVENT_IDS_TMP"
+        done < <(find "$source_dir" -maxdepth 3 -path "*/current/event.xml")
+    }
+
+    add_events_from_dir "$DATA_DIR" "realtime"
+
+    if [ -n "$DATA_STORAGE_DIR" ]; then
+        add_events_from_dir "$DATA_STORAGE_DIR" "storage"
+    fi
+
+    # Count total events first, after deduplicating realtime and storage dirs.
+    total_events=$(wc -l < "$EVENT_SOURCES_TMP" | tr -d ' ')
     echo "Found $total_events events to process"
+
+    if [ "$total_events" -eq 0 ]; then
+        echo "No events found in $DATA_DIR${DATA_STORAGE_DIR:+ or $DATA_STORAGE_DIR}" >&2
+        rm -f "$EVENT_SOURCES_TMP" "$EVENT_IDS_TMP"
+        exit 1
+    fi
     
     # Initialize counter
     current=0
     
-    # Find all event.xml files
-    # Use process substitution to avoid subshell and preserve EVENTS_WITH_TIME_PARSING array
     # Create temporary file for raw JSON output
-    EVENTS_JSON_RAW="${WORKDIR}/events_raw.json.tmp"
 
     # Step 1: Process all events and write to temporary file
-    while read xml_file; do
+    while IFS=$'\t' read -r source_label source_dir xml_file; do
         # Extract event_id from path
-        event_id=$(basename $(dirname $(dirname "$xml_file")))
+        event_id=$(basename "$(dirname "$(dirname "$xml_file")")")
 
         # Increment counter
         current=$((current + 1))
 
         # Check exclusion
         if is_excluded "$event_id"; then
-            echo "$current/$total_events - Skipping $event_id: directory name ends with '${EXCLUDE_DIR_END}' (excluded by -x/--exclude-dir-end)" >&2
+            echo "$current/$total_events - Skipping $event_id [$source_label: $source_dir]: directory name ends with '${EXCLUDE_DIR_END}' (excluded by -x/--exclude-dir-end)" >&2
             EVENTS_EXCLUDED+=("$event_id")
             continue
         fi
 
-        echo "$current/$total_events - Processing $event_id" >&2
+        echo "$current/$total_events - Processing $event_id [$source_label: $source_dir]" >&2
 
         # Process event
-        json_str=$(process_event "$event_id")
+        json_str=$(process_event "$event_id" "$source_dir")
         if [ -n "$json_str" ]; then
             # Check if time parsing was used
             if [ "$(echo "$json_str" | jq -r '._used_time_parsing')" = "1" ]; then
@@ -516,11 +624,11 @@ else
             fi
             echo "$json_str"
         fi
-    done < <(find "$DATA_DIR" -maxdepth 3 -path "*/current/event.xml") > "${EVENTS_JSON_RAW}"
+    done < "$EVENT_SOURCES_TMP" > "${EVENTS_JSON_RAW}"
 
     # Step 2: Convert to JSON array
     jq -s '.' "${EVENTS_JSON_RAW}" > "${EVENTS_JSON_TMP}"
-    rm "${EVENTS_JSON_RAW}"
+    rm "${EVENTS_JSON_RAW}" "$EVENT_SOURCES_TMP" "$EVENT_IDS_TMP"
 
     # Now restructure flat list into Year -> Month -> List
     restructure_events_json
