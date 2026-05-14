@@ -1,7 +1,8 @@
 # Release Notes
 
 ### Release 2.10.0-dev (2026-05-14)
-  - . . .
+  - Add `process_events.sh` options to move old realtime event directories to `data_storage`
+  - Add `--no-move` protection list for event directories that must remain in `data`
 
 ### Release 2.9.0 (2026-05-14)
   - Add historical ShakeMap data storage fallback through Nginx while keeping public `/data/...` URLs unchanged
