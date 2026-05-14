@@ -24,6 +24,7 @@ COPY disclaimer*.md /usr/share/nginx/html/
 COPY contributors*.md /usr/share/nginx/html/
 COPY scientific-background*.md /usr/share/nginx/html/
 COPY productsListToProcess.json /usr/share/nginx/html/
+COPY EVENTID_DO_NOT_MOVE.txt /usr/share/nginx/html/
 COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/
 COPY images/ /usr/share/nginx/html/images/

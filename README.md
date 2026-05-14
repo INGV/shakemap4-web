@@ -77,6 +77,26 @@ docker run -d -p 8080:80 \
 
 When `PROCESS_ALL_DATA_FIRST_TIME=true` is set, the container will process events at startup before starting the Nginx server. It processes recent events from the realtime data directory first, then starts a full rebuild in the background; the full rebuild also includes `data_storage` when mounted.
 
+**Run with automatic old-event moving enabled:**
+```bash
+docker run -d -p 8080:80 \
+  -v $(pwd)/data:/usr/share/nginx/html/data:rw \
+  -v $(pwd)/data_storage:/usr/share/nginx/html/data_storage:rw \
+  -v $(pwd)/EVENTID_DO_NOT_MOVE.txt:/usr/share/nginx/html/EVENTID_DO_NOT_MOVE.txt:rw \
+  --name shakemap4-web__container \
+  -e PROCESS_ALL_DATA_FIRST_TIME=true \
+  -e DATA_MOVE_DAYS=100 \
+  -e DATA_MOVE_NO_MOVE_IDS=/usr/share/nginx/html/EVENTID_DO_NOT_MOVE.txt \
+  ingv/shakemap4-web
+```
+
+`DATA_MOVE_DAYS` is applied only to full rebuilds: the daily cron full rebuild
+and the second startup pass triggered by `PROCESS_ALL_DATA_FIRST_TIME=true`.
+Incremental runs (`-l`) never move data. `DATA_MOVE_NO_MOVE_IDS` must be an
+absolute path inside the container to a readable text file with one protected
+event ID per line. The file can be edited while the container is running; the
+next full rebuild reads the updated contents.
+
 **Run with a specific environment profile (e.g. EU):**
 ```bash
 docker run -d -p 8080:80 \
@@ -93,6 +113,8 @@ docker run -d -p 8080:80 \
 | `ENABLE_CRONTAB` | Enable automated event processing via cron | `false` | `true` |
 | `PROCESS_ALL_DATA_FIRST_TIME` | Process all events at container startup | `false` | `true` |
 | `SHAKEMAP_ENV` | Environment profile to load (`ingv`, `eu`, or custom) | `ingv` | `eu` |
+| `DATA_MOVE_DAYS` | Move realtime event directories older than this many days during full rebuilds | unset | `100` |
+| `DATA_MOVE_NO_MOVE_IDS` | Absolute container path to a file with event IDs that must not be moved | unset | `/usr/share/nginx/html/EVENTID_DO_NOT_MOVE.txt` |
 
 **Notes:**
 - All environment variables are optional. If not set, the INGV defaults from `js/config-base.js` are used.
@@ -161,9 +183,11 @@ the destination already exists in `data_storage/`, it is overwritten.
 
 Protect selected event IDs from moving with `--no-move`:
 ```bash
-./process_events.sh --data-realtime-dir data/ --data-storage-dir data_storage/ --move-days 100 --no-move 432423,4342342,4342343 --exclude-dir-end _ri
+./process_events.sh --data-realtime-dir data/ --data-storage-dir data_storage/ --move-days 100 --no-move EVENTID_DO_NOT_MOVE.txt --exclude-dir-end _ri
 ```
-Each protected ID also protects its matching `<eventid>_ri` directory.
+The `--no-move` file must contain one event ID per line. Empty lines and lines
+starting with `#` are ignored. Each protected ID also protects its matching
+`<eventid>_ri` directory.
 
 When `--move-days` is used, both `data/` and `data_storage/` must be mounted
 read-write; the read-only Docker volume examples are suitable for serving and

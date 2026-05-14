@@ -18,7 +18,7 @@ echo_date() {
 # Function to display usage/help
 usage() {
     cat <<EOF
-Usage: $(basename "$0") -d DATA_DIR [-k DATA_STORAGE_DIR] [-m DAYS [-n IDS]] [-e EVENT_ID | -l LAST_N_EVENTS] [-x SUFFIX] [-h]
+Usage: $(basename "$0") -d DATA_DIR [-k DATA_STORAGE_DIR] [-m DAYS [-n FILE]] [-e EVENT_ID | -l LAST_N_EVENTS] [-x SUFFIX] [-h]
 
 Process ShakeMap event data and generate events.json.
 
@@ -37,9 +37,9 @@ Options:
                              The event OriginTime is read directly from
                              current/event.xml. Requires -d and -k
   --move-days DAYS           Long alias for -m
-  -n IDS                     Comma-separated event IDs that must never be
-                             moved when -m is used. Example: 432423,4342342
-  --no-move IDS              Long alias for -n
+  -n FILE                    Path to a text file with event IDs that must never
+                             be moved when -m is used, one event ID per line
+  --no-move FILE             Long alias for -n
   -e EVENT_ID                Process a single event by its ID. Performs an
                              incremental update: adds or updates the event in
                              events.json while preserving all other events
@@ -64,7 +64,8 @@ Examples:
   $(basename "$0") -d data/ -l 5                                 Process last 5 modified realtime events
   $(basename "$0") -d data/ -k data_storage/ -x _ri              Full rebuild excluding dirs ending with "_ri"
   $(basename "$0") -d data/ -k data_storage/ -m 100 -x _ri       Move events older than 100 days, then full rebuild
-  $(basename "$0") -d data/ -k data_storage/ -m 100 -n 1,2,3     Move old events except listed IDs, then full rebuild
+  $(basename "$0") -d data/ -k data_storage/ -m 100 -n EVENTID_DO_NOT_MOVE.txt
+                                                                  Move old events except IDs listed in the file
   $(basename "$0") -d data/ --exclude-dir-end _ri                Same exclusion, using long option
   $(basename "$0") -h                                            Show this help
 EOF
@@ -175,7 +176,7 @@ SINGLE_EVENT_ID=""
 LAST_EVENTS=""
 EXCLUDE_DIR_END=""
 MOVE_DAYS=""
-NO_MOVE_IDS_CSV=""
+NO_MOVE_IDS_FILE=""
 NO_MOVE_IDS=()
 # Array to track events with time parsing issues
 EVENTS_WITH_TIME_PARSING=()
@@ -223,11 +224,11 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         --no-move)
-            NO_MOVE_IDS_CSV="$2"
+            NO_MOVE_IDS_FILE="$2"
             shift 2
             ;;
         --no-move=*)
-            NO_MOVE_IDS_CSV="${1#*=}"
+            NO_MOVE_IDS_FILE="${1#*=}"
             shift
             ;;
         *)
@@ -247,7 +248,7 @@ while getopts "d:e:l:x:k:m:n:h" opt; do
     ;;
     m) MOVE_DAYS="$OPTARG"
     ;;
-    n) NO_MOVE_IDS_CSV="$OPTARG"
+    n) NO_MOVE_IDS_FILE="$OPTARG"
     ;;
     e) SINGLE_EVENT_ID="$OPTARG"
     ;;
@@ -302,7 +303,7 @@ if [ -n "$MOVE_DAYS" ]; then
     fi
 fi
 
-if [ -n "$NO_MOVE_IDS_CSV" ] && [ -z "$MOVE_DAYS" ]; then
+if [ -n "$NO_MOVE_IDS_FILE" ] && [ -z "$MOVE_DAYS" ]; then
     echo "Error: -n/--no-move is valid only when -m/--move-days is used" >&2
     echo "" >&2
     usage >&2
@@ -342,16 +343,24 @@ if [ -n "$MOVE_DAYS" ]; then
     fi
 fi
 
+if [ -n "$NO_MOVE_IDS_FILE" ]; then
+    if [ ! -f "$NO_MOVE_IDS_FILE" ]; then
+        echo "Error: -n/--no-move file does not exist or is not a regular file: $NO_MOVE_IDS_FILE" >&2
+        exit 1
+    fi
+
+    if [ ! -r "$NO_MOVE_IDS_FILE" ]; then
+        echo "Error: -n/--no-move file is not readable: $NO_MOVE_IDS_FILE" >&2
+        exit 1
+    fi
+fi
+
 # Validate -l is a positive integer
 if [ -n "$LAST_EVENTS" ]; then
     if ! [[ "$LAST_EVENTS" =~ ^[0-9]+$ ]] || [ "$LAST_EVENTS" -le 0 ]; then
         echo "Error: -l option requires a positive integer" >&2
         exit 1
     fi
-fi
-
-if [ -n "$NO_MOVE_IDS_CSV" ]; then
-    IFS=',' read -r -a NO_MOVE_IDS <<< "$NO_MOVE_IDS_CSV"
 fi
 
 # Function to restructure flat event list into Year -> Month -> List structure
@@ -399,6 +408,30 @@ normalize_event_base_id() {
     fi
 
     printf '%s' "$event_id"
+}
+
+# Function to load protected event IDs from -n/--no-move file.
+# Empty lines and lines starting with "#" are ignored.
+load_no_move_ids() {
+    local line
+
+    NO_MOVE_IDS=()
+
+    if [ -z "$NO_MOVE_IDS_FILE" ]; then
+        return 0
+    fi
+
+    while IFS= read -r line || [ -n "$line" ]; do
+        line=$(trim_spaces "$line")
+
+        if [ -z "$line" ] || [[ "$line" == \#* ]]; then
+            continue
+        fi
+
+        NO_MOVE_IDS+=("$line")
+    done < "$NO_MOVE_IDS_FILE"
+
+    echo_date "Loaded ${#NO_MOVE_IDS[@]} protected event ID(s) from $NO_MOVE_IDS_FILE"
 }
 
 # Function to check if an event is protected by -n/--no-move
@@ -583,6 +616,7 @@ move_old_events_to_storage() {
     cutoff_epoch=$((now_epoch - (MOVE_DAYS * 86400)))
 
     echo_date "Moving events older than ${MOVE_DAYS} day(s) from $DATA_DIR to $DATA_STORAGE_DIR"
+    load_no_move_ids
 
     while IFS= read -r event_xml; do
         found_events=1
