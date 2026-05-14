@@ -1,0 +1,2 @@
+# Event IDs that must remain in data/ when DATA_MOVE_DAYS is enabled.
+# Add one event ID per line. Empty lines and lines starting with "#" are ignored.

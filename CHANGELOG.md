@@ -1,7 +1,9 @@
 # Release Notes
 
 ### Release 2.11.0-dev (2026-05-14)
-  - . . .
+  - Add Docker environment variables for full-rebuild data move configuration
+  - Change `--no-move` to read protected event IDs from a text file
+  - Exclude Reported Intensity directories during first-boot event processing
 
 ### Release 2.10.0 (2026-05-14)
   - Add `process_events.sh` options to move old realtime event directories to `data_storage`
