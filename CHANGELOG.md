@@ -1,6 +1,6 @@
 # Release Notes
 
-### Release 2.9.0-dev (2026-05-08)
+### Release 2.9.0 (2026-05-14)
   - Add historical ShakeMap data storage fallback through Nginx while keeping public `/data/...` URLs unchanged
   - Add `--data-realtime-dir` and `--data-storage-dir` options to `process_events.sh`
   - Update Docker startup and cron processing to include storage data only during full rebuilds
