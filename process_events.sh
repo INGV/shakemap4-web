@@ -265,6 +265,26 @@ while getopts "d:e:l:x:k:m:n:h" opt; do
   esac
 done
 
+# Function to verify directory writability by doing a real create/remove test.
+# Some mounted filesystems can make test -w return false even when writes work.
+ensure_directory_writable() {
+    local dir=$1
+    local label=$2
+    local tmp_dir="${dir%/}/.process_events_write_test.$$.$RANDOM"
+
+    if ! mkdir "$tmp_dir" 2>/dev/null; then
+        echo "Error: $label must allow directory creation when -m/--move-days is used: $dir" >&2
+        return 1
+    fi
+
+    if ! rmdir "$tmp_dir" 2>/dev/null; then
+        echo "Error: $label must allow directory removal when -m/--move-days is used: $dir" >&2
+        return 1
+    fi
+
+    return 0
+}
+
 # Validate required argument
 if [ -z "$DATA_DIR" ]; then
     echo "Error: -d option is required to specify DATA_DIR" >&2
@@ -332,15 +352,8 @@ if [ -n "$MOVE_DAYS" ]; then
         exit 1
     fi
 
-    if [ ! -w "$DATA_DIR" ]; then
-        echo "Error: DATA_DIR must be writable when -m/--move-days is used: $DATA_DIR" >&2
-        exit 1
-    fi
-
-    if [ ! -w "$DATA_STORAGE_DIR" ]; then
-        echo "Error: DATA_STORAGE_DIR must be writable when -m/--move-days is used: $DATA_STORAGE_DIR" >&2
-        exit 1
-    fi
+    ensure_directory_writable "$DATA_DIR" "DATA_DIR" || exit 1
+    ensure_directory_writable "$DATA_STORAGE_DIR" "DATA_STORAGE_DIR" || exit 1
 fi
 
 if [ -n "$NO_MOVE_IDS_FILE" ]; then
