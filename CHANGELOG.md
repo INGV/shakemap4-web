@@ -1,7 +1,7 @@
 # Release Notes
 
 ### Release 2.12.0-dev (2026-05-14)
-  - . . .
+  - Validate `--no-move` files by opening them instead of relying on permission metadata
 
 ### Release 2.11.0 (2026-05-14)
   - Add Docker environment variables for full-rebuild data move configuration

@@ -50,8 +50,8 @@ validate_data_move_config() {
             exit 1
         fi
 
-        if [ ! -r "$DATA_MOVE_NO_MOVE_IDS" ]; then
-            echo "ERROR: DATA_MOVE_NO_MOVE_IDS file is not readable: $DATA_MOVE_NO_MOVE_IDS" >&2
+        if ! cat "$DATA_MOVE_NO_MOVE_IDS" >/dev/null 2>&1; then
+            echo "ERROR: DATA_MOVE_NO_MOVE_IDS file cannot be opened for reading: $DATA_MOVE_NO_MOVE_IDS" >&2
             exit 1
         fi
     fi
