@@ -1,5 +1,8 @@
 # Release Notes
 
+### Release 2.14.0 (2026-05-15)
+  - Roll back tracked code, configuration, and documentation to the v2.9.0 state
+
 ### Release 2.13.0 (2026-05-14)
   - Validate move directory writability with real create/remove checks
 

@@ -18,7 +18,7 @@ echo_date() {
 # Function to display usage/help
 usage() {
     cat <<EOF
-Usage: $(basename "$0") -d DATA_DIR [-k DATA_STORAGE_DIR] [-m DAYS [-n FILE]] [-e EVENT_ID | -l LAST_N_EVENTS] [-x SUFFIX] [-h]
+Usage: $(basename "$0") -d DATA_DIR [-k DATA_STORAGE_DIR] [-e EVENT_ID | -l LAST_N_EVENTS] [-x SUFFIX] [-h]
 
 Process ShakeMap event data and generate events.json.
 
@@ -32,14 +32,6 @@ Options:
                              during full rebuilds
   --data-storage-dir DATA_STORAGE_DIR
                              Long alias for -k
-  -m DAYS                    Move event directories older than DAYS from
-                             DATA_DIR to DATA_STORAGE_DIR before processing.
-                             The event OriginTime is read directly from
-                             current/event.xml. Requires -d and -k
-  --move-days DAYS           Long alias for -m
-  -n FILE                    Path to a text file with event IDs that must never
-                             be moved when -m is used, one event ID per line
-  --no-move FILE             Long alias for -n
   -e EVENT_ID                Process a single event by its ID. Performs an
                              incremental update: adds or updates the event in
                              events.json while preserving all other events
@@ -53,8 +45,7 @@ Options:
 Note: Options -e and -l are mutually exclusive. If neither is specified,
 all events in DATA_DIR and, when provided, DATA_STORAGE_DIR are processed
 (full rebuild of events.json). Option -k/--data-storage-dir is valid only
-for full rebuilds. Option -m/--move-days is valid only for full rebuilds and
-requires writable DATA_DIR and DATA_STORAGE_DIR mounts.
+for full rebuilds.
 
 Examples:
   $(basename "$0") -d data/                                      Process all realtime events (full rebuild)
@@ -63,9 +54,6 @@ Examples:
   $(basename "$0") -d data/ -e 44683062                          Process a single realtime event
   $(basename "$0") -d data/ -l 5                                 Process last 5 modified realtime events
   $(basename "$0") -d data/ -k data_storage/ -x _ri              Full rebuild excluding dirs ending with "_ri"
-  $(basename "$0") -d data/ -k data_storage/ -m 100 -x _ri       Move events older than 100 days, then full rebuild
-  $(basename "$0") -d data/ -k data_storage/ -m 100 -n EVENTID_DO_NOT_MOVE.txt
-                                                                  Move old events except IDs listed in the file
   $(basename "$0") -d data/ --exclude-dir-end _ri                Same exclusion, using long option
   $(basename "$0") -h                                            Show this help
 EOF
@@ -175,9 +163,6 @@ EVENTS_JSON_TMP=${WORKDIR}/events.json.tmp
 SINGLE_EVENT_ID=""
 LAST_EVENTS=""
 EXCLUDE_DIR_END=""
-MOVE_DAYS=""
-NO_MOVE_IDS_FILE=""
-NO_MOVE_IDS=()
 # Array to track events with time parsing issues
 EVENTS_WITH_TIME_PARSING=()
 # Array to track excluded directories
@@ -215,22 +200,6 @@ while [ $# -gt 0 ]; do
             DATA_STORAGE_DIR="${1#*=}"
             shift
             ;;
-        --move-days)
-            MOVE_DAYS="$2"
-            shift 2
-            ;;
-        --move-days=*)
-            MOVE_DAYS="${1#*=}"
-            shift
-            ;;
-        --no-move)
-            NO_MOVE_IDS_FILE="$2"
-            shift 2
-            ;;
-        --no-move=*)
-            NO_MOVE_IDS_FILE="${1#*=}"
-            shift
-            ;;
         *)
             ARGS+=("$1")
             shift
@@ -240,15 +209,11 @@ done
 set -- "${ARGS[@]}"
 
 # Parse arguments
-while getopts "d:e:l:x:k:m:n:h" opt; do
+while getopts "d:e:l:x:k:h" opt; do
   case $opt in
     d) DATA_DIR="$OPTARG"
     ;;
     k) DATA_STORAGE_DIR="$OPTARG"
-    ;;
-    m) MOVE_DAYS="$OPTARG"
-    ;;
-    n) NO_MOVE_IDS_FILE="$OPTARG"
     ;;
     e) SINGLE_EVENT_ID="$OPTARG"
     ;;
@@ -264,26 +229,6 @@ while getopts "d:e:l:x:k:m:n:h" opt; do
     ;;
   esac
 done
-
-# Function to verify directory writability by doing a real create/remove test.
-# Some mounted filesystems can make test -w return false even when writes work.
-ensure_directory_writable() {
-    local dir=$1
-    local label=$2
-    local tmp_dir="${dir%/}/.process_events_write_test.$$.$RANDOM"
-
-    if ! mkdir "$tmp_dir" 2>/dev/null; then
-        echo "Error: $label must allow directory creation when -m/--move-days is used: $dir" >&2
-        return 1
-    fi
-
-    if ! rmdir "$tmp_dir" 2>/dev/null; then
-        echo "Error: $label must allow directory removal when -m/--move-days is used: $dir" >&2
-        return 1
-    fi
-
-    return 0
-}
 
 # Validate required argument
 if [ -z "$DATA_DIR" ]; then
@@ -301,35 +246,6 @@ if [ -n "$SINGLE_EVENT_ID" ] && [ -n "$LAST_EVENTS" ]; then
     exit 1
 fi
 
-# Validate -m is a positive integer and compatible only with full rebuilds
-if [ -n "$MOVE_DAYS" ]; then
-    if ! [[ "$MOVE_DAYS" =~ ^[0-9]+$ ]] || [ "$MOVE_DAYS" -le 0 ]; then
-        echo "Error: -m/--move-days requires a positive integer" >&2
-        exit 1
-    fi
-
-    if [ -n "$SINGLE_EVENT_ID" ] || [ -n "$LAST_EVENTS" ]; then
-        echo "Error: -m/--move-days is valid only for full rebuilds (do not use it with -e or -l)" >&2
-        echo "" >&2
-        usage >&2
-        exit 1
-    fi
-
-    if [ -z "$DATA_STORAGE_DIR" ]; then
-        echo "Error: -m/--move-days requires -k/--data-storage-dir" >&2
-        echo "" >&2
-        usage >&2
-        exit 1
-    fi
-fi
-
-if [ -n "$NO_MOVE_IDS_FILE" ] && [ -z "$MOVE_DAYS" ]; then
-    echo "Error: -n/--no-move is valid only when -m/--move-days is used" >&2
-    echo "" >&2
-    usage >&2
-    exit 1
-fi
-
 # Validate storage directory use
 if [ -n "$DATA_STORAGE_DIR" ]; then
     if [ -n "$SINGLE_EVENT_ID" ] || [ -n "$LAST_EVENTS" ]; then
@@ -341,29 +257,6 @@ if [ -n "$DATA_STORAGE_DIR" ]; then
 
     if [ ! -d "$DATA_STORAGE_DIR" ]; then
         echo "Error: DATA_STORAGE_DIR does not exist or is not a directory: $DATA_STORAGE_DIR" >&2
-        exit 1
-    fi
-fi
-
-# Validate move directory permissions
-if [ -n "$MOVE_DAYS" ]; then
-    if [ ! -d "$DATA_DIR" ]; then
-        echo "Error: DATA_DIR does not exist or is not a directory: $DATA_DIR" >&2
-        exit 1
-    fi
-
-    ensure_directory_writable "$DATA_DIR" "DATA_DIR" || exit 1
-    ensure_directory_writable "$DATA_STORAGE_DIR" "DATA_STORAGE_DIR" || exit 1
-fi
-
-if [ -n "$NO_MOVE_IDS_FILE" ]; then
-    if [ ! -f "$NO_MOVE_IDS_FILE" ]; then
-        echo "Error: -n/--no-move file does not exist or is not a regular file: $NO_MOVE_IDS_FILE" >&2
-        exit 1
-    fi
-
-    if ! cat "$NO_MOVE_IDS_FILE" >/dev/null 2>&1; then
-        echo "Error: -n/--no-move file cannot be opened for reading: $NO_MOVE_IDS_FILE" >&2
         exit 1
     fi
 fi
@@ -400,288 +293,6 @@ is_excluded() {
         return 0
     fi
     return 1
-}
-
-# Function to trim leading and trailing whitespace
-trim_spaces() {
-    local value=$1
-    value="${value#"${value%%[![:space:]]*}"}"
-    value="${value%"${value##*[![:space:]]}"}"
-    printf '%s' "$value"
-}
-
-# Function to normalize an event directory name to its base event ID.
-# Reported Intensity directories follow their base event for move decisions.
-normalize_event_base_id() {
-    local event_id
-    event_id=$(trim_spaces "$1")
-
-    if [[ "$event_id" == *_ri ]]; then
-        event_id="${event_id%_ri}"
-    fi
-
-    printf '%s' "$event_id"
-}
-
-# Function to load protected event IDs from -n/--no-move file.
-# Empty lines and lines starting with "#" are ignored.
-load_no_move_ids() {
-    local line
-
-    NO_MOVE_IDS=()
-
-    if [ -z "$NO_MOVE_IDS_FILE" ]; then
-        return 0
-    fi
-
-    while IFS= read -r line || [ -n "$line" ]; do
-        line=$(trim_spaces "$line")
-
-        if [ -z "$line" ] || [[ "$line" == \#* ]]; then
-            continue
-        fi
-
-        NO_MOVE_IDS+=("$line")
-    done < "$NO_MOVE_IDS_FILE"
-
-    echo_date "Loaded ${#NO_MOVE_IDS[@]} protected event ID(s) from $NO_MOVE_IDS_FILE"
-}
-
-# Function to check if an event is protected by -n/--no-move
-# Parameters:
-#   $1 - event_id: directory name to check
-# Returns: 0 if protected, 1 if not protected
-is_no_move_protected() {
-    local event_id=$1
-    local event_base
-    local protected_id
-    local protected_base
-
-    if [ ${#NO_MOVE_IDS[@]} -eq 0 ]; then
-        return 1
-    fi
-
-    event_base=$(normalize_event_base_id "$event_id")
-
-    for protected_id in "${NO_MOVE_IDS[@]}"; do
-        protected_base=$(normalize_event_base_id "$protected_id")
-        if [ -n "$protected_base" ] && [ "$event_base" = "$protected_base" ]; then
-            return 0
-        fi
-    done
-
-    return 1
-}
-
-# Function to left-pad a numeric date/time component to two digits
-pad2() {
-    local value=$1
-
-    if ! [[ "$value" =~ ^[0-9]+$ ]]; then
-        return 1
-    fi
-
-    printf '%02d' "$((10#$value))"
-}
-
-# Function to normalize ISO 8601 UTC origin times to YYYY-MM-DDTHH:MM:SSZ
-normalize_origin_time_iso() {
-    local value
-    value=$(trim_spaces "$1")
-
-    if [[ "$value" =~ ^([0-9]{4}-[0-9]{2}-[0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2})(\.[0-9]+)?Z$ ]]; then
-        printf '%sT%sZ' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}"
-        return 0
-    fi
-
-    return 1
-}
-
-# Function to convert an ISO 8601 UTC timestamp to epoch seconds.
-# Supports GNU date (Linux) and BSD date (macOS).
-origin_time_to_epoch() {
-    local iso
-    local epoch
-
-    iso=$(normalize_origin_time_iso "$1") || return 1
-
-    if epoch=$(date -u -d "$iso" +%s 2>/dev/null); then
-        printf '%s' "$epoch"
-        return 0
-    fi
-
-    if epoch=$(date -u -j -f "%Y-%m-%dT%H:%M:%SZ" "$iso" +%s 2>/dev/null); then
-        printf '%s' "$epoch"
-        return 0
-    fi
-
-    return 1
-}
-
-# Function to extract OriginTime epoch seconds directly from current/event.xml
-# Parameters:
-#   $1 - event_xml: path to event.xml
-# Returns: prints epoch seconds and returns 0 on success
-get_event_origin_epoch() {
-    local event_xml=$1
-    local time_attr
-    local epoch
-    local year
-    local month
-    local day
-    local hour
-    local minute
-    local second
-    local month_padded
-    local day_padded
-    local hour_padded
-    local minute_padded
-    local second_padded
-    local iso
-
-    time_attr=$(xmllint --xpath "string(/earthquake/@time)" "$event_xml" 2>/dev/null)
-    if [ -n "$time_attr" ]; then
-        if epoch=$(origin_time_to_epoch "$time_attr"); then
-            printf '%s' "$epoch"
-            return 0
-        fi
-    fi
-
-    year=$(xmllint --xpath "string(/earthquake/@year)" "$event_xml" 2>/dev/null)
-    month=$(xmllint --xpath "string(/earthquake/@month)" "$event_xml" 2>/dev/null)
-    day=$(xmllint --xpath "string(/earthquake/@day)" "$event_xml" 2>/dev/null)
-    hour=$(xmllint --xpath "string(/earthquake/@hour)" "$event_xml" 2>/dev/null)
-    minute=$(xmllint --xpath "string(/earthquake/@minute)" "$event_xml" 2>/dev/null)
-    second=$(xmllint --xpath "string(/earthquake/@second)" "$event_xml" 2>/dev/null)
-
-    if ! [[ "$year" =~ ^[0-9]{4}$ ]] || [ -z "$month" ] || [ -z "$day" ]; then
-        return 1
-    fi
-
-    hour=${hour:-0}
-    minute=${minute:-0}
-    second=${second:-0}
-
-    month_padded=$(pad2 "$month") || return 1
-    day_padded=$(pad2 "$day") || return 1
-    hour_padded=$(pad2 "$hour") || return 1
-    minute_padded=$(pad2 "$minute") || return 1
-    second_padded=$(pad2 "$second") || return 1
-
-    iso="${year}-${month_padded}-${day_padded}T${hour_padded}:${minute_padded}:${second_padded}Z"
-    origin_time_to_epoch "$iso"
-}
-
-# Function to move one event directory to DATA_STORAGE_DIR, overwriting any
-# existing destination directory as requested.
-move_directory_to_storage() {
-    local event_id=$1
-    local source_path="${DATA_DIR%/}/${event_id}"
-    local destination_path="${DATA_STORAGE_DIR%/}/${event_id}"
-
-    if [ -z "$event_id" ] || [ "$destination_path" = "${DATA_STORAGE_DIR%/}" ]; then
-        echo "Error: refusing to move invalid event directory name: '$event_id'" >&2
-        return 1
-    fi
-
-    if [ ! -d "$source_path" ]; then
-        echo "Warning: source directory not found while moving $event_id: $source_path" >&2
-        return 1
-    fi
-
-    if [ -e "$destination_path" ]; then
-        echo "Warning: overwriting existing storage directory for $event_id: $destination_path" >&2
-        if ! rm -rf "$destination_path"; then
-            echo "Error: failed to remove existing storage directory for $event_id: $destination_path" >&2
-            return 1
-        fi
-        MOVE_OVERWRITTEN=$((MOVE_OVERWRITTEN + 1))
-    fi
-
-    if ! mv "$source_path" "$destination_path"; then
-        echo "Error: failed to move $event_id from $source_path to $destination_path" >&2
-        return 1
-    fi
-
-    return 0
-}
-
-# Function to move old realtime event directories to historical storage
-move_old_events_to_storage() {
-    local now_epoch
-    local cutoff_epoch
-    local event_xml
-    local event_id
-    local ri_event_id
-    local origin_epoch
-    local found_events=0
-
-    MOVE_TOTAL=0
-    MOVE_MOVED=0
-    MOVE_RI_MOVED=0
-    MOVE_RECENT=0
-    MOVE_PROTECTED=0
-    MOVE_PARSE_ERRORS=0
-    MOVE_ERRORS=0
-    MOVE_OVERWRITTEN=0
-
-    now_epoch=$(date -u +%s)
-    cutoff_epoch=$((now_epoch - (MOVE_DAYS * 86400)))
-
-    echo_date "Moving events older than ${MOVE_DAYS} day(s) from $DATA_DIR to $DATA_STORAGE_DIR"
-    load_no_move_ids
-
-    while IFS= read -r event_xml; do
-        found_events=1
-        event_id=$(basename "$(dirname "$(dirname "$event_xml")")")
-
-        # Reported Intensity directories are moved only together with their base event.
-        if [[ "$event_id" == *_ri ]]; then
-            continue
-        fi
-
-        MOVE_TOTAL=$((MOVE_TOTAL + 1))
-
-        if is_no_move_protected "$event_id"; then
-            MOVE_PROTECTED=$((MOVE_PROTECTED + 1))
-            echo "Skipping $event_id: protected by -n/--no-move" >&2
-            continue
-        fi
-
-        if ! origin_epoch=$(get_event_origin_epoch "$event_xml"); then
-            MOVE_PARSE_ERRORS=$((MOVE_PARSE_ERRORS + 1))
-            echo "Warning: could not parse OriginTime for $event_id from $event_xml; not moving" >&2
-            continue
-        fi
-
-        if [ "$origin_epoch" -ge "$cutoff_epoch" ]; then
-            MOVE_RECENT=$((MOVE_RECENT + 1))
-            continue
-        fi
-
-        if move_directory_to_storage "$event_id"; then
-            MOVE_MOVED=$((MOVE_MOVED + 1))
-            echo "Moved $event_id to storage" >&2
-
-            ri_event_id="${event_id}_ri"
-            if [ -d "${DATA_DIR%/}/${ri_event_id}" ]; then
-                if move_directory_to_storage "$ri_event_id"; then
-                    MOVE_RI_MOVED=$((MOVE_RI_MOVED + 1))
-                    echo "Moved ${ri_event_id} to storage together with $event_id" >&2
-                else
-                    MOVE_ERRORS=$((MOVE_ERRORS + 1))
-                fi
-            fi
-        else
-            MOVE_ERRORS=$((MOVE_ERRORS + 1))
-        fi
-    done < <(find "$DATA_DIR" -maxdepth 3 -path "*/current/event.xml" -type f | sort)
-
-    if [ "$found_events" -eq 0 ]; then
-        echo "No events found in $DATA_DIR for move evaluation" >&2
-    fi
-
-    echo_date "Move summary: evaluated=${MOVE_TOTAL}, moved=${MOVE_MOVED}, moved_ri=${MOVE_RI_MOVED}, recent=${MOVE_RECENT}, protected=${MOVE_PROTECTED}, parse_errors=${MOVE_PARSE_ERRORS}, overwritten=${MOVE_OVERWRITTEN}, move_errors=${MOVE_ERRORS}"
 }
 
 # Function to check whether Reported Intensity data exists for an event
@@ -843,10 +454,6 @@ fi
 
 # Capture start time
 START_TIME=$(date +%s)
-
-if [ -n "$MOVE_DAYS" ]; then
-    move_old_events_to_storage
-fi
 
 # Main logic
 if [ -n "$SINGLE_EVENT_ID" ]; then
