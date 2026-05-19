@@ -16,7 +16,7 @@
 | ![SED](images/contributors-eu/SED.png) | Swiss Seismological Service (SED) | Carlo Cauzzi, Philipp Kästli, John Clinton |
 | ![Univ. Tirana](images/contributors-eu/Univ_Tirana.png) | Department of Seismology, Institute of Geosciences, Polytechnic University of Tirana | Edmond Dushi, Besian Rama |
 | ![ROB](images/contributors-eu/ROB.jpg) | Royal Observatory of Belgium (ROB) | Thomas Lecocq, Kris Vanneste, Koen Van Noten |
-| ![HGI](images/contributors-eu/HGI.jpg) | Croatian Seismological Survey (HGI) | Krešimir Kuk |
+| ![HGI](images/contributors-eu/HGI.jpg) | Croatian Seismological Survey (GFZ) | Krešimir Kuk |
 | ![BCSF-RéNaSS](images/contributors-eu/BCSFReNaSS.jpg) | BCSF-Rénass Epos-France | Marc Grunberg, Véronique Mendel, Antoine Schlupp, Christophe Sira |
 | ![ITSAK](images/contributors-eu/ITSAK.png) | Institute of Engineering Seismology & Earthquake Engineering (ITSAK) | Kiriaki Konstantinidou, Nikolaos Theodoulidis |
 | ![NOA](images/contributors-eu/NOA.png) | National Observatory of Athens (NOA) | Nicos Melis |
@@ -24,7 +24,7 @@
 | ![IHMS](images/contributors-eu/IHMS.jpeg) | Institute of Hydrometeorology and Seismology (IHMS) | Jovan Dedic, Jadranka Mihaljevic |
 | ![IGPAS](images/contributors-eu/IGPAS.jpg) | Institute of Geophysics of the Polish Academy of Sciences | Janusz Mirek, Łukasz Rudziński |
 | ![IPMA](images/contributors-eu/IPMA.png) | Portuguese Institute of the Sea and Atmosphere (IPMA) | Fernando Carrilho |
-| ![Skopje](images/contributors-eu/Skopje.png) | University of Skopje | Dragana Cernih, Radmila Salic |
+| ![Skopje](images/contributors-eu/Skopje.png) | Ss. Cyril and Methodius University in Skopje | Dragana Cernih, Radmila Salic |
 | ![NIEP](images/contributors-eu/INFP.png) | National Institute for Earth Physics (NIEP) | Bogdan Grecu, Constantin Ionescu, Alexandru Marmureanu |
 | ![ARSO](images/contributors-eu/Slovenia.jpg) | Slovenian Environment Agency (ARSO) | Martina Čarman, Polona Zupančič |
 
@@ -44,6 +44,7 @@
 | Remy Bossu | Euro-Mediterranean Seismological Centre (EMSC/CSEM) | France |
 | Robert Steed | Euro-Mediterranean Seismological Centre (EMSC/CSEM) | France |
 | Graeme Weatherill | German Research Centre for Geosciences (GFZ) | Germany |
+| Zafeiria Roumelioti | University of Patras | Greece |
 | Andrea Antonucci | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
 | Mario Locati | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
 | Lucia Luzi | Istituto Nazionale di Geofisica e Vulcanologia (INGV) | Italy |
