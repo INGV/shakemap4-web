@@ -16,7 +16,7 @@
 | ![SED](images/contributors-eu/SED.png) | Swiss Seismological Service (SED) | Carlo Cauzzi, Philipp Kästli, John Clinton |
 | ![Univ. Tirana](images/contributors-eu/Univ_Tirana.png) | Department of Seismology, Institute of Geosciences, Polytechnic University of Tirana | Edmond Dushi, Besian Rama |
 | ![ROB](images/contributors-eu/ROB.jpg) | Royal Observatory of Belgium (ROB) | Thomas Lecocq, Kris Vanneste, Koen Van Noten |
-| ![HGI](images/contributors-eu/HGI.jpg) | Croatian Seismological Survey (GFZ) | Krešimir Kuk |
+| ![HGI](images/contributors-eu/Croatia.png) | Croatian Seismological Survey (GFZ) | Krešimir Kuk |
 | ![BCSF-RéNaSS](images/contributors-eu/BCSFReNaSS.jpg) | BCSF-Rénass Epos-France | Marc Grunberg, Véronique Mendel, Antoine Schlupp, Christophe Sira |
 | ![ITSAK](images/contributors-eu/ITSAK.png) | Institute of Engineering Seismology & Earthquake Engineering (ITSAK) | Kiriaki Konstantinidou, Nikolaos Theodoulidis |
 | ![NOA](images/contributors-eu/NOA.png) | National Observatory of Athens (NOA) | Nicos Melis |
