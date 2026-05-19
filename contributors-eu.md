@@ -1,11 +1,11 @@
 # Contributors
 
 ## DOI and Citation
-**DOI**: 
+**DOI**: https://doi.org/10.13127/shakemap-eu 
 
 **Cite as**:
 ```
---
+ShakeMap-EU working group. (2020, April 3). ShakeMap-EU. Istituto Nazionale di Geofisica e Vulcanologia (INGV). https://doi.org/10.13127/shakemap-eu
 ```
 
 ## Participating Institutes
