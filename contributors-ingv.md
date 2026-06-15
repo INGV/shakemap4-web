@@ -23,3 +23,9 @@ Istituto Nazionale di Geofisica e Vulcanologia (INGV). https://doi.org/10.13127/
 | ![GeoSphere](images/contributors-ingv/GeoSphere.png) | GeoSphere (GeoSphere) | -- |
 | ![SED](images/contributors-ingv/SED.png) | Swiss Seismological Service (SED) | -- |
 | ![DPC-Friuli](images/contributors-ingv/DPC-Friuli.jpg) | Dipartimento della Protezione Civile - Friuli Venezia Giulia (DPC-Friuli) | -- |
+
+## ShakeMap Support Group
+
+| Logo | Name |
+|------|----------|
+|![ESM](images/contributors-ingv/esm_logo_max.png)| ESM (Engineering Strong-Motion Database) | 

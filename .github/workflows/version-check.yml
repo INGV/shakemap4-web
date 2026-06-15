@@ -1,0 +1,69 @@
+name: Check version alignment
+
+on:
+  push:
+    paths:
+      - "js/config-base.js"
+      - "publiccode.yml"
+      - "CHANGELOG.md"
+      - ".github/workflows/version-check.yml"
+  pull_request:
+    paths:
+      - "js/config-base.js"
+      - "publiccode.yml"
+      - "CHANGELOG.md"
+      - ".github/workflows/version-check.yml"
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    name: version alignment
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Compare versions across sources
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Strip an optional leading "v" so "v2.15.0-dev" and "2.15.0-dev" match.
+          normalize() {
+              local VALUE="$1"
+              echo "${VALUE#v}"
+          }
+
+          # js/config-base.js -> version: "v2.15.0-dev"
+          CONFIG_VERSION="$(grep -oE 'version:[[:space:]]*"[^"]*"' js/config-base.js | head -n1 | sed -E 's/.*"([^"]*)".*/\1/')"
+
+          # publiccode.yml -> softwareVersion: v2.15.0-dev
+          PUBLICCODE_VERSION="$(grep -oE '^softwareVersion:[[:space:]]*\S+' publiccode.yml | head -n1 | sed -E 's/^softwareVersion:[[:space:]]*//')"
+
+          # CHANGELOG.md -> first "### Release 2.15.0-dev (...)" entry
+          CHANGELOG_VERSION="$(grep -oE '^###[[:space:]]+Release[[:space:]]+\S+' CHANGELOG.md | head -n1 | sed -E 's/^###[[:space:]]+Release[[:space:]]+//')"
+
+          if [ -z "${CONFIG_VERSION}" ] || [ -z "${PUBLICCODE_VERSION}" ] || [ -z "${CHANGELOG_VERSION}" ]; then
+              echo "::error::Could not extract a version from one of the sources."
+              echo "  js/config-base.js : '${CONFIG_VERSION}'"
+              echo "  publiccode.yml    : '${PUBLICCODE_VERSION}'"
+              echo "  CHANGELOG.md      : '${CHANGELOG_VERSION}'"
+              exit 1
+          fi
+
+          CONFIG_NORM="$(normalize "${CONFIG_VERSION}")"
+          PUBLICCODE_NORM="$(normalize "${PUBLICCODE_VERSION}")"
+          CHANGELOG_NORM="$(normalize "${CHANGELOG_VERSION}")"
+
+          echo "js/config-base.js : ${CONFIG_VERSION} (normalized: ${CONFIG_NORM})"
+          echo "publiccode.yml    : ${PUBLICCODE_VERSION} (normalized: ${PUBLICCODE_NORM})"
+          echo "CHANGELOG.md      : ${CHANGELOG_VERSION} (normalized: ${CHANGELOG_NORM})"
+
+          if [ "${CONFIG_NORM}" != "${PUBLICCODE_NORM}" ] || [ "${CONFIG_NORM}" != "${CHANGELOG_NORM}" ]; then
+              echo "::error::Version mismatch across sources. Align js/config-base.js, publiccode.yml and CHANGELOG.md."
+              exit 1
+          fi
+
+          echo "All versions are aligned: ${CONFIG_NORM}"

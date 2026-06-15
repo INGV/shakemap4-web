@@ -1438,8 +1438,32 @@ footer {
     background-color: #f1f1f1;
     font-weight: bold;
     cursor: default;
-    pointer-events: none;
-    /* Make header not clickable */
+}
+
+.collapsible.header-row:hover {
+    background-color: #f1f1f1;
+    /* Header itself is not a toggle; only its sortable cells react */
+}
+
+/* Sortable header cells (click to sort) */
+.sortable-col {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.sortable-col:hover {
+    color: #000;
+}
+
+.sortable-col i {
+    font-size: 11px;
+    color: #999;
+    margin-left: 2px;
+}
+
+.sortable-col.active-sort i {
+    color: #333;
 }
 
 /* Content (Hidden by default) */

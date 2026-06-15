@@ -324,6 +324,20 @@ function plot_data(data, regrArr, comp_id, newPlot) {
     x.domain([Math.round(distance_min), distance_max]);
     y.domain([yMin - 0.1 * yMin, yMax + 0.1 * yMax]);
 
+    // Light gray grid lines (drawn first so they sit behind the data)
+    svg.append("g")
+        .attr("class", "grid grid-x")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x).ticks(5).tickSize(-height).tickFormat(""))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").attr("stroke", "#d3d3d3").attr("stroke-width", 0.5));
+
+    svg.append("g")
+        .attr("class", "grid grid-y")
+        .call(d3.axisLeft(y).ticks(tickNumber).tickSize(-width).tickFormat(""))
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").attr("stroke", "#d3d3d3").attr("stroke-width", 0.5));
+
     // Regression standard deviation band (gray filled area)
     if (stdArr.length > 0) {
         // Create area generator for the standard deviation band
