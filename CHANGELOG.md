@@ -2,6 +2,9 @@
 
 ### Release 2.15.0-dev (2026-06-15)
   - Add sortable columns to the Station List tables (seismic and reported intensity)
+  - Add light gray grid lines to the analysis regression plots
+  - Fix portal version shown in the footer
+  - Add CI check for version alignment across config-base.js, publiccode.yml and CHANGELOG.md
   - Update contributors-ingv.md
   - Add ESM logo
   - Update disclaimer-ingv.md
