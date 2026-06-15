@@ -1,6 +1,7 @@
 # Release Notes
 
 ### Release 2.15.0-dev (2026-06-15)
+  - Add sortable columns to the Station List tables (seismic and reported intensity)
   - Update contributors-ingv.md
   - Add ESM logo
   - Update disclaimer-ingv.md
