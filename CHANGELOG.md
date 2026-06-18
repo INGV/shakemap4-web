@@ -4,7 +4,7 @@
   - . . .
 
 ### Release 2.16.0 (2026-06-18)
-  - . . .
+  - Update scientific-background-ingv.md
 
 ### Release 2.15.0 (2026-06-15)
   - Add sortable columns to the Station List tables (seismic and reported intensity)
