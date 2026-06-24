@@ -19,7 +19,6 @@ RUN rm -rf /usr/share/nginx/html/*
 
 # Copy application files to nginx web root
 COPY index.html /usr/share/nginx/html/
-COPY analysis.html /usr/share/nginx/html/
 COPY disclaimer*.md /usr/share/nginx/html/
 COPY contributors*.md /usr/share/nginx/html/
 COPY scientific-background*.md /usr/share/nginx/html/
