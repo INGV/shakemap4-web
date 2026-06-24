@@ -2,6 +2,40 @@
 // Modern implementation using D3.js v7
 
 const ANALYSIS_DATA_DIR = 'data';
+
+// Single source of truth for the data-selection thresholds used in the plots.
+// Both the filtering logic and the user-facing "Applied filters" note read from
+// here, so changing a value updates the plots and the note together.
+const ANALYSIS_FILTERS = {
+    distanceMinKm: 1,
+    distanceMaxKm: 301,
+    pgaMin: 0.0098,   // %g, applied to seismic (instrumental) stations only
+    pgvMin: 0.00098,  // cm/s, applied to seismic (instrumental) stations only
+};
+
+// Coerce a station property to a finite number, or null. ShakeMap station lists
+// encode "missing" as the literal string "null" (not JSON null) for macroseismic
+// points without instrumental ground motion, so a plain truthiness check is not
+// enough: "null" is truthy and would later blow up on .toFixed().
+function toNum(value) {
+    if (value === null || value === undefined || value === 'null') return null;
+    const num = parseFloat(value);
+    return Number.isFinite(num) ? num : null;
+}
+
+// Build the per-tab "Applied filters" caption shown under each plot. Values are
+// interpolated from ANALYSIS_FILTERS so the note never drifts from the logic.
+function filtersNoteText(comp_id) {
+    const f = ANALYSIS_FILTERS;
+    const dist = `epicentral distance ${f.distanceMinKm}–${f.distanceMaxKm} km`;
+    const gm = `PGA > ${f.pgaMin} %g and PGV > ${f.pgvMin} cm/s`;
+    if (comp_id === 'intensity') {
+        return `Applied filters: ${dist}. Seismic stations also require ${gm}; ` +
+            `reported-intensity points are selected by intensity value only.`;
+    }
+    return `Applied filters: ${dist}, ${gm}. Instrumental (seismic) stations only.`;
+}
+
 let analysisEventId = null;
 let analysisEventYear = null;
 let currentAnalysisData = [];
@@ -75,6 +109,14 @@ function switchAnalysisTab(tabName) {
     });
     const plotArea = document.getElementById(tabName);
     if (plotArea) plotArea.classList.add('active');
+
+    // The "Show Reported Intensity" toggle only affects the intensity plot, so
+    // hide it on the PGA/PGV tabs where macroseismic points are never shown.
+    // Null-safe: legacy pages without this wrapper simply keep the checkbox.
+    const dyfiControlGroup = document.getElementById('dyfiControlGroup');
+    if (dyfiControlGroup) {
+        dyfiControlGroup.style.display = (tabName === 'intensity') ? '' : 'none';
+    }
 }
 
 // Change plot based on controls
@@ -99,31 +141,47 @@ async function stationList(newPlot, regrType, showDYFI) {
 
         // Process station data
         const objArr = [];
-        const dontUseStationType = showDYFI ? '' : 'macroseismic';
+        const f = ANALYSIS_FILTERS;
 
         stations.forEach(station => {
             const props = station.properties || {};
+            const isMacro = props.station_type === 'macroseismic';
 
-            if (props.distance < 301 &&
-                props.distance > 1 &&
-                props.pga > 0.0098 &&
-                props.pgv > 0.00098 &&
-                props.station_type !== dontUseStationType) {
+            // Normalize numeric fields up front: "null"/missing become real null.
+            const distance = toNum(props.distance);
+            const intensity = toNum(props.intensity);
+            const pga = toNum(props.pga);
+            const pgv = toNum(props.pgv);
 
-                objArr.push({
-                    id: station.id,
-                    distance: props.distance,
-                    intensity: props.intensity,
-                    pga: props.pga,
-                    pgv: props.pgv,
-                    color: intColors_USGS[Math.round(props.intensity)] || 'black',
-                    intensityPrediction: getPredictedValue('mmi', props.predictions),
-                    pgaPrediction: getPredictedValue('pga', props.predictions),
-                    pgvPrediction: getPredictedValue('pgv', props.predictions),
-                    vs30: props.vs30,
-                    obsType: props.station_type
-                });
+            // Distance window applies to both station types.
+            if (distance === null ||
+                distance <= f.distanceMinKm ||
+                distance >= f.distanceMaxKm) {
+                return;
             }
+
+            if (isMacro) {
+                // Reported-intensity points: gated by the "Show Reported Intensity"
+                // toggle and selected by intensity only (no PGA/PGV requirement).
+                if (!showDYFI || intensity === null) return;
+            } else {
+                // Seismic (instrumental) stations: require minimum ground motion.
+                if (!(pga > f.pgaMin) || !(pgv > f.pgvMin)) return;
+            }
+
+            objArr.push({
+                id: station.id,
+                distance: distance,
+                intensity: intensity,
+                pga: pga,
+                pgv: pgv,
+                color: intColors_USGS[Math.round(intensity)] || 'black',
+                intensityPrediction: getPredictedValue('mmi', props.predictions),
+                pgaPrediction: getPredictedValue('pga', props.predictions),
+                pgvPrediction: getPredictedValue('pgv', props.predictions),
+                vs30: toNum(props.vs30),
+                obsType: props.station_type
+            });
         });
 
         currentAnalysisData = objArr;
@@ -132,10 +190,11 @@ async function stationList(newPlot, regrType, showDYFI) {
         if (await fileExists(`${ANALYSIS_DATA_DIR}/${analysisEventId}/current/products/attenuation_curves.json`)) {
             await getRegression(objArr, newPlot, regrType);
         } else {
-            // Plot without regression
+            // Plot without regression. PGA/PGV are seismic-only (see getRegression).
+            const seismicArr = objArr.filter(o => o.obsType === 'seismic');
             plot_data(clean_array(objArr, 'intensity'), [], 'intensity', newPlot);
-            plot_data(clean_array(objArr, 'pga'), [], 'pga', false);
-            plot_data(clean_array(objArr, 'pgv'), [], 'pgv', false);
+            plot_data(clean_array(seismicArr, 'pga'), [], 'pga', false);
+            plot_data(clean_array(seismicArr, 'pgv'), [], 'pgv', false);
         }
 
     } catch (error) {
@@ -175,44 +234,59 @@ async function getRegression(obsArr, newPlot, regrType) {
         if (!response.ok) throw new Error('Attenuation curves not found');
 
         const regrPoints = await response.json();
-        const regrArr = [];
-
-        const distance_min = Math.min(...obsArr.map(o => o.distance), 300);
-        const distance_max = Math.max(...obsArr.map(o => o.distance), 1);
-
         const distances = regrPoints.distances.repi;
         const gmpe = regrPoints.gmpe[regrType];
 
-        for (let i = 0; i < distances.length; i++) {
-            if (distances[i] < 301 &&
-                distances[i] > distance_min &&
-                distances[i] < distance_max) {
+        // Per-plot observed datasets. Reported-intensity (macroseismic) points
+        // appear only in the intensity plot; PGA/PGV show instrumental (seismic)
+        // stations only, regardless of any derived pga/pgv they may carry.
+        const seismicArr = obsArr.filter(o => o.obsType === 'seismic');
+        const intensityObs = clean_array(obsArr, 'intensity');
+        const pgaObs = clean_array(seismicArr, 'pga');
+        const pgvObs = clean_array(seismicArr, 'pgv');
 
-                regrArr.push({
-                    distance: distances[i],
-                    intensity: gmpe.MMI.mean[i],
-                    intensityStd: gmpe.MMI.stddev[i],
-                    pga: 100 * Math.exp(gmpe.PGA.mean[i]),
-                    pgaStd: Math.exp(gmpe.PGA.stddev[i]),
-                    pgv: Math.exp(gmpe.PGV.mean[i]),
-                    pgvStd: Math.exp(gmpe.PGV.stddev[i])
-                });
-            }
-        }
-
-        currentRegressionData = regrArr;
-
-        plot_data(clean_array(obsArr, 'intensity'), clean_array(regrArr, 'intensity'), 'intensity', newPlot);
-        plot_data(clean_array(obsArr, 'pga'), clean_array(regrArr, 'pga'), 'pga', false);
-        plot_data(clean_array(obsArr, 'pgv'), clean_array(regrArr, 'pgv'), 'pgv', false);
+        // Each plot's regression curve spans only the distance range of the
+        // points actually shown in that plot.
+        plot_data(intensityObs, buildRegrArr(distances, gmpe, intensityObs), 'intensity', newPlot);
+        plot_data(pgaObs, buildRegrArr(distances, gmpe, pgaObs), 'pga', false);
+        plot_data(pgvObs, buildRegrArr(distances, gmpe, pgvObs), 'pgv', false);
 
     } catch (error) {
         console.error('Error loading regression:', error);
         // Plot without regression
+        const seismicArr = obsArr.filter(o => o.obsType === 'seismic');
         plot_data(clean_array(obsArr, 'intensity'), [], 'intensity', newPlot);
-        plot_data(clean_array(obsArr, 'pga'), [], 'pga', false);
-        plot_data(clean_array(obsArr, 'pgv'), [], 'pgv', false);
+        plot_data(clean_array(seismicArr, 'pga'), [], 'pga', false);
+        plot_data(clean_array(seismicArr, 'pgv'), [], 'pgv', false);
     }
+}
+
+// Build the GMPE regression points limited to the distance range spanned by the
+// observed points shown in a given plot. Returns [] when there are no points.
+function buildRegrArr(distances, gmpe, obs) {
+    if (!obs || obs.length === 0) return [];
+
+    const distMin = Math.min(...obs.map(o => o.distance));
+    const distMax = Math.max(...obs.map(o => o.distance));
+
+    const regrArr = [];
+    for (let i = 0; i < distances.length; i++) {
+        if (distances[i] < ANALYSIS_FILTERS.distanceMaxKm &&
+            distances[i] > distMin &&
+            distances[i] < distMax) {
+
+            regrArr.push({
+                distance: distances[i],
+                intensity: gmpe.MMI.mean[i],
+                intensityStd: gmpe.MMI.stddev[i],
+                pga: 100 * Math.exp(gmpe.PGA.mean[i]),
+                pgaStd: Math.exp(gmpe.PGA.stddev[i]),
+                pgv: Math.exp(gmpe.PGV.mean[i]),
+                pgvStd: Math.exp(gmpe.PGV.stddev[i])
+            });
+        }
+    }
+    return regrArr;
 }
 
 // Clean array from null values
@@ -486,14 +560,21 @@ function plot_data(data, regrArr, comp_id, newPlot) {
             }, 100);
         });
 
-    // Legend
+    // Legend. The "Reported Intensity" (circle) entry is only meaningful in the
+    // intensity plot; PGA/PGV show seismic stations only, so we drop that row and
+    // shrink the box accordingly.
     const legendX = width - width * 0.21;
+    const showReportedRow = comp_id === 'intensity';
+    // Vertical anchor of the "Predicted" row depends on whether the reported row
+    // is present.
+    const predictedY = showReportedRow ? 65 : 40;
+    const legendHeight = showReportedRow ? 90 : 65;
 
     svg.append("rect")
         .attr("x", legendX)
         .attr("y", 0)
         .attr("width", 200)
-        .attr("height", 90)
+        .attr("height", legendHeight)
         .style("stroke", "#000000")
         .attr("stroke-width", 2)
         .style("fill", "#F0E0C0");
@@ -504,19 +585,6 @@ function plot_data(data, regrArr, comp_id, newPlot) {
         .style("stroke", "#000000")
         .attr("transform", `translate(${legendX + 15}, 15)`);
 
-    svg.append("path")
-        .attr("d", symbolGenerator.type(d3.symbolCircle).size(64)())
-        .style("fill", "#FFFFFF")
-        .style("stroke", "#000000")
-        .attr("transform", `translate(${legendX + 15}, 40)`);
-
-    svg.append("rect")
-        .attr("x", legendX + 8)
-        .attr("y", 69)
-        .attr("width", 20)
-        .attr("height", 4)
-        .style("fill", "#A971A8");
-
     svg.append("text")
         .attr("x", legendX + 35)
         .attr("y", 15)
@@ -524,23 +592,38 @@ function plot_data(data, regrArr, comp_id, newPlot) {
         .style("font-size", "15px")
         .attr("alignment-baseline", "middle");
 
-    svg.append("text")
-        .attr("x", legendX + 35)
-        .attr("y", 40)
-        .text("Reported Intensity")
-        .style("font-size", "15px")
-        .attr("alignment-baseline", "middle");
+    if (showReportedRow) {
+        svg.append("path")
+            .attr("d", symbolGenerator.type(d3.symbolCircle).size(64)())
+            .style("fill", "#FFFFFF")
+            .style("stroke", "#000000")
+            .attr("transform", `translate(${legendX + 15}, 40)`);
+
+        svg.append("text")
+            .attr("x", legendX + 35)
+            .attr("y", 40)
+            .text("Reported Intensity")
+            .style("font-size", "15px")
+            .attr("alignment-baseline", "middle");
+    }
+
+    svg.append("rect")
+        .attr("x", legendX + 8)
+        .attr("y", predictedY + 4)
+        .attr("width", 20)
+        .attr("height", 4)
+        .style("fill", "#A971A8");
 
     svg.append("text")
         .attr("x", legendX + 35)
-        .attr("y", 65)
+        .attr("y", predictedY)
         .text("Predicted")
         .style("font-size", "15px")
         .attr("alignment-baseline", "middle");
 
     svg.append("text")
         .attr("x", legendX + 35)
-        .attr("y", 78)
+        .attr("y", predictedY + 13)
         .text("(+/- 1 std dev)")
         .style("font-size", "15px")
         .attr("alignment-baseline", "middle");
@@ -575,4 +658,16 @@ function plot_data(data, regrArr, comp_id, newPlot) {
         .style("text-anchor", "middle")
         .style("font-size", "14px")
         .text(yVar);
+
+    // Per-tab "Applied filters" caption under the plot, describing the exact
+    // data-selection rules used for this component. Text is derived from
+    // ANALYSIS_FILTERS so it stays in sync with the filtering logic above.
+    plotElement.append("div")
+        .attr("class", "analysis-filters-note")
+        .style("margin-top", "8px")
+        .style("font-size", "12px")
+        .style("color", "#666")
+        .style("font-style", "italic")
+        .style("text-align", "center")
+        .text(filtersNoteText(comp_id));
 }
