@@ -1,7 +1,11 @@
 # Release Notes
 
 ### Release 2.17.0-dev (2026-06-18)
-  - . . .
+  - Plot all reported-intensity (macroseismic) points in the Analysis View intensity chart, selected by intensity instead of PGA/PGV thresholds
+  - Keep the PGA/PGV analysis charts limited to instrumental (seismic) stations
+  - Hide the "Show Reported Intensity" toggle on the PGA/PGV analysis tabs and reorder controls so "Select Site Class" stays aligned
+  - Add a per-tab note describing the applied data filters under each analysis chart
+  - Fix a tooltip crash on macroseismic points caused by the string "null" in PGA/PGV fields
 
 ### Release 2.16.0 (2026-06-18)
   - Update scientific-background-ingv.md
