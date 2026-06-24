@@ -86,9 +86,9 @@ if [ "$PROCESS_ALL_DATA_FIRST_TIME" = "true" ]; then
     # so that events.json is available quickly and the portal is usable right away.
     # The second run rebuilds the full dataset in the background without blocking
     # nginx startup — it may take a long time on large data directories.
-    "$PROCESS_EVENTS_SCRIPT" --data-realtime-dir "$REALTIME_DATA_DIR" -l 20
+    "$PROCESS_EVENTS_SCRIPT" --data-realtime-dir "$REALTIME_DATA_DIR" -l 20 -x _ri
     mapfile -t FULL_REBUILD_ARGS < <(get_full_rebuild_args)
-    "$PROCESS_EVENTS_SCRIPT" "${FULL_REBUILD_ARGS[@]}" &
+    "$PROCESS_EVENTS_SCRIPT" "${FULL_REBUILD_ARGS[@]}" -x _ri &
 
     echo "All data processed."
 else
