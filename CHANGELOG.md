@@ -7,6 +7,7 @@
   - Add a per-tab note describing the applied data filters under each analysis chart
   - Fix a tooltip crash on macroseismic points caused by the string "null" in PGA/PGV fields
   - Remove the unused legacy analysis.html page
+  - Rename the Analysis View tooltip "MMI" labels to "Intensity"
 
 ### Release 2.16.0 (2026-06-18)
   - Update scientific-background-ingv.md

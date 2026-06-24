@@ -500,8 +500,8 @@ function plot_data(data, regrArr, comp_id, newPlot) {
                 `<strong>Station ID:</strong> ${d.id}<br/>` +
                 `<strong>Station type:</strong> ${d.obsType}<br/>` +
                 `<strong>Distance:</strong> ${d.distance.toFixed(3)} km<br/>` +
-                `<strong>MMI:</strong> ${d.intensity ? d.intensity.toFixed(1) : 'N/A'}<br/>` +
-                `<strong>MMI predicted:</strong> ${d.intensityPrediction ? d.intensityPrediction.toFixed(4) : 'N/A'}<br/>` +
+                `<strong>Intensity:</strong> ${d.intensity ? d.intensity.toFixed(1) : 'N/A'}<br/>` +
+                `<strong>Intensity predicted:</strong> ${d.intensityPrediction ? d.intensityPrediction.toFixed(4) : 'N/A'}<br/>` +
                 `<strong>PGA:</strong> ${d.pga ? d.pga.toFixed(4) : 'N/A'} %g<br/>` +
                 `<strong>PGA pred:</strong> ${d.pgaPrediction ? d.pgaPrediction.toFixed(4) : 'N/A'} %g<br/>` +
                 `<strong>PGV:</strong> ${d.pgv ? d.pgv.toFixed(4) : 'N/A'} cm/s<br/>` +
