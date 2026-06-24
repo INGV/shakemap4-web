@@ -246,15 +246,14 @@ function initSharedComponents(currentPage = 'index') {
     renderFooter();
 }
 
-// Auto-initialize when DOM is loaded if not already initialized
+// Auto-initialize when DOM is loaded if not already initialized.
+// index.html is the only page, so the shared components always run in the
+// default 'index' context.
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        // Determine current page from filename
-        const currentPage = window.location.pathname.includes('analysis.html') ? 'analysis' : 'index';
-        initSharedComponents(currentPage);
+        initSharedComponents();
     });
 } else {
     // DOM already loaded
-    const currentPage = window.location.pathname.includes('analysis.html') ? 'analysis' : 'index';
-    initSharedComponents(currentPage);
+    initSharedComponents();
 }

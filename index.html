@@ -142,20 +142,23 @@
                         </label>
                     </div>
 
-                    <!-- Controls moved to same row -->
+                    <!-- Controls moved to same row. "Show Reported Intensity"
+                         comes first so that "Select Site Class" keeps a stable
+                         right-aligned position when the checkbox is hidden on the
+                         PGA/PGV tabs. -->
                     <div class="analysis-controls-inline">
+                        <div class="control-group" id="dyfiControlGroup">
+                            <label for="dyfiCheck">
+                                <input type="checkbox" id="dyfiCheck">
+                                Show Reported Intensity
+                            </label>
+                        </div>
                         <div class="control-group">
                             <label for="selectRegrType">Select Site Class</label>
                             <select id="selectRegrType" class="custom-select">
                                 <option value="rock">Rock</option>
                                 <option value="soil">Soil</option>
                             </select>
-                        </div>
-                        <div class="control-group">
-                            <label for="dyfiCheck">
-                                <input type="checkbox" id="dyfiCheck">
-                                Show Reported Intensity
-                            </label>
                         </div>
                     </div>
                 </div>
