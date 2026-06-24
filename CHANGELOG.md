@@ -1,5 +1,8 @@
 # Release Notes
 
+### Release 2.18.0-dev (2026-06-24)
+  - . . .
+
 ### Release 2.17.0 (2026-06-24)
   - Plot all reported-intensity (macroseismic) points in the Analysis View intensity chart, selected by intensity instead of PGA/PGV thresholds
   - Keep the PGA/PGV analysis charts limited to instrumental (seismic) stations
