@@ -15,7 +15,7 @@
 
 This project provides a static web portal to visualize ShakeMap data. It consists of a Bash script to process event data and a frontend (HTML/JS/CSS) to display it.
 
-Version 2 is a redesign that builds on the foundations laid by version 1 (up to `v1.28.0`), originally developed by Dario Jozinović.
+Version 2 is a redesign that builds on the foundations laid by version 1 (up to [`v1.28.0`](https://github.com/INGV/shakemap4-web/tree/v1.28.0)), originally developed by [Dario Jozinović](https://github.com/djozinovi).
 
 ## Features
 - **Event List**: View all processed ShakeMap events.
