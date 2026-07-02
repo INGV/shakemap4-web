@@ -1,6 +1,6 @@
 # Release Notes
 
-### Release 2.18.0-dev (2026-07-02)
+### Release 2.18.0 (2026-07-02)
   - Credit version 1 (up to v1.28.0, by Dario Jozinović) in the README introduction
   - Clarify the README "Develop" section (purpose of the local mount, dev port, SHAKEMAP_ENV default)
 
