@@ -15,6 +15,8 @@
 
 This project provides a static web portal to visualize ShakeMap data. It consists of a Bash script to process event data and a frontend (HTML/JS/CSS) to display it.
 
+Version 2 is a redesign that builds on the foundations laid by version 1 (up to `v1.28.0`), originally developed by Dario Jozinović.
+
 ## Features
 - **Event List**: View all processed ShakeMap events.
 - **Search**: Filter events by Start Time, End Time, and Minimum Magnitude.
@@ -181,6 +183,17 @@ Python's simple HTTP server cannot provide the `/data/...` to `data_storage/` fa
 - **Map Layers**: configured in `js/app.js` (`initMap` function).
 - **Styles**: `css/style.css`.
 
+## Develop
+For local development, mount the whole project directory into the container so that changes to HTML/JS/CSS are served live, without rebuilding the image:
+
+```bash
+docker run --rm -p 8085:80 -e ENABLE_CRONTAB=true -e SHAKEMAP_ENV=ingv -v $(pwd):/usr/share/nginx/html --name shakemap4-web__container ingv/shakemap4-web
+```
+
+Then open `http://localhost:8085` in your browser.
+
+> **Note:** `SHAKEMAP_ENV` selects the environment profile (`ingv`, `eu`, or custom); `ingv` is the default and is shown here only for clarity. When mounting the full project directory, the entrypoint generates `js/config-env.js` locally — this file is gitignored.
+
 ## Thanks to
 This work has been partially funded by:
 - Seismology and Earthquake Engineering Research Infrastructure Alliance for Europe (SERA) project
@@ -189,13 +202,6 @@ This work has been partially funded by:
 
 ## Contribute
 Thanks to your contributions!
-
-For develop run:
-```bash
-docker run --rm -p 8085:80 -e ENABLE_CRONTAB=true -e SHAKEMAP_ENV=ingv -v $(pwd):/usr/share/nginx/html --name shakemap4-web__container ingv/shakemap4-web
-```
-
-> **Note:** `SHAKEMAP_ENV` selects the environment profile (`ingv`, `eu`, or custom). When mounting the full project directory, the entrypoint generates `js/config-env.js` locally — this file is gitignored.
 
 Here is a list of users who already contributed to this repository: \
 <a href="https://github.com/ingv/shakemap4-web/graphs/contributors">
